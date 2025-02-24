@@ -28,6 +28,7 @@ Example code:
 
 ```
 library(adaptNP)
+library(dplyr)  # recommended for the examples
 ```
 
 Get data:

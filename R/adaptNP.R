@@ -12,6 +12,8 @@
 #   Install Package:           'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
+#   GitHub help:
+#   https://resources.github.com/github-and-rstudio/
 #' Print hello
 #'
 #' Print hello
@@ -38,7 +40,7 @@ hello <- function() {
 
 #' Find clusters and optimize the number of clusters
 #'
-#' Given a data frame as input the function will calculate the clusters
+#' Given a data frame as input the function will calculate the clusters.
 #' @param x numeric matrix of data, or an object that can be coerced to such a matrix (such as a numeric vector or a data frame with all numeric columns).
 #' @return Returns a vector of factors representing arbitrary cluster number of the data_frame provided
 #' @examples
@@ -72,13 +74,24 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 }
 
 
-
-# df dataframe with timestamp in either date, datetime, or dttm format
-# df dplyr style criteria, e.g. (Sonde1_Temperature > 15) | (Sonde1_pH >7)
+#' Flag event given a user-defined craiteria
+#'
+#' Given a data frame as input the function will flag rows of data that are part of an event.
+#' @param df a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.
+#' @param criteria dplyr style criteria
+#' @return Returns a vector of factors representing arbitrary cluster number of the data_frame provided
+#' @examples
+#' \dontrun{
+#' criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
+#' flag_event(sonde_data,criteria)
+#' }
 
 flag_event <- function(df, criteria){
 
   # warn user if event_flag column already exist?
+  if (any(names(df) == "event_flag")) {
+    warning("The column 'event_flag' exists in the data frame.")
+  }
 
   df <- df %>%
     mutate(event_flag = ifelse(!!criteria,TRUE,FALSE))
@@ -86,6 +99,19 @@ flag_event <- function(df, criteria){
 }
 
 
+#' Extract periods of events (given minimum segment length)
+#'
+#' Given a data frame as input the function will calculate the clusters.
+#' @param df a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.
+#' @param min_length minimum length of the event
+#' @return Returns a list of events with start and end date (or datetime).
+#' @examples
+#' \dontrun{
+#' extract_event_periods(
+#'     sonde_data %>%
+#'       rename(timestamp=TIMESTAMP,flag=event_flag),
+#'        min_length=50)
+#' }
 
 extract_event_periods <- function(df, min_length = 10){
 

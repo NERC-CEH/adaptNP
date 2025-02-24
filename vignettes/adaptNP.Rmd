@@ -16,4 +16,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(adaptNP)
+library(dplyr)  # recommended for the examples
+
+# to add: get data
+criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
+flag_event(sonde_data,criteria)
 ```

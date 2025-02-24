@@ -1,0 +1,23 @@
+Package: adaptNP
+Type: Package
+Title: Adaptive multi-nutrient monitoring system (ADAPT-NP)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Chak-Hau Michael", "Tso", , "mtso@ceh.ac.uk", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-2415-0826"))
+Maintainer: Michael Tso <mtso@ceh.ac.uk>
+Description:
+    This package contains adaptive sampling methods for high frequency envrionmental sensors.
+License: CC BY 4.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Imports: 
+    datasets,
+    stats
+URL: https://nerc-ceh.github.io/adaptNP/
+BugReports: https://nerc-ceh.github.io/adaptNP/
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

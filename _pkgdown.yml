@@ -1,0 +1,18 @@
+url: ~
+template:
+  bootstrap: 5
+  light-switch: true
+  pkgdown-nav-height: 100px
+  navbar:
+    bg: primary
+  bslib:
+  bg: "#fff"
+  fg: "#292C2F"
+  primary: "#0483A4"
+  secondary: "#EAEFEC"
+  success: "#37a635"
+  info: "#34b8c7"
+  warning: "#F49633"
+    # base_font: {google: "Montserrat"}
+    # heading_font: {google: "Montserrat"}
+    # code_font: {google: "Roboto Mono"}

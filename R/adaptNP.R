@@ -78,26 +78,28 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #'
 #' Given a data frame as input the function will flag rows of data that are part of an event.
 #' @param df a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.
-#' @param criteria dplyr style criteria
+#' @param flag_statement dplyr style criteria
 #' @return Returns a vector of factors representing arbitrary cluster number of the data_frame provided
 #' @examples
 #' \dontrun{
-#' criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
+#' flag_statement = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'  # must pass a string
 #' flag_event(sonde_data,criteria)
 #' }
 
-flag_event <- function(df, criteria){
-
+flag_event <- function(df, flag_statement){
+  if(!is.character(flag_statement)) {stop("Error: please put quotes around your flag criteria statement.")}
   # warn user if event_flag column already exist?
   if (any(names(df) == "event_flag")) {
     warning("The column 'event_flag' exists in the data frame.")
   }
 
   df <- df %>%
-    mutate(event_flag = ifelse(!!criteria,TRUE,FALSE))
+    mutate(event_flag = ifelse(eval(rlang::parse_expr(flag_statement)),TRUE,FALSE))
   return(df)
 }
 
+
+# flag_event(sonde_data, sonde_data$Sonde1_Temperature > 15) ## This works
 
 #' Extract periods of events (given minimum segment length)
 #'
@@ -149,4 +151,19 @@ extract_event_periods <- function(df, min_length = 10){
 
 
 
+#' Downsample data given a list of start and end times and frequencies
+#'
+#' Given a data frame as input the function will flag rows of data that are part of an event.
+#' @param df a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.
+#' @param periodicity lists with entry `start` and `end` with times in dttm format, as well as `frequency` instruction.
+#' @return df 
+#' @examples
+#' \dontrun{
+#' resample_periods(sonde_data, periodicity)
+#' }
+
+resample_periods <- function(df, periodicity){
+  
+  return(df)
+}
 

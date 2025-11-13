@@ -22,6 +22,7 @@ This package can be installed using the [remotes](https://remotes.r-lib.org/inde
 remotes::install_github("NERC-CEH/adaptNP")
 ```
 
+
 ## Using adaptNP
 
 Example code:
@@ -55,7 +56,41 @@ extract_event_periods(
   min_length=50)
 ```
 
+Down-sample data (from 2 minutes, e.g. 15 minutes, 2 days)
+Note in python, this can be done using the `resample` function in `pandas`.
+```
+sonde_data_15min <- sonde_data %>% 
+    mutate(TIMESTAMP = floor_date(TIMESTAMP, "15 minutes")) %>%
+    group_by(TIMESTAMP) %>%
+    summarise(across(everything(), first), .groups='drop')
+    
+sonde_data_2d <- sonde_data %>% 
+    mutate(TIMESTAMP = floor_date(TIMESTAMP, "2 days")) %>%
+    group_by(TIMESTAMP) %>%
+    summarise(across(everything(), first), .groups='drop')   
+```
+
+
+Rolling average smoothing (across all columns)
+```
+sonde_data_rollmean <- sonde_data %>% dplyr::select(-RECORD) %>% 
+    mutate(across(everything(), ~ rollapply(.x, width = 7, FUN = mean, fill = NA, align = "center"))) %>% 
+    drop_na(TIMESTAMP)
+```
+
+
+## Developer guide
+
+`usethis::use_pkgdown()`
+
+`devtools::document()`
+
+To build reference, run `pkgdown::build_reference()`.
+
+To preview `pkgdown` site, run ` pkgdown::preview_site(path='reference/index.html')`.
+
 ***
+## Acknowledgment
 
 
 This work was funded by the Natural Environment Research Council (part of UK Research and Innovation) under the Innovative Environmental Monitoring programme: Adaptive multi-nutrient monitoring system (ADAPT-NP)  (Grant Reference NE/Z503551/1).

@@ -1,4 +1,4 @@
-# adaptNP: adaptive sampling methods for high frequency envrionmental sensors
+# adaptNP: adaptive sampling methods for high frequency environmental sensors
 
 <!-- badges: start -->
 # [![R-CMD-check](https://github.com/NERC-CEH/jsdmstan/workflows/R-CMD-check/badge.svg)](https://github.com/NERC-CEH/adaptNP/actions)

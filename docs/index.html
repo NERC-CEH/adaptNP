@@ -33,6 +33,13 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/adaptNP.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/adaptNP_ESTH.html">Lake water quality example: Esthwaite Water, UK</a></li>
+    <li><a class="dropdown-item" href="articles/TheCut.html">River water quality example: The Cut, UK</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -55,11 +62,17 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="adaptnp-adaptive-sampling-methods-for-high-frequency-envrionmental-sensors">adaptNP: adaptive sampling methods for high frequency envrionmental sensors<a class="anchor" aria-label="anchor" href="#adaptnp-adaptive-sampling-methods-for-high-frequency-envrionmental-sensors"></a>
+<div class="page-header"><h1 id="adaptnp-adaptive-sampling-methods-for-high-frequency-environmental-sensors">adaptNP: adaptive sampling methods for high frequency environmental sensors<a class="anchor" aria-label="anchor" href="#adaptnp-adaptive-sampling-methods-for-high-frequency-environmental-sensors"></a>
 </h1></div>
 <!-- badges: start -->
+<!-- # [![R-CMD-check](https://github.com/NERC-CEH/jsdmstan/workflows/R-CMD-check/badge.svg)](https://github.com/NERC-CEH/adaptNP/actions) -->
+<!-- # [![Codecov test coverage](https://codecov.io/gh/NERC-CEH/jsdmstan/branch/main/graph/badge.svg)](https://codecov.io/gh/NERC-CEH/jsdmstan?branch=main) -->
 
-<p>This is an R package for running adaptive sampling methods for high frequency envrionmental sensors.</p>
+<!-- badges: end -->
+<blockquote>
+<p>Under initial development. Not working yet.</p>
+</blockquote>
+<p>This is an R package for running adaptive sampling methods for high frequency environmental sensors.</p>
 <p>This package can flag data for (very) high frequency sampling based on different criteria.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -67,40 +80,69 @@
 <p>This package can be installed using the <a href="https://remotes.r-lib.org/index.html" class="external-link">remotes</a> package using the following code:</p>
 <pre><code><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"NERC-CEH/adaptNP"</span><span class="op">)</span></span></code></pre>
+<p>time series showing adaptive vs regular sampling <!-- ADD hero figure --></p>
 </div>
 <div class="section level2">
 <h2 id="using-adaptnp">Using adaptNP<a class="anchor" aria-label="anchor" href="#using-adaptnp"></a>
 </h2>
 <p>Example code:</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nerc-ceh.github.io/adaptNP/" class="external-link">adaptNP</a></span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">adaptNP</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>  <span class="co"># recommended for the examples</span></span></code></pre>
 <p>Get data:</p>
 <pre><code></code></pre>
 <p>Flag data (1. given criteria in data):</p>
 <pre><code><span><span class="va">criteria</span> <span class="op">=</span> <span class="st">'(Sonde1_Temperature &gt; 15) | (Sonde1_pH &gt;7)'</span></span>
-<span><span class="fu">flag_event</span><span class="op">(</span><span class="va">sonde_data</span>,<span class="va">criteria</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="reference/flag_event.html">flag_event</a></span><span class="op">(</span><span class="va">sonde_data</span>,<span class="va">criteria</span><span class="op">)</span></span></code></pre>
 <p>Flag data (2. clustering and other data driven methods):</p>
 <pre><code></code></pre>
 <p>Extract periods of events (given minimum segment length):</p>
-<pre><code><span><span class="fu">extract_event_periods</span><span class="op">(</span></span>
-<span>  <span class="va">sonde_data</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">rename</span><span class="op">(</span>timestamp<span class="op">=</span><span class="va">TIMESTAMP</span>,flag<span class="op">=</span><span class="va">event_flag</span><span class="op">)</span>,</span>
+<pre><code><span><span class="fu"><a href="reference/extract_event_periods.html">extract_event_periods</a></span><span class="op">(</span></span>
+<span>  <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>timestamp<span class="op">=</span><span class="va">TIMESTAMP</span>,flag<span class="op">=</span><span class="va">event_flag</span><span class="op">)</span>,</span>
 <span>  min_length<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre>
+<p>Down-sample data (from 2 minutes, e.g. 15 minutes, 2 days) Note in python, this can be done using the <code>resample</code> function in <code>pandas</code>.</p>
+<pre><code><span><span class="va">sonde_data_15min</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu">floor_date</span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"15 minutes"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">first</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sonde_data_2d</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu">floor_date</span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"2 days"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">first</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span>   </span></code></pre>
+<p>Rolling average smoothing (across all columns)</p>
+<pre><code><span><span class="va">sonde_data_rollmean</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">RECORD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">~</span> <span class="fu">rollapply</span><span class="op">(</span><span class="va">.x</span>, width <span class="op">=</span> <span class="fl">7</span>, FUN <span class="op">=</span> <span class="va">mean</span>, fill <span class="op">=</span> <span class="cn">NA</span>, align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">drop_na</span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="developer-guide">Developer guide<a class="anchor" aria-label="anchor" href="#developer-guide"></a>
+</h2>
+<p><code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown()</a></code></p>
+<p><code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code></p>
+<p>To build reference, run <code><a href="https://pkgdown.r-lib.org/reference/build_reference.html" class="external-link">pkgdown::build_reference()</a></code>.</p>
+<p>To preview <code>pkgdown</code> site, run <code>pkgdown::preview_site(path='reference/index.html')</code>.</p>
 <hr>
+</div>
+<div class="section level2">
+<h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
+</h2>
 <p>This work was funded by the Natural Environment Research Council (part of UK Research and Innovation) under the Innovative Environmental Monitoring programme: Adaptive multi-nutrient monitoring system (ADAPT-NP) (Grant Reference NE/Z503551/1).</p>
-<p><a href="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" class="external-link"><img src="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" width="250"></a> <a href="https://ceh.ac.uk" class="external-link"><img src="https://raw.githubusercontent.com/NERC-CEH/jsdmstan/refs/heads/main/man/figures/UKCEH-Logo.png" width="250"></a></p>
+<p><a href="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" class="external-link"><img src="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" width="250"></a> <a href="https://ceh.ac.uk" class="external-link"><img src="https://raw.githubusercontent.com/NERC-CEH/jsdmstan/refs/heads/main/man/figures/UKCEH-Logo.png" width="250"></a> “# adaptNP”</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://nerc-ceh.github.io/adaptNP/" class="external-link">Report a bug</a></li>
+<li><a href="https://nerc-ceh.github.io/adaptNP/">Report a bug</a></li>
 </ul>
 </div>
 
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://creativecommons.org/licenses/by/4.0" class="external-link">CC BY 4.0</a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
 
@@ -115,15 +157,13 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Chak-Hau Michael Tso <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2415-0826" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Chak-Hau Michael Tso <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-2415-0826" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/NERC-CEH/jsdmstan/actions" class="external-link"><img src="https://github.com/NERC-CEH/jsdmstan/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/NERC-CEH/jsdmstan?branch=main" class="external-link"><img src="https://codecov.io/gh/NERC-CEH/jsdmstan/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 </ul>
 </div>
@@ -137,7 +177,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

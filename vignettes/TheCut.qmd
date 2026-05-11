@@ -1,5 +1,5 @@
 ---
-title: "Adaptive sampling example: The Cut"
+title: "River water quality example: The Cut, UK"
 html:
   out-width: "300px"
   out-heigth: "300px"

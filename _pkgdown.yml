@@ -1,4 +1,6 @@
-url: ~
+url: https://nerc-ceh.github.io/adaptNP/
+project:
+  render: ["*.qmd"]
 template:
   bootstrap: 5
   light-switch: true

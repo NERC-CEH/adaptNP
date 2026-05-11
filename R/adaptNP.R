@@ -21,6 +21,9 @@
 #' \dontrun{
 #' #' hello()
 #' }
+#' 
+#' @export
+
 hello <- function() {
   print("Hello, world!")
 }
@@ -48,6 +51,7 @@ hello <- function() {
 #' data_frame <- datasets::USArrests
 #' clusters <- find_clusters(datasets::USArrests)
 #' }
+#' @export
 
 #### add library as dependency: usethis::use_package('stats')
 #### add library as dependency: usethis::use_import_from('datasets','USArrests')
@@ -210,6 +214,7 @@ if (!all(colnames(clusters@xrange) %in% colnames(newdata)) == TRUE) {
 #' flag_statement = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'  # must pass a string
 #' flag_event(sonde_data,criteria)
 #' }
+#' @export
 
 flag_event <- function(df, flag_statement){
   if(!is.character(flag_statement)) {stop("Error: please put quotes around your flag criteria statement.")}
@@ -239,6 +244,7 @@ flag_event <- function(df, flag_statement){
 #'       rename(timestamp=TIMESTAMP,flag=event_flag),
 #'        min_length=50)
 #' }
+#' @export
 
 extract_event_periods <- function(df, min_length = 10){
 

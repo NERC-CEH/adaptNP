@@ -1,5 +1,5 @@
 ---
-title: "Introduction to adaptive temporal sampling--illustration for high-frquency water quality sensors"
+title: "Lake water quality example: Esthwaite Water, UK"
 html:
   out-width: "300px"
   out-heigth: "300px"

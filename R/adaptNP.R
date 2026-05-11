@@ -55,6 +55,8 @@ hello <- function() {
 
 
 find_clusters = function(x){  # automatically employ elbows method (last point to have reduction of misfit by >25%)
+  set.seed(200) # for reproducibility
+
   # Nbclust: https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/
   #f_of_x <- splinefun(x,sin(pi/x))
   #f_of_x(x,deriv = 1) # take first derivative of function
@@ -69,10 +71,133 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
   }
   ratio = misfit_k[2:length(misfit_k)]/misfit_k[1:length(misfit_k)-1]
   k_opt = max(which(ratio <0.75)) + 1 # add error handling, set default to 5
-  clusters[complete.cases(a)] = stats::kmeans(scale(x2),k_opt)$cluster
-  return(as.factor(clusters))
+  clusters[complete.cases(x2)] = stats::kmeans(scale(x2),k_opt)$cluster
+  #return(as.factor(clusters))
+  return(flexclust::as.kcca(stats::kmeans(scale(x2),k_opt), scale(x2)))
 }
 
+#' Predict cluster membership for new data
+#'
+#' Assigns cluster labels to new observations using a previously fitted
+#' clustering model (e.g. from \code{\link{find_cluster}}). The function
+#' applies the same feature structure as the training data and appends
+#' predicted cluster states to the input data frame.
+#'
+#' @param clusters A fitted clustering model object (e.g. `kcca` object)
+#'   returned by \code{\link{adaptNP::find_cluster}}. Must support
+#'   \code{predict()} and contain training feature ranges in `@xrange`.
+#' @param newdata A data frame containing new observations to classify.
+#'   Must include all variables used to train the clustering model.
+#' @param option Character string specifying how predictions are applied.
+#'   Options are:
+#'   \itemize{
+#'     \item `"same"` (default): predict cluster for each row in `newdata`
+#'     \item `"daily"`: aggregate data to daily means before prediction
+#'     \item `"daily9am"`: placeholder (not yet implemented)
+#'   }
+#'
+#' @return A data frame equal to `newdata` with an additional column:
+#' \itemize{
+#'   \item `state`: predicted cluster label for each observation
+#' }
+#'
+#' @details
+#' The function ensures that `newdata` contains all variables used to train
+#' the clustering model. Only these variables are used in prediction.
+#'
+#' For `option = "same"`, cluster labels are predicted directly for each
+#' observation.
+#'
+#' For `option = "daily"`, the data are aggregated to daily resolution
+#' (using mean values of numeric columns) before prediction. The resulting
+#' cluster labels are then mapped back to the original data.
+#'
+#' Input variables are scaled using \code{scale()} before prediction.
+#'
+#' Currently, automatic detection of timestamp columns is limited and assumes
+#' a column named `TIMESTAMP` when using `"daily"` aggregation.
+#'
+#' @section Warning:
+#' \itemize{
+#'   \item The function assumes `newdata` contains a `TIMESTAMP` column for
+#'   daily aggregation.
+#'   \item The `"daily9am"` option is not yet implemented and will result
+#'   in an error.
+#'   \item No validation is performed on scaling consistency with the
+#'   original training data.
+#' }
+#'
+#' @examples
+#' # Example: predict clusters for new data
+#' \dontrun{
+#' # Fit clustering model
+#' model <- adaptNP::find_cluster(training_data)
+#'
+#' # Predict cluster states for new observations
+#' newdata$TIMESTAMP <- Sys.time() + seq_len(nrow(newdata))
+#'
+#' result <- pred_clusters(
+#'   clusters = model,
+#'   newdata = newdata,
+#'   option = "same"
+#' )
+#'
+#' head(result$state)
+#' }
+#'
+#' @seealso \code{\link{find_cluster}}, \code{\link[stats]{predict}}
+#'
+#' @export
+pred_clusters = function(clusters,newdata, option='same'){
+
+# 1. check column names exist
+if ('state' %in% colnames(newdata) == TRUE) {
+  print("state column detected. Note new states will be predicted.")
+}
+if (!all(colnames(clusters@xrange) %in% colnames(newdata)) == TRUE) {
+  stop("new data frame must contain all columns from clusters")
+}
+  
+# 2. extract columns and make sure other is right
+  tempdata = newdata |> dplyr::select(colnames(clusters@xrange))
+
+# 3. make predictions
+  if (option == 'same') {
+    state = predict(clusters, scale(tempdata))
+    newdata = newdata |> mutate(state = state)
+  } else if (option == 'daily9am') {
+    # aggregate data daily before clustering
+    # find first column is date or dttm >> TODO
+
+  } else if (option == 'daily') {
+   # need some way to detect time stamp DTTM column >> TODO  
+
+    tempdata = newdata  |> 
+      group_by(lubridate::date(TIMESTAMP )) |> 
+      summarise(across(where(is.numeric), mean, na.rm = TRUE)) |> 
+      dplyr::rename(DATE = 'lubridate::date(TIMESTAMP)')
+
+    tempdates = tempdata |> dplyr::select(DATE)
+    tempdata = tempdata |> dplyr::select(colnames(clusters@xrange))
+    state = predict(clusters, scale(tempdata))
+
+    tempdates = tempdates |> mutate(state = state)
+
+    newdata  |> 
+      mutate(DATE = lubridate::date(TIMESTAMP)) |> 
+      left_join(tempdates, by='DATE')
+
+    # broadcast back to original dataframe
+
+
+  } else if (option == 'daily9am') {
+   stop("option not implmented")
+  } else {
+    stop("option not implmented")
+
+  }
+  return(newdata)
+}
 
 #' Flag event given a user-defined craiteria
 #'
@@ -154,21 +279,4 @@ extract_event_periods <- function(df, min_length = 10){
   return(event_periods)
 }
 
-
-
-#' Downsample data given a list of start and end times and frequencies
-#'
-#' Given a data frame as input the function will flag rows of data that are part of an event.
-#' @param df a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.
-#' @param periodicity lists with entry `start` and `end` with times in dttm format, as well as `frequency` instruction.
-#' @return df 
-#' @examples
-#' \dontrun{
-#' resample_periods(sonde_data, periodicity)
-#' }
-
-resample_periods <- function(df, periodicity){
-  
-  return(df)
-}
 

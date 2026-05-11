@@ -12,7 +12,7 @@ extract_event_periods(df, min_length = 10)
 \item{min_length}{minimum length of the event}
 }
 \value{
-Returns a list of events with start and end date (or datetime).
+Returns a df of events with the columns `start` and `end` date (or datetime).
 }
 \description{
 Given a data frame as input the function will calculate the clusters.

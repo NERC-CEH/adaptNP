@@ -7,3 +7,5 @@ inst/doc
 .DS_Store
 .quarto
 temp/*
+vignettes\TheCut_files\*
+vignettes\adaptNP_ESTH_files\*

@@ -1,0 +1,400 @@
+---
+title: "Introduction to adaptive temporal sampling--illustration for high-frquency water quality sensors"
+html:
+  fig-width: 14
+  fig-height: 20
+execute:
+  warning: false
+code-overflow: wrap
+
+---
+
+### What is adatpive sampling?
+Adpative sampling is the opposite of sampling with a fixed design. A majority of previous adaptive sampling is applied spatially, where collected data determined the spatial location of the samples in the next sampling round. Here we focus on temporal adatpive sampling, where sampling frequencies effectively changes based on measured data or other information.
+
+### The multi-rule approach
+Adaptive sampling means sampling that goes beyonds fixed designs of sampmling at regular intervals. In practice, changing sampling frequencies all the time can lead to a variety of issues. Therefore, using a combination of multiple rules, each sampling at regular intervals and activated by different criteria, to achieve adaptive sampling is more flexible and is preferred.
+
+| Multi-rule adaptive sampling (this R package) | Dynamic frquency adaptive sampling |
+|-----------------------------------------------|------------------------------------|
+| Each rule samples at regular intervals, but are triggered adaptively.   | Sampling frequencies can change abruptly and unexpeectedly.    | 
+|The combination of rules make the approach highly flexible.|More challenging to analyze data. |
+|You can analyze data from each rule separately.||
+|Baseline data for trend monitoring will not be disrupted.||
+|Ideal solution to combine compliance monitoring with taking opportunisitc measurements.||
+
+
+
+: Multi-rule vs dynamic frquency approach to adaptive sammpling {#tbl-letters}
+Table: 
+
+
+
+
+
+
+### Example data: Esthwaite lake monitoring data and SUNA nitrate sensor
+For demonstration, we use field trial data from in-lake physico-chemical sensors (water temperature at 12 depths, and Ponsel temperature and conductivity), over-lake weather sensors (air temperature, wind speed, wind direction, solar radiation, relative humidity) sonde and a SUNA optical nitrate sensor on an automatic buoy located on Esthwaite water in Lake District, England collected between 29th April to 22nd October 2025. Optical nitrate data was collected every 10 minutes, while the other determinants are measured at every 2 minutes. While no specific events are expected in this lake, we use this dataset to demonstrate the various techniques for adaptive sampling.
+
+### Evaluation: some metrics
+
+Following Elfferich et al. (2024), we will report the median and range captured by the downsampled time series, which is applicable to adaptively sampled time series in retrospective experiments. $x$ is the orginal time series, while $x_{\text{sub}}$ is the sub-sampled time series.
+
+**Percentage of range captured**\
+$$ \frac{\max(x_{\text{sub}})-\min(x_{\text{sub}})}{\max(x)-\min(x)} $$
+
+**Percentage change of median**\
+$$ \frac{\text{median}(x)-\text{median}(x_{sub})}{\text{median}(x)} $$
+
+### Loading libraries
+
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(tidyr)
+
+devtools::load_all() # to replace with library(adaptNP)
+
+source('../temp/theme_gov.R') # optional theming for plots
+```
+
+
+
+### Loading data
+
+```{r}
+filepath <- '../temp/Esthwaite_Buoy_Data_May_to_Oct_2025.xlsx'
+
+excel_sheets(filepath)
+
+# print header
+print( read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", n_max = 0))
+
+Esthwaite_Buoy_HiRes <- read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", skip=1) # every 2 minutes
+
+# print header
+print( read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", n_max = 0))
+
+Esthwaite_Buoy_SUNA_Data <- read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", skip=1) # every 10 minutes
+```
+
+### Example 1: threshold rules
+
+We will illustrate the method by using a simple rule:
+
+`criteria <-"(Temp4m > 18) | (SPFD >800)"`
+
+The `adapt-NP` R package make it very easy to do so.
+
+- The `flag_event` function returns whether or not the criterion is met (i.e. a event).
+- The `extract_event_periods` function extract periods (i.e. dictionary of start and end times) where the event occurs. Note you can specify to extract only events that are longer than a particular duration (specifically, number of records).
+
+```{r run-adaptNP}
+criteria <-"(Temp4m > 18) | (SPFD >800)"
+
+# flag event (True or false)
+Esthwaite_Buoy_HiRes <- flag_event(Esthwaite_Buoy_HiRes,criteria)
+
+# extract event periods (i.e. start and end)
+periods  <- extract_event_periods(
+  Esthwaite_Buoy_HiRes %>% 
+    rename(timestamp=TIMESTAMP,flag=event_flag)  |> tidyr::drop_na(flag),
+  min_length=50) 
+
+# convert period to R lubridate intervals
+intervals <- periods |> 
+  mutate(int = interval(start,end) ) |> 
+  pull(int)
+
+```
+
+After extracting the event periods, the following code snippets uses it to subset the dataset.
+```{r ex1-grab-data}
+# rule 0: every 6h
+baseline <- Esthwaite_Buoy_SUNA_Data |> 
+  select(TIMESTAMP, SUNA_Nitrate_mgL) |> 
+  mutate(hour = lubridate::hour(TIMESTAMP), 
+         minute = lubridate::minute(TIMESTAMP)) |> 
+  filter(minute==0, hour %in% c(3,9,15,21))
+
+# rule 1: every 10 or 20 minutes within periods
+
+# very fast!
+mask <- Reduce(`|`, lapply(intervals, function(int) Esthwaite_Buoy_SUNA_Data$TIMESTAMP %within% int))
+rule1 <- Esthwaite_Buoy_SUNA_Data[mask, ]
+
+```
+
+Now, we plot the results.
+```{r ex1-combine-plot}
+#| fig-cap: "Illustration of the adaptive sampling approach using SUNA nitrate data. Black line denotes all data from the field trail. Baseline denotes baseline sampling at every 6 hours (aligned to 03:00), and rule 1 denotes event sampling at every 10 minutes. The shaded area denotes periods where rule 1 is activated"
+#| fig-alt: "A line plot illustrating adaptive sampling"
+#| fig-heights:
+# now plot: (1) all SUNA, (2) baseline SUNA, (3) rule 1 SUNA
+
+combined_SUNA <- Esthwaite_Buoy_SUNA_Data |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> 
+  left_join(rule1 |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> rename(rule1 = SUNA_Nitrate_mgL), by='TIMESTAMP') |> 
+  left_join(baseline |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> rename(baseline = SUNA_Nitrate_mgL), by='TIMESTAMP')
+
+anno <- data.frame(xtext = c('2025-07-15', '2025-07-15', '2025-07-15'), 
+                   ytext = c(0.4,0.4,0.4), 
+                   Rule = c("raw data", "rule 0 (baseline)" ,"rule 1 (algal bloom likely)" ),
+                   text = c("Every 10 minutes", "Every 6 hours", "Every 10 minutes only during event")) |> 
+  mutate(xtext = as.Date(xtext))
+
+combined_SUNA |> 
+  rename( `raw data` = SUNA_Nitrate_mgL, 
+          `rule 0 (baseline)` = baseline,
+          `rule 1 (algal bloom likely)` = rule1,) |> 
+#  filter(TIMESTAMP <'2025-08-15') |> 
+  tidyr::pivot_longer(!TIMESTAMP, names_to = "Rule", values_to = "value") |> 
+  ggplot2::ggplot() + 
+  geom_point(aes(x = TIMESTAMP, y=value, colour = factor(Rule))) + 
+  facet_grid(rows = vars(Rule)) +
+  # scale_fill_manual(values = c("red", "blue", "green")) +
+  scale_color_manual(
+    name   = "",                      # legend title
+    values = c("raw data" = "#000000",
+               "rule 0 (baseline)" = "#1b9e77",
+               "rule 1 (algal bloom likely)" = "#d95f02")
+  ) + 
+    geom_text(data = anno, aes(x = xtext,  y = ytext, label = text), size=5) +
+  theme_gov() +
+#   geom_rect(data = periods |> mutate(start=as.Date(start), end=as.Date(end)),
+#             aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+#             fill = "lightpink", alpha= 0.3)+ 
+  theme(legend.position='bottom',
+        panel.spacing = unit(2, "lines"),
+        text=element_text(size=20), #change font size of all text
+        # axis.line = element_line(linewidth = 3, colour = "grey20"),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
+        axis.text=element_text(size=20), #change font size of axis text
+        axis.title=element_text(size=20), #change font size of axis titles
+        plot.title=element_text(size=16), #change font size of plot title
+        legend.text=element_text(size=20), #change font size of legend text
+        legend.title=element_text(size=20))+ #change font size of legend title  
+  ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
+  labs(x='',y='mg/L')+ ylim(0,0.5) + 
+  guides(colour = guide_legend(override.aes = list(size=8))) # change legend point size
+
+```
+
+```{r}
+# plot periods (hours flagged per day) as rectangles: y axis (date), x axis (hours)
+periods  |> mutate(duration = interval(start,end)%/%minutes(1))
+
+### metrics
+combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+    summarise(across(where(is.numeric), ~ median(.x, na.rm = TRUE)))
+
+
+## median changed
+ (.Last.value$SUNA_Nitrate_mgL - .Last.value$rule1) / .Last.value$SUNA_Nitrate_mgL
+
+combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+     summarise(across(where(is.numeric), list(min = min, max = max), na.rm=TRUE))
+```
+
+### Example 2: data-driven rules (state tagging)
+```{r}
+# load extra libraries
+# library(devtools)
+# load_all() # load adaptNP
+
+library(flexclust) # for S4 plot/predict(clusters)
+
+```
+
+In the `adaptNP` R package, `find_clusters` applies the state tagging method.
+
+```{r}
+## train state tagging with old data
+Esthwaite_Buoy_OLD <- read.csv('../temp/ESTH_2008_2009_2010_2011.csv')
+
+######### plot daily training data cluster results
+
+Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD |> mutate(across(where(is.numeric), ~ na_if(.x, 99999))) |> 
+    dplyr::mutate(Date_GMT = as.POSIXct(Date_GMT, format= "%d/%m/%Y %H:%M" , tz="GMT") ) |> 
+  group_by(lubridate::date(Date_GMT )) |> 
+  summarise(across(where(is.numeric), mean, na.rm = TRUE)) |> 
+  dplyr::rename(DATE = 'lubridate::date(Date_GMT)')
+
+
+
+clusters <- find_clusters(Esthwaite_Buoy_OLD_daily  |>   select(Water_temperature_1m, Pyranometer, Wind_Speed)  )
+
+## write state = clusters to data frame
+Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD_daily  |>   
+  select(DATE, Water_temperature_1m, Pyranometer, Wind_Speed)  |> 
+  tidyr::drop_na() |> 
+  mutate(state = modeltools::clusters(clusters))
+
+
+## plot
+ggplot(Esthwaite_Buoy_OLD_daily  |> 
+    pivot_longer(!c(DATE, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
+    mutate(state = as.factor(state))
+) + 
+  geom_point(aes(x=DATE,y=VALUE, color=state)) + 
+  facet_grid(rows = vars(FIELDNAME), scales = "free") +
+  theme_gov() +
+  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
+  guides(color = guide_legend(override.aes = list(size = 4)))
+
+p1 = .Last.value
+```
+
+
+```{r}
+### 3D plotting of clusters
+#| fig-cap: "A visual summary of the three clusters (e.g. cluster 3 represents high wind conditions)"
+#| fig-alt: "A visual summary of the three clusters"
+
+
+# 2D
+plot(clusters)
+
+# 3D
+
+
+```
+### make cluster predictions
+
+
+```{r predict-clulsters}
+#| fig-cap: "Applying the clusters on hourly data creates a very busy plot. We will apply clutering on daily data instead."
+#| fig-alt: "A plot showing clustering on hourly data"
+#| 
+# not used, apply to hourly data directly
+
+### predict hi-res data
+
+### (1) no aggregation
+
+
+newdata = Esthwaite_Buoy_HiRes |> rename(Water_temperature_1m=Temp1m,Pyranometer=SPFD,Wind_Speed=WindSpd)
+
+newdata = pred_clusters(clusters, newdata)
+
+# plot hourly state and weather data
+ggplot(newdata |> dplyr::select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
+    pivot_longer(!c(TIMESTAMP, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
+    mutate(state = as.factor(state))
+) + 
+  geom_point(aes(x=TIMESTAMP,y=VALUE, color=state)) + 
+  facet_grid(rows = vars(FIELDNAME), scales = "free") +
+  theme_gov() +
+  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
+  guides(color = guide_legend(override.aes = list(size = 4)))
+
+
+newdata  |> 
+      group_by(lubridate::date(TIMESTAMP )) |> 
+      summarise(across(where(is.numeric), mean, na.rm = TRUE)) |> 
+      dplyr::rename(DATE = 'lubridate::date(TIMESTAMP)')
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+# Find state from previous 24 hour data (option 1: daily mode of states, option 2: do state tagging on daily mean data)
+newdataDailyMode = newdata |> dplyr::select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state) |> 
+      group_by(lubridate::date(TIMESTAMP )) |> 
+      summarise(across(where(is.numeric), Mode)) |> 
+      dplyr::rename(DATE = 'lubridate::date(TIMESTAMP)') |> 
+      dplyr::mutate(state = lag(state))
+
+newdataDailyMode
+```
+
+
+This is the daily clustering rules we will apply. We apply daily state to high freq data and apply sampling rule by states:
+
+1. High Temp/ Low wind: every 10 min, starting from 0000
+2. Low Temp/ Low wind: every hour
+3. High wind: every 6 hours (0300,0900,1500,2100)
+
+```{r sample_by_state}
+
+
+#| fig-cap: "Daily clustering results."
+#| fig-alt: "Daily clustering results."
+
+# Apply daily state to high freq data and apply sampling rule by states:
+# 1. High Temp/ Low wind: every 10 min, starting from 0000
+# 2. Low Temp/ Low wind: every hour
+# 3. High wind: every 6 hours (0300,0900,1500,2100)
+
+# Appply the rule then left join with high freq data
+
+times = newdataDailyMode |> select(DATE,state) |> drop_na() |> 
+  rowwise() |> 
+  mutate(TIMESTAMP = case_when(
+      state == 1 ~ list(seq(
+      from = as_datetime(DATE),
+      to   = as_datetime(DATE) + hours(23) + minutes(50),
+      by   = "10 min"
+    )),
+      state == 2 ~ list(as_datetime(DATE) + hours(0:23)),
+      state == 3 ~ list(as_datetime(DATE) + hours(c(3, 9, 15, 21))),
+
+      .default = list(as_datetime(DATE) + hours(c(0)))
+    )
+) %>%
+  unnest(TIMESTAMP) %>%
+  ungroup()
+
+# plot sampling state
+
+
+ggplot(times |> mutate(y=state, state=as.factor(state))) + 
+  geom_point(aes(x=TIMESTAMP,y=y, color=state)) + 
+  theme_gov() +
+  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
+  guides(color = guide_legend(override.aes = list(size = 4)))
+
+# left join, plot sampled weather data and their state
+times |> mutate(y=state, state=as.factor(state)) |> 
+  left_join(newdata |> select(-state), by='TIMESTAMP') |> 
+  select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
+  pivot_longer(!c(TIMESTAMP, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
+  ggplot() + 
+  geom_point(aes(x=TIMESTAMP,y=VALUE, color=state)) + 
+  facet_grid(rows = vars(FIELDNAME), scales = "free") +
+  theme_gov() +
+  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
+  guides(color = guide_legend(override.aes = list(size = 4)))
+```
+
+```{r}
+#| fig-cap: "Nitrate adpative sampling results based on state tagging (i.e. clustering)"
+#| fig-alt: "Nitrate adpative sampling results based on state tagging (i.e. clustering)"
+# left join, SUNA
+
+rule_statetag <-times |> mutate(y=state, state=as.factor(state)) |> 
+  left_join(Esthwaite_Buoy_SUNA_Data , by='TIMESTAMP') 
+  
+rule_statetag  |> 
+  ggplot() + 
+  geom_point(aes(x=TIMESTAMP,y=SUNA_Nitrate_mgL , color=state)) + 
+  theme_gov() +
+  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
+  guides(color = guide_legend(override.aes = list(size = 4)))
+
+
+# metrics
+a = diff(range(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE))
+diff(range(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE)) /a
+
+b = median(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE)
+(median(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE) -b) /b 
+
+```
+
+```{r predict-clusters-online}
+
+```

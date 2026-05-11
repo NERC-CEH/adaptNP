@@ -4,12 +4,12 @@
 \alias{flag_event}
 \title{Flag event given a user-defined craiteria}
 \usage{
-flag_event(df, criteria)
+flag_event(df, flag_statement)
 }
 \arguments{
 \item{df}{a dataframe containing columns of data, with timestamp in either date, datetime, or dttm format.}
 
-\item{criteria}{dplyr style criteria}
+\item{flag_statement}{dplyr style criteria}
 }
 \value{
 Returns a vector of factors representing arbitrary cluster number of the data_frame provided
@@ -19,7 +19,7 @@ Given a data frame as input the function will flag rows of data that are part of
 }
 \examples{
 \dontrun{
-criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
+flag_statement = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'  # must pass a string
 flag_event(sonde_data,criteria)
 }
 }

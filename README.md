@@ -7,11 +7,9 @@
 
 <!-- badges: end -->
 
-> Under initial development. Not working yet.
+>This is an R package for running adaptive sampling methods for high frequency environmental sensors.
 
-This is an R package for running adaptive sampling methods for high frequency environmental sensors.
-
-This package can flag data for (very) high frequency sampling based on different criteria.
+>This package can flag data for (very) high frequency sampling based on different criteria.
 
 ## Installation
 
@@ -22,9 +20,14 @@ This package can be installed using the [remotes](https://remotes.r-lib.org/inde
 remotes::install_github("NERC-CEH/adaptNP")
 ```
 
-
-time series showing adaptive vs regular sampling
+![A diagram illustrating the basic concept of adaptive sampling.](..\man\figures\adapt-np-sequence-fig.png){.lightbox}
+<!-- time series showing adaptive vs regular sampling -->
 <!-- ADD hero figure -->
+<!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) -->
+<!-- Zoomed event inset -->
+<!-- 3. Sampling effort heatmap ribbon -->
+<!-- 2. Side-by-side Split panel (before vs after) -->
+
 
 ## Using adaptNP
 
@@ -37,19 +40,33 @@ library(dplyr)  # recommended for the examples
 
 Get data:
 ```
-
+data = Esthwaite_Buoy_HiRes # pre-loaded data
 ```
 
 Flag data (1. given criteria in data):
 ```
-criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
-flag_event(sonde_data,criteria)
+criteria = '(Temp4m > 18) | (SPFD >800)'
+flag_event(data,criteria)
 ```
 
 Flag data (2. clustering and other data driven methods):
 ```
 
+## Using historical data to form clusters (i.e. state tagging)
+clusters <- find_clusters(Esthwaite_Buoy_OLD_daily  |>   
+    select(Water_temperature_1m, Pyranometer, Wind_Speed)  )
+
+## write state = clusters to data frame
+Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD_daily  |>   
+  select(DATE, Water_temperature_1m, Pyranometer, Wind_Speed)  |> 
+  tidyr::drop_na() |> 
+  mutate(state = modeltools::clusters(clusters))
+
+## You can then specify the sampling rules for each cluster state and apply to your clustering results. See more in the lake water quality example.
+
 ```
+This method is used in:
+>Tso C-HM, Henrys P, Rennie S and Watkins J (2020) State Tagging for Improved Earth and Environmental Data Quality Assurance. Front. Environ. Sci. 8:46. doi: 10.3389/fenvs.2020.00046
 
 Extract periods of events (given minimum segment length):
 ```
@@ -90,6 +107,12 @@ sonde_data_rollmean <- sonde_data %>% dplyr::select(-RECORD) %>%
 
 To build reference, run `pkgdown::build_reference()`.
 
+To add data to package, run `usethis::use_data(TheData)`.
+
+To install package for use in vignette, run `devtools::install()`.
+
+To build vignettes, run `pkgdown::build_articles(quiet = FALSE)`.
+
 To preview `pkgdown` site, run ` pkgdown::preview_site(path='reference/index.html')`.
 
 ***
@@ -100,4 +123,3 @@ This work was funded by the Natural Environment Research Council (part of UK Res
 
 [<img src="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" width="250"/>](https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png)
 [<img src="https://raw.githubusercontent.com/NERC-CEH/jsdmstan/refs/heads/main/man/figures/UKCEH-Logo.png" width="250"/>](https://ceh.ac.uk)
-"# adaptNP" 

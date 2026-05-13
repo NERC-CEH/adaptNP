@@ -58,27 +58,29 @@ library(tidyr)
 # devtools::load_all() # to replace with library(adaptNP)
 library(adaptNP)
 
-source('../temp/theme_gov.R') # optional theming for plots
+# source('../temp/theme_gov.R') # optional theming for plots
 ```
 
 
 
 ### Loading data
 
+The following data has been loaded in the adaptNP R package.
+
 ```{r}
-filepath <- '../temp/Esthwaite_Buoy_Data_May_to_Oct_2025.xlsx'
+# filepath <- 'temp/Esthwaite_Buoy_Data_May_to_Oct_2025.xlsx'
 
-excel_sheets(filepath)
+# excel_sheets(filepath)
 
-# print header
-print( read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", n_max = 0))
+# # print header
+# print( read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", n_max = 0))
 
-Esthwaite_Buoy_HiRes <- read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", skip=1) # every 2 minutes
+# Esthwaite_Buoy_HiRes <- read_excel(filepath, sheet = "Esthwaite_Buoy_HiRes", skip=1) # every 2 minutes
 
-# print header
-print( read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", n_max = 0))
+# # print header
+# print( read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", n_max = 0))
 
-Esthwaite_Buoy_SUNA_Data <- read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", skip=1) # every 10 minutes
+# Esthwaite_Buoy_SUNA_Data <- read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", skip=1) # every 10 minutes
 ```
 
 ### Example 1: threshold rules
@@ -132,7 +134,7 @@ Now, we plot the results.
 ```{r ex1-combine-plot}
 #| fig-cap: "Illustration of the adaptive sampling approach using SUNA nitrate data. Black line denotes all data from the field trail. Baseline denotes baseline sampling at every 6 hours (aligned to 03:00), and rule 1 denotes event sampling at every 10 minutes. The shaded area denotes periods where rule 1 is activated"
 #| fig-alt: "A line plot illustrating adaptive sampling"
-#| fig-heights:
+#| fig-height: 10
 # now plot: (1) all SUNA, (2) baseline SUNA, (3) rule 1 SUNA
 
 combined_SUNA <- Esthwaite_Buoy_SUNA_Data |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> 
@@ -213,7 +215,7 @@ In the `adaptNP` R package, `find_clusters` applies the state tagging method.
 
 ```{r}
 ## train state tagging with old data
-Esthwaite_Buoy_OLD <- read.csv('../temp/ESTH_2008_2009_2010_2011.csv')
+# Esthwaite_Buoy_OLD <- read.csv('../temp/ESTH_2008_2009_2010_2011.csv') # data loaded in package
 
 ######### plot daily training data cluster results
 
@@ -268,7 +270,8 @@ plot(clusters)
 ```{r predict-clulsters}
 #| fig-cap: "Applying the clusters on hourly data creates a very busy plot. We will apply clutering on daily data instead."
 #| fig-alt: "A plot showing clustering on hourly data"
-#| 
+#| fig-height: 10
+
 # not used, apply to hourly data directly
 
 ### predict hi-res data
@@ -357,7 +360,11 @@ ggplot(times |> mutate(y=state, state=as.factor(state))) +
   theme_gov() +
   scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
   guides(color = guide_legend(override.aes = list(size = 4)))
-
+```
+```{r}
+#| fig-cap: "State tagging results on the variables used for clustering."
+#| fig-alt: "State tagging results"
+#| fig-height: 10
 # left join, plot sampled weather data and their state
 times |> mutate(y=state, state=as.factor(state)) |> 
   left_join(newdata |> select(-state), by='TIMESTAMP') |> 

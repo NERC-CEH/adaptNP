@@ -19,6 +19,7 @@ library(adaptNP)
 library(dplyr)  # recommended for the examples
 
 # to add: get data
-criteria = '(Sonde1_Temperature > 15) | (Sonde1_pH >7)'
-flag_event(sonde_data,criteria)
+data = Esthwaite_Buoy_HiRes # pre-loaded data
+criteria = '(Temp4m > 18) | (SPFD >800)'
+flag_event(data,criteria)
 ```

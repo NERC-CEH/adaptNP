@@ -23,8 +23,8 @@ monitoring systems should collect data based on conditional logic."></head><body
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/adaptNP_ESTH.html">Introduction to adaptive temporal sampling--illustration for high-frquency water quality sensors</a></li>
-    <li><a class="dropdown-item" href="../articles/TheCut.html">Adaptive sampling example: The Cut</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/adaptNP_ESTH.html">Lake water quality example: Esthwaite Water, UK</a></li>
+    <li><a class="dropdown-item" href="../articles/TheCut.html">River water quality example: The Cut, UK</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -147,26 +147,10 @@ or duration format; users should ensure inputs are valid for the target system.<
 <span class="r-in"><span>  determinants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sonde1_Temperature"</span>, <span class="st">"Sonde1_pH"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  samplingFrequency <span class="op">=</span> <span class="st">"PT10M"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in list(id = id, name = name, comment = comment, disabled = disabled,     criterionType = criterionType, criterionOptArg = criterionOptArg,     criterion = criterion, determinants = determinants, samplingFrequency = samplingFrequency) %&gt;%     jsonlite::toJSON(auto_unbox = TRUE) %&gt;% jsonlite::prettify():</span> could not find function "%&gt;%"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">json_rule</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "id": 1,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "name": "High variability sampling",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "comment": {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     },</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "disabled": false,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "criterionType": "query_R",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "criterionOptArg": {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     },</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "criterion": "(Sonde1_Temperature &gt; 15) | (Sonde1_pH &gt; 7)",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "determinants": [</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "Sonde1_Temperature",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         "Sonde1_pH"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "samplingFrequency": "PT10M"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'json_rule' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

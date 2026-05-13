@@ -70,31 +70,44 @@
 
 <!-- badges: end -->
 <blockquote>
-<p>Under initial development. Not working yet.</p>
-</blockquote>
 <p>This is an R package for running adaptive sampling methods for high frequency environmental sensors.</p>
+</blockquote>
+<blockquote>
 <p>This package can flag data for (very) high frequency sampling based on different criteria.</p>
+</blockquote>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>This package can be installed using the <a href="https://remotes.r-lib.org/index.html" class="external-link">remotes</a> package using the following code:</p>
 <pre><code><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"NERC-CEH/adaptNP"</span><span class="op">)</span></span></code></pre>
-<p>time series showing adaptive vs regular sampling <!-- ADD hero figure --></p>
+<p><img src="..\man\figures\adapt-np-sequence-fig.png" class="lightbox" alt="A diagram illustrating the basic concept of adaptive sampling."><!-- time series showing adaptive vs regular sampling --><!-- ADD hero figure --><!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) --><!-- Zoomed event inset --><!-- 3. Sampling effort heatmap ribbon --><!-- 2. Side-by-side Split panel (before vs after) --></p>
 </div>
 <div class="section level2">
 <h2 id="using-adaptnp">Using adaptNP<a class="anchor" aria-label="anchor" href="#using-adaptnp"></a>
 </h2>
 <p>Example code:</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">adaptNP</span><span class="op">)</span></span>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nerc-ceh.github.io/adaptNP/">adaptNP</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>  <span class="co"># recommended for the examples</span></span></code></pre>
 <p>Get data:</p>
-<pre><code></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">=</span> <span class="va">Esthwaite_Buoy_HiRes</span> <span class="co"># pre-loaded data</span></span></code></pre>
 <p>Flag data (1. given criteria in data):</p>
-<pre><code><span><span class="va">criteria</span> <span class="op">=</span> <span class="st">'(Sonde1_Temperature &gt; 15) | (Sonde1_pH &gt;7)'</span></span>
-<span><span class="fu"><a href="reference/flag_event.html">flag_event</a></span><span class="op">(</span><span class="va">sonde_data</span>,<span class="va">criteria</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">criteria</span> <span class="op">=</span> <span class="st">'(Temp4m &gt; 18) | (SPFD &gt;800)'</span></span>
+<span><span class="fu"><a href="reference/flag_event.html">flag_event</a></span><span class="op">(</span><span class="va">data</span>,<span class="va">criteria</span><span class="op">)</span></span></code></pre>
 <p>Flag data (2. clustering and other data driven methods):</p>
-<pre><code></code></pre>
+<pre><code><span></span>
+<span><span class="co">## Using historical data to form clusters (i.e. state tagging)</span></span>
+<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/find_clusters.html">find_clusters</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_OLD_daily</span>  <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Water_temperature_1m</span>, <span class="va">Pyranometer</span>, <span class="va">Wind_Speed</span><span class="op">)</span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co">## write state = clusters to data frame</span></span>
+<span><span class="va">Esthwaite_Buoy_OLD_daily</span> <span class="op">=</span> <span class="va">Esthwaite_Buoy_OLD_daily</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DATE</span>, <span class="va">Water_temperature_1m</span>, <span class="va">Pyranometer</span>, <span class="va">Wind_Speed</span><span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu">modeltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/modeltools/man/Generics.html" class="external-link">clusters</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## You can then specify the sampling rules for each cluster state and apply to your clustering results. See more in the lake water quality example.</span></span></code></pre>
+<p>This method is used in: &gt;Tso C-HM, Henrys P, Rennie S and Watkins J (2020) State Tagging for Improved Earth and Environmental Data Quality Assurance. Front. Environ. Sci. 8:46. doi: 10.3389/fenvs.2020.00046</p>
 <p>Extract periods of events (given minimum segment length):</p>
 <pre><code><span><span class="fu"><a href="reference/extract_event_periods.html">extract_event_periods</a></span><span class="op">(</span></span>
 <span>  <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -102,18 +115,18 @@
 <span>  min_length<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre>
 <p>Down-sample data (from 2 minutes, e.g. 15 minutes, 2 days) Note in python, this can be done using the <code>resample</code> function in <code>pandas</code>.</p>
 <pre><code><span><span class="va">sonde_data_15min</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu">floor_date</span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"15 minutes"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/round_date.html" class="external-link">floor_date</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"15 minutes"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">first</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sonde_data_2d</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu">floor_date</span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"2 days"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/round_date.html" class="external-link">floor_date</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="st">"2 days"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">first</span><span class="op">)</span>, .groups<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span>   </span></code></pre>
 <p>Rolling average smoothing (across all columns)</p>
 <pre><code><span><span class="va">sonde_data_rollmean</span> <span class="op">&lt;-</span> <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">RECORD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">~</span> <span class="fu">rollapply</span><span class="op">(</span><span class="va">.x</span>, width <span class="op">=</span> <span class="fl">7</span>, FUN <span class="op">=</span> <span class="va">mean</span>, fill <span class="op">=</span> <span class="cn">NA</span>, align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu">drop_na</span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span></span></code></pre>
+<span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="developer-guide">Developer guide<a class="anchor" aria-label="anchor" href="#developer-guide"></a>
@@ -121,6 +134,9 @@
 <p><code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown()</a></code></p>
 <p><code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code></p>
 <p>To build reference, run <code><a href="https://pkgdown.r-lib.org/reference/build_reference.html" class="external-link">pkgdown::build_reference()</a></code>.</p>
+<p>To add data to package, run <code>usethis::use_data(TheData)</code>.</p>
+<p>To install package for use in vignette, run <code><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">devtools::install()</a></code>.</p>
+<p>To build vignettes, run <code>pkgdown::build_articles(quiet = FALSE)</code>.</p>
 <p>To preview <code>pkgdown</code> site, run <code>pkgdown::preview_site(path='reference/index.html')</code>.</p>
 <hr>
 </div>
@@ -128,7 +144,7 @@
 <h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
 </h2>
 <p>This work was funded by the Natural Environment Research Council (part of UK Research and Innovation) under the Innovative Environmental Monitoring programme: Adaptive multi-nutrient monitoring system (ADAPT-NP) (Grant Reference NE/Z503551/1).</p>
-<p><a href="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" class="external-link"><img src="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" width="250"></a> <a href="https://ceh.ac.uk" class="external-link"><img src="https://raw.githubusercontent.com/NERC-CEH/jsdmstan/refs/heads/main/man/figures/UKCEH-Logo.png" width="250"></a> “# adaptNP”</p>
+<p><a href="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" class="external-link"><img src="https://edshare.soton.ac.uk/21748/4.haspreviewThumbnailVersion/university-of-southampton-text.png" width="250"></a> <a href="https://ceh.ac.uk" class="external-link"><img src="https://raw.githubusercontent.com/NERC-CEH/jsdmstan/refs/heads/main/man/figures/UKCEH-Logo.png" width="250"></a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

@@ -17,16 +17,24 @@ library(dplyr)
 library(lubridate)
 library(cowplot)
 
+library(lfstat) # baseflow separation
 
-devtools::load_all() # to replace with library(adaptNP)
 
-source('../temp/theme_gov.R') # optional theming for plots
+# devtools::load_all() # to replace with library(adaptNP)
+library(adaptNP)
+# source('temp/theme_gov.R') # optional theming for plots, included in package
+#  source('../temp/state_machine.R') # included in package
 ```
 
+The data used for demonstration in this notebook is included in the R package. 
+
+**Please cite**:
+Bowes, M.J.; Gozzard, E.; Newman, J.; Loewenthal, M.; Halliday, S.; Skeffington, R.A.; Jarvie, H.P.; Wade, A.; Palmer-Felgate, E. (2015). Hourly physical and nutrient monitoring data for The Cut, Berkshire (2010-2012). NERC Environmental Information Data Centre. https://doi.org/10.5285/abe4dd7c-a340-4595-a57f-8c1446ff7656
 
 ```{r}
-TheCutData = read_csv('../temp/HighFrequencyWQ_TheCut.csv') |> 
-    mutate(`Date / time` = parse_datetime(`Date / time`, "%d/%m/%Y %H:%M"))
+# TheCutData = read_csv('temp/HighFrequencyWQ_TheCut.csv') |> 
+#     mutate(`Date / time` = parse_datetime(`Date / time`, "%d/%m/%Y %H:%M"))
+
 ```
 
 
@@ -116,13 +124,12 @@ text(
 ### Baseflow separation
 
 ```{r}
-library(lfstat)
 TheCutDataXTS <- as.xts(TheCutData |> rename(discharge = `Flow at Binfield gauging station (m3/s)`) |> tail(8000) )
 TheCutDataXTS$baseflow <- baseflow(TheCutDataXTS$discharge)
 TheCutDataXTS$bf_turning <- (TheCutDataXTS$baseflow == TheCutDataXTS$discharge)
 
 # this method gives 1000+ turning points
-index(TheCutDataXTS[TheCutDataXTS$bf_turning==1])
+index(TheCutDataXTS[TheCutDataXTS$bf_turning==1]) |> length()
 
 plot(TheCutDataXTS$discharge, type = "l")
 lines(TheCutDataXTS$baseflow, col = 2)
@@ -217,7 +224,7 @@ rule_above_baseflow <- TheCutData[mask, ]|>
 
 
 
-### Wong and Kerkez (2016) algorithm
+### Adaptive sampling using Wong and Kerkez (2016) algorithm
 <!-- A real-time probability of precipitation, obtained in our case by querying the public WeatherUndergroundforecast (Weather Underground data from http://www.wunderground.com/), is used to trigger the autosam-pler to take a water quality sample before a storm. This provides a valuable base ﬂow measurement andsafeguards from missing measurements during instances when the hydrograph changes too rapidly or attoo small of an amplitude to be detected by ﬂow sensors alone. The sampling algorithm (Figure 4) uses theweather forecast to trigger a sample when the chance of precipitation exceeding 5 mm within the hour sur-passes 10% (empirically determined based upon an analysis of historical forecasts and the resulting hydro-logic response). Samples are then subsequently triggered based on the estimates of the hydrograph state.While many sampling strategies are possible, in the case of this study, the states of interest included:
 
  1. base ﬂow conditions right before a storm, 
@@ -247,7 +254,16 @@ print(paste('The Richards-Baker Flashiness Index (RBI) of the station is', RBI))
 ```
 
  ```{r}
- source('../temp/state_machine.R')
+
+# parameters
+params <- list(
+  # forecast_prob_thresh = 0.10,     # 10% POP
+  # forecast_rain_thresh = 5,        # mm/hour
+  event_frac_thresh <- 0.25,  # 25% above baseflow
+  onset_slope_thresh   = 7.5 / 5 /10 ,  # m3/s per min (paper value), may reduce to 0.05
+  baseflow_tol_frac    = 0.01,     # 10% of baseflow
+  eps                  = 1e-4      # 1e-2 or 1e-6
+)
 
 flow_state =  run_state_machine(
     TheCutData$`Date / time`, 
@@ -280,10 +296,9 @@ rule_state_machine <- TheCutData[mask, ]
 
 
 ```{r plot}
-
-#| fig-ncol: 2
-#| fig-width: 12
-#| fig-asp: 5
+#| fig-dim: [13,13]
+#| fig-cap: "Total chlorophyll and total phosphorus concentration plots using different regular and adaptive sub-sampling approaches. For plot (a) and (b), the full dataset is shown in black while the weekly baseline dataset is shown in red."
+#| fig-alt: "Comparison of sampling methods."
 
 # plot flow, and chlrophyll and P for all 4 rules
 size = 0.75
@@ -333,18 +348,18 @@ pTP4 = ggplot(rule_state_machine) +
 # )
 
 # # size 1000 x 750 or 1000x 1000
-# plot_grid(
-#   pTOCA1,pTOCA2,pTOCA3,pTOCA4, pTP1,pTP2,pTP3,pTP4,
-#   labels = letters[c(1,3,5,7,2,4,6,8)],label_x = 0.05,ncol=2, byrow = FALSE, label_size = 18
-# )
-print(pTOCA1)
-print(pTOCA2)
-print(pTOCA3)
-print(pTOCA4)
-print(pTP1)
-print(pTP2)
-print(pTP3)
-print(pTP4)
+plot_grid(
+  pTOCA1,pTOCA2,pTOCA3,pTOCA4, pTP1,pTP2,pTP3,pTP4,
+  labels = letters[c(1,3,5,7,2,4,6,8)],label_x = 0.05,ncol=2, byrow = FALSE, label_size = 18
+)
+# print(pTOCA1)
+# print(pTOCA2)
+# print(pTOCA3)
+# print(pTOCA4)
+# print(pTP1)
+# print(pTP2)
+# print(pTP3)
+# print(pTP4)
 
 # plot_grid(p1,p2,ncol=2)
 ```

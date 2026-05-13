@@ -20,7 +20,7 @@ This package can be installed using the [remotes](https://remotes.r-lib.org/inde
 remotes::install_github("NERC-CEH/adaptNP")
 ```
 
-![A diagram illustrating the basic concept of adaptive sampling.](..\man\figures\adapt-np-sequence-fig.png){.lightbox}
+![A diagram illustrating the basic concept of adaptive sampling.](\man\figures\adapt-np-sequence-fig.png){.lightbox}
 <!-- time series showing adaptive vs regular sampling -->
 <!-- ADD hero figure -->
 <!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) -->
@@ -66,6 +66,7 @@ Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD_daily  |>
 
 ```
 This method is used in:
+
 >Tso C-HM, Henrys P, Rennie S and Watkins J (2020) State Tagging for Improved Earth and Environmental Data Quality Assurance. Front. Environ. Sci. 8:46. doi: 10.3389/fenvs.2020.00046
 
 Extract periods of events (given minimum segment length):

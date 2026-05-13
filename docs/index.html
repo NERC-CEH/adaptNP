@@ -81,7 +81,7 @@
 <p>This package can be installed using the <a href="https://remotes.r-lib.org/index.html" class="external-link">remotes</a> package using the following code:</p>
 <pre><code><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"NERC-CEH/adaptNP"</span><span class="op">)</span></span></code></pre>
-<p><img src="..\man\figures\adapt-np-sequence-fig.png" class="lightbox" alt="A diagram illustrating the basic concept of adaptive sampling."><!-- time series showing adaptive vs regular sampling --><!-- ADD hero figure --><!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) --><!-- Zoomed event inset --><!-- 3. Sampling effort heatmap ribbon --><!-- 2. Side-by-side Split panel (before vs after) --></p>
+<p><img src="https://github.com/NERC-CEH/adaptNP/blob/main/man/figures/adapt-np-sequence-fig.png" class="lightbox" alt="A diagram illustrating the basic concept of adaptive sampling."><!-- time series showing adaptive vs regular sampling --><!-- ADD hero figure --><!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) --><!-- Zoomed event inset --><!-- 3. Sampling effort heatmap ribbon --><!-- 2. Side-by-side Split panel (before vs after) --></p>
 </div>
 <div class="section level2">
 <h2 id="using-adaptnp">Using adaptNP<a class="anchor" aria-label="anchor" href="#using-adaptnp"></a>
@@ -107,7 +107,10 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu">modeltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/modeltools/man/Generics.html" class="external-link">clusters</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## You can then specify the sampling rules for each cluster state and apply to your clustering results. See more in the lake water quality example.</span></span></code></pre>
-<p>This method is used in: &gt;Tso C-HM, Henrys P, Rennie S and Watkins J (2020) State Tagging for Improved Earth and Environmental Data Quality Assurance. Front. Environ. Sci. 8:46. doi: 10.3389/fenvs.2020.00046</p>
+<p>This method is used in:</p>
+<blockquote>
+<p>Tso C-HM, Henrys P, Rennie S and Watkins J (2020) State Tagging for Improved Earth and Environmental Data Quality Assurance. Front. Environ. Sci. 8:46. doi: 10.3389/fenvs.2020.00046</p>
+</blockquote>
 <p>Extract periods of events (given minimum segment length):</p>
 <pre><code><span><span class="fu"><a href="reference/extract_event_periods.html">extract_event_periods</a></span><span class="op">(</span></span>
 <span>  <span class="va">sonde_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>

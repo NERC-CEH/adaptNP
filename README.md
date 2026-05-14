@@ -19,9 +19,9 @@ This package can be installed using the [remotes](https://remotes.r-lib.org/inde
 # install.packages("remotes")
 remotes::install_github("NERC-CEH/adaptNP")
 ```
-![A diagram illustrating the basic concept of adaptive sampling.](man/figures/adapt-np-sequence-fig.png)
+<!-- ![A diagram illustrating the basic concept of adaptive sampling.](man/figures/adapt-np-sequence-fig.png) -->
 
-<!-- ![A diagram illustrating the basic concept of adaptive sampling.](https://github.com/NERC-CEH/adaptNP/blob/main/man/figures/adapt-np-sequence-fig.png?raw=true){.lightbox} -->
+![A diagram illustrating the basic concept of adaptive sampling.](https://nerc-ceh.github.io/adaptNP/reference/figures/adapt-np-sequence-fig.png){.lightbox}
 <!-- time series showing adaptive vs regular sampling -->
 <!-- ADD hero figure -->
 <!-- Could add error comparison panel (reconstuction from regular vs adpative sampling) -->

@@ -117,6 +117,15 @@ To build vignettes, run `pkgdown::build_articles(quiet = FALSE)`.
 
 To preview `pkgdown` site, run ` pkgdown::preview_site(path='reference/index.html')`.
 
+# Run all tests
+devtools::test()
+
+# Run specific test file
+devtools::test_file("tests/testthat/test-flag_event.R")
+
+# Check coverage
+devtools::test_coverage()
+
 ***
 ## Acknowledgment
 

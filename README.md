@@ -4,7 +4,6 @@
 <!-- # [![R-CMD-check](https://github.com/NERC-CEH/jsdmstan/workflows/R-CMD-check/badge.svg)](https://github.com/NERC-CEH/adaptNP/actions) -->
 <!-- # [![Codecov test coverage](https://codecov.io/gh/NERC-CEH/jsdmstan/branch/main/graph/badge.svg)](https://codecov.io/gh/NERC-CEH/jsdmstan?branch=main) -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-
 [![R-CMD-check](https://github.com/NERC-CEH/adaptNP/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NERC-CEH/adaptNP/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/NERC-CEH/adaptNP/graph/badge.svg)](https://app.codecov.io/gh/NERC-CEH/adaptNP)
 <!-- badges: end -->

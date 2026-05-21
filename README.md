@@ -5,7 +5,11 @@
 <!-- # [![Codecov test coverage](https://codecov.io/gh/NERC-CEH/jsdmstan/branch/main/graph/badge.svg)](https://codecov.io/gh/NERC-CEH/jsdmstan?branch=main) -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
+[![R-CMD-check](https://github.com/NERC-CEH/adaptNP/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NERC-CEH/adaptNP/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/NERC-CEH/adaptNP/graph/badge.svg)](https://app.codecov.io/gh/NERC-CEH/adaptNP)
 <!-- badges: end -->
+
+<!-- To use github action, `run usethis::use_github_action()` -->
 
 >This is an R package for running adaptive sampling methods for high frequency environmental sensors.
 

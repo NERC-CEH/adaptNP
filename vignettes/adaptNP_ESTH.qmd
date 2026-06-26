@@ -112,8 +112,48 @@ intervals <- periods |>
   pull(int)
 
 ```
+We can show the periods during which the rule is activated in the Temp4m and SPFD data.
+```{r}
+Esthwaite_Buoy_HiRes$mask <- Reduce(`|`, lapply(intervals, function(int) Esthwaite_Buoy_HiRes$TIMESTAMP %within% int))
 
-After extracting the event periods, the following code snippets uses it to subset the dataset.
+
+
+Esthwaite_Buoy_HiRes |>   mutate(   
+    Rule = if_else(mask == TRUE, "rule 1 active", "rule 0 only")
+  ) |> 
+  select(TIMESTAMP,Rule,Temp4m,SPFD) |> 
+  tidyr::pivot_longer(-c(TIMESTAMP, Rule), names_to = "fieldname", values_to = "value") |> 
+  ggplot2::ggplot() + 
+  geom_point(aes(x = TIMESTAMP, y=value, colour = factor(Rule))) + 
+  facet_grid(rows = vars(fieldname), scales = "free_y", axes = "all_y") +
+  scale_color_manual(
+    name   = "",                      # legend title
+    values = c(#"raw data" = "#000000",
+               "rule 0 only" = "#1b9e77",
+               "rule 1 active" = "#d95f02")
+  ) + 
+   # geom_text(data = anno, aes(x = xtext,  y = ytext, label = text), size=5) +
+  theme_gov() +
+#   geom_rect(data = periods |> mutate(start=as.Date(start), end=as.Date(end)),
+#             aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+#             fill = "lightpink", alpha= 0.3)+ 
+  theme(legend.position='bottom',
+        panel.spacing = unit(2, "lines"),
+        text=element_text(size=20), #change font size of all text
+        # axis.line = element_line(linewidth = 3, colour = "grey20"),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
+        axis.text=element_text(size=20), #change font size of axis text
+        axis.title=element_text(size=20), #change font size of axis titles
+        plot.title=element_text(size=16), #change font size of plot title
+        legend.text=element_text(size=20), #change font size of legend text
+        legend.title=element_text(size=20))+ #change font size of legend title  
+  #ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
+  labs(x='',y='')+
+  guides(colour = guide_legend(override.aes = list(size=8))) 
+```
+
+After extracting the event periods, the following code snippets uses it to subset the SUNA nitrate dataset.
 ```{r ex1-grab-data}
 # rule 0: every 6h
 baseline <- Esthwaite_Buoy_SUNA_Data |> 

@@ -14,8 +14,9 @@ LazyData: true
 RoxygenNote: 7.3.3
 Imports: 
     datasets,
+    ggplot2,
     stats,
-    flexclust
+    flexclust, 'jsonlite' 'lubridate' 'rlang'
 URL: https://nerc-ceh.github.io/adaptNP/
 BugReports: https://nerc-ceh.github.io/adaptNP/
 Suggests: 

@@ -223,8 +223,22 @@ flag_event <- function(df, flag_statement){
     warning("The column 'event_flag' exists in the data frame.")
   }
 
-  df <- df %>%
-    mutate(event_flag = ifelse(eval(rlang::parse_expr(flag_statement)),TRUE,FALSE))
+  df <- df |> 
+  mutate(
+    event_flag = coalesce(
+      eval(rlang::parse_expr(flag_statement)),
+      FALSE
+    )
+  )
+
+    # mutate(
+    #   event_flag = ifelse(eval(rlang::parse_expr(flag_statement)),TRUE,FALSE), # OLD, will give true if there are NA, must use coalesce to correct
+    # 
+    #   )
+
+  # )
+
+
   return(df)
 }
 

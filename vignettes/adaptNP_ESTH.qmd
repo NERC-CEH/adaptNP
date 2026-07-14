@@ -54,8 +54,9 @@ library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(tidyr)
+library(cowplot)
 
-# devtools::load_all() # to replace with library(adaptNP)
+#devtools::load_all() 
 library(adaptNP)
 
 # source('../temp/theme_gov.R') # optional theming for plots
@@ -106,6 +107,17 @@ periods  <- extract_event_periods(
     rename(timestamp=TIMESTAMP,flag=event_flag)  |> tidyr::drop_na(flag),
   min_length=50) 
 
+ # stats
+ 
+periods |>
+  mutate(
+    duration =
+      lubridate::parse_date_time(end, orders = c("ymd HMS", "ymd")) -
+      lubridate::parse_date_time(start, orders = c("ymd HMS", "ymd"))
+  ) |>
+  summarise(mean = mean(duration, na.rm = TRUE))
+ 
+
 # convert period to R lubridate intervals
 intervals <- periods |> 
   mutate(int = interval(start,end) ) |> 
@@ -118,14 +130,23 @@ Esthwaite_Buoy_HiRes$mask <- Reduce(`|`, lapply(intervals, function(int) Esthwai
 
 
 
-Esthwaite_Buoy_HiRes |>   mutate(   
+pp1 = Esthwaite_Buoy_HiRes |>   mutate(   
     Rule = if_else(mask == TRUE, "rule 1 active", "rule 0 only")
   ) |> 
   select(TIMESTAMP,Rule,Temp4m,SPFD) |> 
   tidyr::pivot_longer(-c(TIMESTAMP, Rule), names_to = "fieldname", values_to = "value") |> 
   ggplot2::ggplot() + 
   geom_point(aes(x = TIMESTAMP, y=value, colour = factor(Rule))) + 
-  facet_grid(rows = vars(fieldname), scales = "free_y", axes = "all_y") +
+  facet_wrap(~fieldname, ncol = 1, scales = "free_y", axes = "all_y",
+        labeller = as_labeller(
+              c(
+                SPFD   = "atop('Solar radiation', W~m^{-2})",
+                Temp4m = "atop('Water temperature', 'at ~4m depth')"
+              ),
+              label_parsed
+            ), 
+             strip.position = "left"
+             ) +
   scale_color_manual(
     name   = "",                      # legend title
     values = c(#"raw data" = "#000000",
@@ -142,7 +163,8 @@ Esthwaite_Buoy_HiRes |>   mutate(
         text=element_text(size=20), #change font size of all text
         # axis.line = element_line(linewidth = 3, colour = "grey20"),
         strip.background = element_blank(),
-        strip.text.y = element_blank(),
+        strip.placement = "outside",
+        #strip.text.y = element_blank(),
         axis.text=element_text(size=20), #change font size of axis text
         axis.title=element_text(size=20), #change font size of axis titles
         plot.title=element_text(size=16), #change font size of plot title
@@ -151,6 +173,8 @@ Esthwaite_Buoy_HiRes |>   mutate(
   #ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
   labs(x='',y='')+
   guides(colour = guide_legend(override.aes = list(size=8))) 
+
+# pp1
 ```
 
 After extracting the event periods, the following code snippets uses it to subset the SUNA nitrate dataset.
@@ -187,7 +211,7 @@ anno <- data.frame(xtext = c('2025-07-15', '2025-07-15', '2025-07-15'),
                    text = c("Every 10 minutes", "Every 6 hours", "Every 10 minutes only during event")) |> 
   mutate(xtext = as.Date(xtext))
 
-combined_SUNA |> 
+pp2 <- combined_SUNA |> 
   rename( `raw data` = SUNA_Nitrate_mgL, 
           `rule 0 (baseline)` = baseline,
           `rule 1 (algal bloom likely)` = rule1,) |> 
@@ -221,8 +245,13 @@ combined_SUNA |>
         legend.title=element_text(size=20))+ #change font size of legend title  
   ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
   labs(x='',y='mg/L')+ ylim(0,0.5) + 
-  guides(colour = guide_legend(override.aes = list(size=8))) # change legend point size
+  guides(colour = guide_legend(override.aes = list(size=8), ncol=2)) # change legend point size
 
+# pp2
+```
+```{r}
+# combine plots
+plot_grid(pp1,pp2, labels = "auto", label_size = 22)
 ```
 
 ```{r}
@@ -230,15 +259,20 @@ combined_SUNA |>
 periods  |> mutate(duration = interval(start,end)%/%minutes(1))
 
 ### metrics
-metrics <- combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+combined_SUNA = combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE))
+metrics <- combined_SUNA |> 
     summarise(across(where(is.numeric), ~ median(.x, na.rm = TRUE)))
 
 
 ## median changed
- (metrics$SUNA_Nitrate_mgL - metrics$rule1) / metrics$SUNA_Nitrate_mgL
+ (metrics$rule1 - metrics$SUNA_Nitrate_mgL) / metrics$SUNA_Nitrate_mgL
 
-combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+c <- combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
      summarise(across(where(is.numeric), list(min = min, max = max), na.rm=TRUE))
+
+(c$baseline_max- c$baseline_min) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
+(c$rule1_max- c$rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
+(c$baseline_and_rule1_max - c$baseline_and_rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
 ```
 
 ### Example 2: data-driven rules (state tagging)
@@ -440,6 +474,83 @@ diff(range(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE)) /a
 
 b = median(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE)
 (median(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE) -b) /b 
+```
+## Kolmogorov-Smirnov Tests and `ecdf`
+A test to show how good a sub-sampled dataset preseves the characteristics of the orignial one is to overlay their empirical cumulative distribution functions (ecdf). In a perfect scenario, the ecdf of the two time series would completely overlap.
+
+Kolmogorov-Smirnov tests returns the KS statistic, $D$, which is the maximum vertical distance between two cumulative distribution functions (CDFs).
+
+The accompanying p-values tests whether the two time series comes from the same statistical distribution. p-value < 0.05 shows strong evidence that the distrutions differ.
+ 
+ *Caveat:* With very large datasets (common in environmental time series), the KS test becomes extremely sensitive. Even tiny, practically unimportant differences can become statistically significant. In those cases, D is often more informative than the p-value. 
+
+Interpretation guide:
+D < 0.05   Very similar
+0.05-0.10  Small difference
+0.10-0.20  Moderate difference
+> 0.20     Large difference
+
+
+```{r}
+ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, rule_statetag$`SUNA_Nitrate_mgL`)
+
+ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, baseline$`SUNA_Nitrate_mgL`)$statistic
+
+ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, rule_statetag$`SUNA_Nitrate_mgL`)$statistic
+
+plot(ecdf(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`))
+lines(ecdf(rule_statetag$`SUNA_Nitrate_mgL`), col = "red")
+
+
+
+list(
+  `raw data` = Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`,
+  `baseline` = combined_SUNA $`baseline`,
+  `rule 1` = combined_SUNA $`rule1`,
+  `baseline and rule1` = combined_SUNA $`baseline_and_rule1`,
+  `state tagging` = rule_statetag$`SUNA_Nitrate_mgL`
+) |> 
+  stack() |>  
+ggplot(aes(values, colour = ind)) +
+  stat_ecdf(linewidth = 1.5) +
+  labs(x = "Value", y = "ECDF", colour = NULL) +
+  xlab('SUNA nitrate (mg/L)')+
+  guides(
+    colour = guide_legend(ncol = 2)
+  ) + 
+  theme_gov() +
+theme(
+  legend.text = element_text(lineheight = 0.9, size=20), # add legend space
+  legend.position='bottom',
+        panel.spacing = unit(2, "lines"),
+        text=element_text(size=20), #change font size of all text
+        # axis.line = element_line(linewidth = 3, colour = "grey20"),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
+        axis.text=element_text(size=20), #change font size of axis text
+        axis.title=element_text(size=20), #change font size of axis titles
+        plot.title=element_text(size=16), #change font size of plot title
+        legend.title=element_text(size=20)
+        ) + 
+         scale_colour_manual(
+  values = c(
+    "raw data" = "black",
+    "baseline" = "#0072B2",          # Okabe-Ito blue
+    "rule 1" = "#D55E00",
+    "baseline and rule1" = "#009E73",
+    "state tagging" = "#CC79A7"
+  ),
+  labels = c(
+    "raw data" = "raw data",
+    "baseline" = paste0("baseline"," (KS = ", sprintf('%.4f',ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, combined_SUNA $`baseline`)$statistic) ,")"),
+    "rule 1" = paste0("rule 1"," (KS = ", sprintf('%.4f',ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, combined_SUNA $`rule1`)$statistic),")"),
+    "baseline and rule1" = paste0("baseline and rule1"," (KS = ", sprintf('%.4f',ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, combined_SUNA $`baseline_and_rule1`)$statistic ),")"),
+    "state tagging" =  paste0("state tagging"," (KS = ", sprintf('%.4f',ks.test(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, rule_statetag$`SUNA_Nitrate_mgL`)$statistic),")")
+  )
+)
+
+
+#
 
 ```
 

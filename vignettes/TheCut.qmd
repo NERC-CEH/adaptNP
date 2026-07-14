@@ -16,6 +16,7 @@ library(tidyr)
 library(dplyr)
 library(lubridate)
 library(cowplot)
+library(ggtext) # for markdown support in ggplot
 
 library(lfstat) # baseflow separation
 
@@ -379,6 +380,12 @@ b = median(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE)
 (median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
 (median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
 
+b 
+median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
+median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)
+median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
+median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)
+
 
 ```
 
@@ -395,6 +402,128 @@ b = median(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE)
 (median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
 (median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
 (median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+
+median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+```
+
+## Kolmogorov-Smirnov Tests and `ecdf`
+A test to show how good a sub-sampled dataset preseves the characteristics of the orignial one is to overlay their empirical cumulative distribution functions (ecdf). In a perfect scenario, the ecdf of the two time series would completely overlap.
+
+Kolmogorov-Smirnov tests returns the KS statistic, $D$, which is the maximum vertical distance between two cumulative distribution functions (CDFs).
+
+The accompanying p-values tests whether the two time series comes from the same statistical distribution. p-value < 0.05 shows strong evidence that the distrutions differ.
+ 
+ *Caveat:* With very large datasets (common in environmental time series), the KS test becomes extremely sensitive. Even tiny, practically unimportant differences can become statistically significant. In those cases, D is often more informative than the p-value. 
+
+Interpretation guide:
+D < 0.05   Very similar
+0.05-0.10  Small difference
+0.10-0.20  Moderate difference
+> 0.20     Large difference
+
+
+```{r}
+
+## ECDF for TP
+pp1 = list(
+  `raw data` = TheCutData$`Total Phosphorus (mg/l)`,
+  `baseline` = baseline$`Total Phosphorus (mg/l)`,
+  `low flow, low DO` = rule_low_DO$`Total Phosphorus (mg/l)`,
+  `flow above baseflow` = rule_above_baseflow$`Total Phosphorus (mg/l)`,
+  `modified Wong and Kerkez` = rule_state_machine$`Total Phosphorus (mg/l)`
+) |> 
+  stack() |>  
+ggplot(aes(values, colour = ind)) +
+  stat_ecdf(linewidth = 1.5) +
+  labs(x = "Value", y = "ECDF      ", colour = NULL) +
+  xlab('Total Phosphorus (mg/L)')+
+  guides(
+    colour = guide_legend(ncol = 1)
+  ) + 
+  theme_gov() +
+theme(
+  legend.text = element_text(lineheight = 0.9, size=20), # add legend space
+  legend.position='bottom',
+        panel.spacing = unit(2, "lines"),
+        text=element_text(size=20), #change font size of all text
+        # axis.line = element_line(linewidth = 3, colour = "grey20"),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
+        axis.text=element_text(size=20), #change font size of axis text
+        axis.title=element_text(size=20), #change font size of axis titles
+        plot.title=element_text(size=16), #change font size of plot title
+        legend.title=element_text(size=20)
+        ) + 
+         scale_colour_manual(
+  values = c(
+    "raw data" = "black",
+    "baseline" = "#0072B2",          # Okabe-Ito blue
+    "low flow, low DO" = "#D55E00",
+    "flow above baseflow" = "#009E73",
+    "modified Wong and Kerkez" = "#CC79A7"
+  ),
+  labels = c(
+    "raw data" = "raw data",
+    "baseline" = paste0("baseline"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total Phosphorus (mg/l)`, baseline$`Total Phosphorus (mg/l)`)$statistic) ,")"),
+    "low flow, low DO" = paste0("low flow, low DO"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total Phosphorus (mg/l)`, rule_low_DO$`Total Phosphorus (mg/l)`)$statistic),")"),
+    "flow above baseflow" = paste0("flow above baseflow"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total Phosphorus (mg/l)`, rule_above_baseflow$`Total Phosphorus (mg/l)`)$statistic ),")"),
+    "modified Wong and Kerkez" =  paste0("modified Wong and Kerkez"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total Phosphorus (mg/l)`, rule_state_machine$`Total Phosphorus (mg/l)`)$statistic),")")
+  )
+)
+
+
+# ECDF for TC
+pp2 = list(
+  `raw data` = TheCutData$`Total chlorophyll (ug/l)`,
+  `baseline` = baseline$`Total chlorophyll (ug/l)`,
+  `low flow, low DO` = rule_low_DO$`Total chlorophyll (ug/l)`,
+  `flow above baseflow` = rule_above_baseflow$`Total chlorophyll (ug/l)`,
+  `modified Wong and Kerkez` = rule_state_machine$`Total chlorophyll (ug/l)`
+) |> 
+  stack() |>  
+ggplot(aes(values, colour = ind)) +
+  stat_ecdf(linewidth = 1.5) +
+  labs(x = "Value", y = "ECDF      ", colour = NULL) +
+  xlab('Total chlorophyll *a* (ug/L)')+
+  guides(
+    colour = guide_legend(ncol = 1)
+  ) + 
+  theme_gov() +
+theme(
+  axis.title.x = ggtext::element_markdown(), # enable markdown in xlabel
+  legend.text = element_text(lineheight = 0.9, size=20), # add legend space
+  legend.position='bottom',
+        panel.spacing = unit(2, "lines"),
+        text=element_text(size=20), #change font size of all text
+        # axis.line = element_line(linewidth = 3, colour = "grey20"),
+        strip.background = element_blank(),
+        strip.text.y = element_blank(),
+        axis.text=element_text(size=20), #change font size of axis text
+        axis.title=element_text(size=20), #change font size of axis titles
+        plot.title=element_text(size=16), #change font size of plot title
+        legend.title=element_text(size=20)
+        ) + 
+         scale_colour_manual(
+  values = c(
+    "raw data" = "black",
+    "baseline" = "#0072B2",          # Okabe-Ito blue
+    "low flow, low DO" = "#D55E00",
+    "flow above baseflow" = "#009E73",
+    "modified Wong and Kerkez" = "#CC79A7"
+  ),
+  labels = c(
+    "raw data" = "raw data",
+    "baseline" = paste0("baseline"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total chlorophyll (ug/l)`, baseline$`Total chlorophyll (ug/l)`)$statistic) ,")"),
+    "low flow, low DO" = paste0("low flow, low DO"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total chlorophyll (ug/l)`, rule_low_DO$`Total chlorophyll (ug/l)`)$statistic),")"),
+    "flow above baseflow" = paste0("flow above baseflow"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total chlorophyll (ug/l)`, rule_above_baseflow$`Total chlorophyll (ug/l)`)$statistic ),")"),
+    "modified Wong and Kerkez" =  paste0("modified Wong and Kerkez"," (KS = ", sprintf('%.4f',ks.test(TheCutData$`Total chlorophyll (ug/l)`, rule_state_machine$`Total chlorophyll (ug/l)`)$statistic),")")
+  )
+)
+
+plot_grid(pp1+ theme(aspect.ratio=1),pp2+ theme(aspect.ratio=1)+ xlim(0,40), labels = "auto", label_size = 22)
 
 ```
 ```{r}

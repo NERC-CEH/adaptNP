@@ -167,7 +167,7 @@ if (!all(colnames(clusters@xrange) %in% colnames(newdata)) == TRUE) {
 
 # 3. make predictions
   if (option == 'same') {
-    state = predict(clusters, scale(tempdata))
+    state = flexclust::predict(clusters, scale(tempdata))
     newdata = newdata |> mutate(state = state)
   } else if (option == 'daily9am') {
     # aggregate data daily before clustering
@@ -183,7 +183,7 @@ if (!all(colnames(clusters@xrange) %in% colnames(newdata)) == TRUE) {
 
     tempdates = tempdata |> dplyr::select(DATE)
     tempdata = tempdata |> dplyr::select(colnames(clusters@xrange))
-    state = predict(clusters, scale(tempdata))
+    state = flexclust::predict(clusters, scale(tempdata))
 
     tempdates = tempdates |> mutate(state = state)
 
@@ -224,7 +224,7 @@ flag_event <- function(df, flag_statement){
   }
 
   df <- df |> 
-  mutate(
+  dplyr::mutate(
     event_flag = coalesce(
       eval(rlang::parse_expr(flag_statement)),
       FALSE

@@ -16,7 +16,10 @@ Imports:
     datasets,
     ggplot2,
     stats,
-    flexclust, 'jsonlite' 'lubridate' 'rlang'
+    flexclust, 
+    jsonlite,
+    lubridate,
+    rlang
 URL: https://nerc-ceh.github.io/adaptNP/
 BugReports: https://nerc-ceh.github.io/adaptNP/
 Suggests: 

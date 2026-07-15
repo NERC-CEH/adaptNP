@@ -134,6 +134,7 @@ pp1 = Esthwaite_Buoy_HiRes |>   mutate(
     Rule = if_else(mask == TRUE, "rule 1 active", "rule 0 only")
   ) |> 
   select(TIMESTAMP,Rule,Temp4m,SPFD) |> 
+  filter(SPFD > -1.0) |> 
   tidyr::pivot_longer(-c(TIMESTAMP, Rule), names_to = "fieldname", values_to = "value") |> 
   ggplot2::ggplot() + 
   geom_point(aes(x = TIMESTAMP, y=value, colour = factor(Rule))) + 
@@ -205,16 +206,16 @@ combined_SUNA <- Esthwaite_Buoy_SUNA_Data |> select(TIMESTAMP, SUNA_Nitrate_mgL)
   left_join(rule1 |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> rename(rule1 = SUNA_Nitrate_mgL), by='TIMESTAMP') |> 
   left_join(baseline |> select(TIMESTAMP, SUNA_Nitrate_mgL) |> rename(baseline = SUNA_Nitrate_mgL), by='TIMESTAMP')
 
-anno <- data.frame(xtext = c('2025-07-15', '2025-07-15', '2025-07-15'), 
+anno <- data.frame(xtext = c('2025-07-31', '2025-07-31', '2025-07-31'), 
                    ytext = c(0.4,0.4,0.4), 
-                   Rule = c("raw data", "rule 0 (baseline)" ,"rule 1 (algal bloom likely)" ),
+                   Rule = c("raw data", "rule 0 (baseline)" ,"rule 1 (adaptive sampling)" ),
                    text = c("Every 10 minutes", "Every 6 hours", "Every 10 minutes only during event")) |> 
   mutate(xtext = as.Date(xtext))
 
-pp2 <- combined_SUNA |> 
+pp2 <- combined_SUNA |> #select(-`baseline_and_rule1`) |> 
   rename( `raw data` = SUNA_Nitrate_mgL, 
           `rule 0 (baseline)` = baseline,
-          `rule 1 (algal bloom likely)` = rule1,) |> 
+          `rule 1 (adaptive sampling)` = rule1,) |> 
 #  filter(TIMESTAMP <'2025-08-15') |> 
   tidyr::pivot_longer(!TIMESTAMP, names_to = "Rule", values_to = "value") |> 
   ggplot2::ggplot() + 
@@ -225,7 +226,7 @@ pp2 <- combined_SUNA |>
     name   = "",                      # legend title
     values = c("raw data" = "#000000",
                "rule 0 (baseline)" = "#1b9e77",
-               "rule 1 (algal bloom likely)" = "#d95f02")
+               "rule 1 (adaptive sampling)" = "#d95f02")
   ) + 
     geom_text(data = anno, aes(x = xtext,  y = ytext, label = text), size=5) +
   theme_gov() +

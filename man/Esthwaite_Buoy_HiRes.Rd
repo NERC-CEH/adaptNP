@@ -3,21 +3,24 @@
 \docType{data}
 \name{Esthwaite_Buoy_HiRes}
 \alias{Esthwaite_Buoy_HiRes}
-\title{High resolution physio-chemical data collected from automatic buoy at Esthwaite Water, England (2025).}
+\title{High resolution physio-chemical data collected from an automatic buoy at
+Esthwaite Water, England (2025)}
 \format{
-## `Esthwaite_Buoy_HiRes`
 A data frame (tibble) with 126,472 rows and 23 columns:
 \describe{
   \item{TIMESTAMP}{Date and time}
-  \item{others}{Various parameters}
+  \item{others}{Various physical, chemical and meteorological parameters}
 }
-#' @seealso \code{\link{Esthwaite_Buoy_SUNA_Data}}, \code{\link{Esthwaite_Buoy_SUNA_Data}}
-#' @seealso \code{\link{Esthwaite_Buoy_OLD}}, \code{\link{Esthwaite_Buoy_OLD}}
 }
 \usage{
 Esthwaite_Buoy_HiRes
 }
 \description{
-High resolution physio-chemical data collected from automatic buoy at Esthwaite Water, England (2025).
+High resolution physio-chemical data collected from an automatic buoy at
+Esthwaite Water, England (2025)
+}
+\seealso{
+[Esthwaite_Buoy_SUNA_Data()],
+[Esthwaite_Buoy_OLD]
 }
 \keyword{datasets}

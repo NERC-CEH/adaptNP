@@ -37,7 +37,7 @@ to give a plot a feel more in line with gov.uk.
 
 
 library(ggplot2)
-library(govstyle)
+#library(govstyle)  # copied below
 library(dplyr)
 
 p <- mtcars \%>\%

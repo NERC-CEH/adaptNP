@@ -1,3 +1,10 @@
+
+#' @importFrom dplyr mutate summarise group_by across where left_join coalesce
+#' @importFrom magrittr %>%
+#' @importFrom stats complete.cases median
+NULL
+
+
 # Hello, world!
 #
 # This is an example function named 'hello'
@@ -83,12 +90,12 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #' Predict cluster membership for new data
 #'
 #' Assigns cluster labels to new observations using a previously fitted
-#' clustering model (e.g. from \code{\link{find_cluster}}). The function
+#' clustering model (e.g. from \code{\link{find_clusters}}). The function
 #' applies the same feature structure as the training data and appends
 #' predicted cluster states to the input data frame.
 #'
 #' @param clusters A fitted clustering model object (e.g. `kcca` object)
-#'   returned by \code{\link{adaptNP::find_cluster}}. Must support
+#'   returned by \code{\link{adaptNP::find_clusters}}. Must support
 #'   \code{predict()} and contain training feature ranges in `@xrange`.
 #' @param newdata A data frame containing new observations to classify.
 #'   Must include all variables used to train the clustering model.
@@ -135,7 +142,7 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #' # Example: predict clusters for new data
 #' \dontrun{
 #' # Fit clustering model
-#' model <- adaptNP::find_cluster(training_data)
+#' model <- adaptNP::find_clusters(training_data)
 #'
 #' # Predict cluster states for new observations
 #' newdata$TIMESTAMP <- Sys.time() + seq_len(nrow(newdata))
@@ -149,7 +156,7 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #' head(result$state)
 #' }
 #'
-#' @seealso \code{\link{find_cluster}}, \code{\link[stats]{predict}}
+#' @seealso \code{\link{find_clusters}}, \code{\link[stats]{predict}}
 #'
 #' @export
 pred_clusters = function(clusters,newdata, option='same'){

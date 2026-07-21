@@ -312,7 +312,7 @@ Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD_daily  |>
 
 
 ## plot
-ggplot(Esthwaite_Buoy_OLD_daily  |> 
+ggplot2::ggplot(Esthwaite_Buoy_OLD_daily  |> 
     pivot_longer(!c(DATE, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
     mutate(state = as.factor(state))
 ) + 
@@ -359,7 +359,7 @@ newdata = Esthwaite_Buoy_HiRes |> rename(Water_temperature_1m=Temp1m,Pyranometer
 newdata = pred_clusters(clusters, newdata)
 
 # plot hourly state and weather data
-ggplot(newdata |> dplyr::select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
+ggplot2::ggplot(newdata |> dplyr::select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
     pivot_longer(!c(TIMESTAMP, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
     mutate(state = as.factor(state))
 ) + 
@@ -430,7 +430,7 @@ times = newdataDailyMode |> select(DATE,state) |> drop_na() |>
 # plot sampling state
 
 
-ggplot(times |> mutate(y=state, state=as.factor(state))) + 
+ggplot2::ggplot(times |> mutate(y=state, state=as.factor(state))) + 
   geom_point(aes(x=TIMESTAMP,y=y, color=state)) + 
   theme_gov() +
   scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
@@ -445,7 +445,7 @@ times |> mutate(y=state, state=as.factor(state)) |>
   left_join(newdata |> select(-state), by='TIMESTAMP') |> 
   select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
   pivot_longer(!c(TIMESTAMP, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
-  ggplot() + 
+  ggplot2::ggplot() + 
   geom_point(aes(x=TIMESTAMP,y=VALUE, color=state)) + 
   facet_grid(rows = vars(FIELDNAME), scales = "free") +
   theme_gov() +
@@ -462,7 +462,7 @@ rule_statetag <-times |> mutate(y=state, state=as.factor(state)) |>
   left_join(Esthwaite_Buoy_SUNA_Data , by='TIMESTAMP') 
   
 rule_statetag  |> 
-  ggplot() + 
+  ggplot2::ggplot() + 
   geom_point(aes(x=TIMESTAMP,y=SUNA_Nitrate_mgL , color=state)) + 
   theme_gov() +
   scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
@@ -512,7 +512,7 @@ list(
   `state tagging` = rule_statetag$`SUNA_Nitrate_mgL`
 ) |> 
   stack() |>  
-ggplot(aes(values, colour = ind)) +
+ggplot2::ggplot(aes(values, colour = ind)) +
   stat_ecdf(linewidth = 1.5) +
   labs(x = "Value", y = "ECDF", colour = NULL) +
   xlab('SUNA nitrate (mg/L)')+

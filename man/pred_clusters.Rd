@@ -8,7 +8,7 @@ pred_clusters(clusters, newdata, option = "same")
 }
 \arguments{
 \item{clusters}{A fitted clustering model object (e.g. `kcca` object)
-returned by \code{\link{adaptNP::find_cluster}}. Must support
+returned by \code{\link{adaptNP::find_clusters}}. Must support
 \code{predict()} and contain training feature ranges in `@xrange`.}
 
 \item{newdata}{A data frame containing new observations to classify.
@@ -30,7 +30,7 @@ A data frame equal to `newdata` with an additional column:
 }
 \description{
 Assigns cluster labels to new observations using a previously fitted
-clustering model (e.g. from \code{\link{find_cluster}}). The function
+clustering model (e.g. from \code{\link{find_clusters}}). The function
 applies the same feature structure as the training data and appends
 predicted cluster states to the input data frame.
 }
@@ -66,7 +66,7 @@ a column named `TIMESTAMP` when using `"daily"` aggregation.
 # Example: predict clusters for new data
 \dontrun{
 # Fit clustering model
-model <- adaptNP::find_cluster(training_data)
+model <- adaptNP::find_clusters(training_data)
 
 # Predict cluster states for new observations
 newdata$TIMESTAMP <- Sys.time() + seq_len(nrow(newdata))
@@ -82,5 +82,5 @@ head(result$state)
 
 }
 \seealso{
-\code{\link{find_cluster}}, \code{\link[stats]{predict}}
+\code{\link{find_clusters}}, \code{\link[stats]{predict}}
 }

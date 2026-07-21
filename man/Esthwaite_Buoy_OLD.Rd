@@ -3,7 +3,7 @@
 \docType{data}
 \name{Esthwaite_Buoy_OLD}
 \alias{Esthwaite_Buoy_OLD}
-\title{Esthwaite Water buoy monitoring data (2008–2011)}
+\title{Esthwaite Water buoy monitoring data (2008--2011)}
 \format{
 A data frame with 35,064 rows and 16 variables:
 \describe{
@@ -32,23 +32,23 @@ A data frame with 35,064 rows and 16 variables:
 Esthwaite_Buoy_OLD
 }
 \description{
-Data from an automatic water monitoring buoy at Esthwaite Water,
-England, collected between 2008 and 2011.
+Data from an automatic water monitoring buoy at Esthwaite Water, England,
+collected between 2008 and 2011.
 
-The dataset contains high-frequency measurements of water
-temperature at multiple depths, alongside meteorological variables.
+The dataset contains high-frequency measurements of water temperature at
+multiple depths, alongside meteorological variables.
 
-This dataset consists of hourly lake temperature, air temperature, solar irradiance 
-and wind speed data from an automatic water monitoring buoy on Esthwaite Water, a lake 
-in the North West of England. The lake temperatures are measured in various depths of 
-the lake (see supporting documentation). Measurements were taken every 4 minutes and calculated 
-as hourly averages. The data were collected by the Centre for Ecology & Hydrology between 2008 and 2011 
-inclusive. This dataset has been used in various publications, please see supporting 
-documentation for more detail.
+This dataset consists of hourly lake temperature, air temperature, solar
+irradiance and wind speed data from an automatic water monitoring buoy on
+Esthwaite Water, a lake in north-west England. Lake temperatures were
+measured at multiple depths (see supporting documentation). Measurements
+were taken every 4 minutes and aggregated to hourly averages. The data were
+collected by the Centre for Ecology & Hydrology between 2008 and 2011.
 }
 \references{
 Jones, I., & Feuchtmayr, H. (2017).
-*Data from automatic water monitoring buoy from Esthwaite Water, 2008 to 2011*.
+\emph{Data from automatic water monitoring buoy from Esthwaite Water,
+2008 to 2011}.
 NERC Environmental Information Data Centre.
 \doi{10.5285/94abcb39-84a6-428e-a90f-156452197d79}
 }

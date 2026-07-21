@@ -27,7 +27,7 @@
 #'
 #'
 #' library(ggplot2)
-#' library(govstyle)
+#' #library(govstyle)  # copied below
 #' library(dplyr)
 #'
 #' p <- mtcars %>%

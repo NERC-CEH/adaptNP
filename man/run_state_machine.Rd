@@ -27,10 +27,10 @@ Passed to \code{update_state_no_forecast()}.}
 state estimation. Default is `60`.}
 
 \item{time_units}{Character string specifying the time units of the input
-series (e.g. `"mins"`, `"hours"`). Passed to \code{estimate_state()}.}
+series (e.g. `"mins"`, `"hours"`). Passed to \code{estimate_derivatives()}.}
 
 \item{derivative_units}{Character string specifying the units of the
-estimated derivatives (e.g. `"per_minute"`). Passed to \code{estimate_state()}.}
+estimated derivatives (e.g. `"per_minute"`). Passed to \code{estimate_derivatives()}.}
 }
 \value{
 A data frame containing only state transitions with columns:
@@ -46,7 +46,7 @@ estimated signal derivatives. Only state transitions are returned.
 }
 \details{
 The function first estimates a smoothed version of the flow signal and its
-first and second derivatives using \code{estimate_state()}.
+first and second derivatives using \code{estimate_derivatives()}.
 
 A baseline flow (`baseflow_Q`) is computed as the median of the input
 flow series. This is used as a reference level in state transitions.
@@ -88,5 +88,5 @@ head(transitions)
 
 }
 \seealso{
-\code{\link{estimate_state}}, \code{\link{update_state_no_forecast}}
+\code{\link{estimate_derivatives}}, \code{\link{update_state_no_forecast}}
 }

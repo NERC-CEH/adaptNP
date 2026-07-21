@@ -3,20 +3,19 @@
 \docType{data}
 \name{Esthwaite_Buoy_SUNA_Data}
 \alias{Esthwaite_Buoy_SUNA_Data}
-\title{High resolution optical nitrate data at Esthwaite Water, England (2025).}
+\title{High resolution optical nitrate data at Esthwaite Water, England (2025)}
 \format{
-## `Esthwaite_Buoy_SUNA_Data`
 A data frame (tibble) with 25,292 rows and 14 columns:
 \describe{
   \item{TIMESTAMP}{Date and time}
   \item{SUNA_Nitrate_mgL}{SUNA nitrate concentrations in mg/L collected every 10 minutes}
-  \item{Other columns are usually not used.}
+  \item{Other columns}{Additional monitoring variables not typically used in package workflows}
 }
 }
 \usage{
 Esthwaite_Buoy_SUNA_Data
 }
 \description{
-High resolution optical nitrate data at Esthwaite Water, England (2025).
+High resolution optical nitrate data at Esthwaite Water, England (2025)
 }
 \keyword{datasets}

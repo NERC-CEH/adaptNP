@@ -7,17 +7,17 @@
 \format{
 A data frame (tibble) with 15,636 rows and 11 variables:
 \describe{
-  \item{timestamp}{Date and time of observation (POSIXct)}
-  \item{flow_binfield}{Flow at Binfield gauging station (m3 per second)}
-  \item{trp}{Total reactive phosphorus (mg per litre)}
-  \item{tp}{Total phosphorus (mg per litre)}
-  \item{turbidity}{Turbidity (NTU)}
-  \item{chlorophyll}{Total chlorophyll (micrograms per litre)}
-  \item{dissolved_oxygen}{Dissolved oxygen (percent saturation)}
-  \item{ph}{Acidity (unitless)}
-  \item{temperature}{Water temperature (degrees C)}
-  \item{nh4}{Ammonium (mg N per litre)}
-  \item{conductivity}{Electrical conductivity}
+  \item{Date / time}{Date and time of observation (POSIXct)}
+  \item{Flow at Binfield gauging station (m3/s)}{Flow at Binfield gauging station (m3 per second)}
+  \item{Total Reactive Phosphorus (mg/l)}{Total reactive phosphorus (mg per litre)}
+  \item{Total Phosphorus (mg/l)}{Total phosphorus (mg per litre)}
+  \item{Conductivity (us/cm)}{Electrical conductivity}
+  \item{Turbidity (NTU)}{Turbidity (NTU)}
+  \item{Total chlorophyll (ug/l)}{Total chlorophyll (micrograms per litre)}
+  \item{Dissolved Oxygen (\% saturation)}{Dissolved oxygen (percent saturation)}
+  \item{pH}{Acidity (unitless)}
+  \item{Temperature (C)}{Water temperature (degrees C)}
+  \item{NH4 (mg N /l)}{Ammonium (mg N per litre)}
 }
 }
 \source{
@@ -28,7 +28,8 @@ TheCutData
 }
 \description{
 Hourly river flow and water quality data collected at The Cut, Berkshire,
-England from May 2010 to February 2012 by the Centre for Ecology & Hydrology (now UKCEH).
+England from May 2010 to February 2012 by the Centre for Ecology & Hydrology
+(now UKCEH).
 
 This dataset comprises hourly physical and nutrient monitoring data from
 The Cut at Bray Marina (National Grid reference SU915786). Variables include
@@ -42,7 +43,8 @@ programme was funded by EPSRC through the LIMPIDS project.
 \references{
 Bowes, M. J., Gozzard, E., Newman, J., Loewenthal, M., Halliday, S.,
 Skeffington, R. A., Jarvie, H. P., Wade, A., & Palmer-Felgate, E. (2015).
-*Hourly physical and nutrient monitoring data for The Cut, Berkshire (2010–2012)*.
+\emph{Hourly physical and nutrient monitoring data for The Cut, Berkshire
+(2010--2012)}.
 NERC Environmental Information Data Centre.
 \doi{10.5285/abe4dd7c-a340-4595-a57f-8c1446ff7656}
 }

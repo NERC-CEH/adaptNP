@@ -11,9 +11,11 @@ Description:
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 RoxygenNote: 7.3.3
 Imports: 
-    datasets,
+    dplyr,
+    magrittr,
     ggplot2,
     stats,
     flexclust, 

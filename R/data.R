@@ -46,10 +46,31 @@
 #' High resolution physio-chemical data collected from an automatic buoy at
 #' Esthwaite Water, England (2025)
 #'
-#' @format A data frame (tibble) with 126,472 rows and 23 columns:
+#' @format A data frame with one row per timestamp and 23 variables:
 #' \describe{
-#'   \item{TIMESTAMP}{Date and time}
-#'   \item{others}{Various physical, chemical and meteorological parameters}
+#'   \item{TIMESTAMP}{Date and time of observation (POSIXct)}
+#'   \item{RECORD}{Logger record number}
+#'   \item{AirTemp}{Air temperature (deg C)}
+#'   \item{RH}{Relative humidity (\%)}
+#'   \item{Temp_RH}{Temperature at the RH sensor (deg C)}
+#'   \item{WindSpd}{Wind speed (m/s)}
+#'   \item{WindDir}{Wind direction (degrees)}
+#'   \item{SPFD}{Spectral photon flux density / PAR (units as logged)}
+#'   \item{CMP6}{CMP6 pyranometer shortwave radiation (W/m2)}
+#'   \item{PonselTemp}{Ponsel probe water temperature (deg C)}
+#'   \item{PonselCond}{Ponsel probe conductivity (units as logged)}
+#'   \item{Temp1m}{Water temperature at roughly 1 m depth (deg C)}
+#'   \item{Temp2m}{Water temperature at roughly 2 m depth (deg C)}
+#'   \item{Temp3m}{Water temperature at roughly 3 m depth (deg C)}
+#'   \item{Temp4m}{Water temperature at roughly 4 m depth (deg C)}
+#'   \item{Temp5m}{Water temperature at roughly 5 m depth (deg C)}
+#'   \item{Temp6m}{Water temperature at roughly 6 m depth (deg C)}
+#'   \item{Temp7m}{Water temperature at roughly 7 m depth (deg C)}
+#'   \item{Temp8m}{Water temperature at roughly 8 m depth (deg C)}
+#'   \item{Temp9m}{Water temperature at roughly 9 m depth (deg C)}
+#'   \item{Temp10m}{Water temperature at roughly 10 m depth (deg C)}
+#'   \item{Temp11m}{Water temperature at roughly 11 m depth (deg C)}
+#'   \item{Temp12m}{Water temperature at roughly 12 m depth (deg C)}
 #' }
 #'
 #' @seealso
@@ -61,11 +82,22 @@
 
 #' High resolution optical nitrate data at Esthwaite Water, England (2025)
 #'
-#' @format A data frame (tibble) with 25,292 rows and 14 columns:
+#' @format A data frame with one row per timestamp and 14 variables:
 #' \describe{
-#'   \item{TIMESTAMP}{Date and time}
-#'   \item{SUNA_Nitrate_mgL}{SUNA nitrate concentrations in mg/L collected every 10 minutes}
-#'   \item{Other columns}{Additional monitoring variables not typically used in package workflows}
+#'   \item{TIMESTAMP}{Date and time of observation (POSIXct)}
+#'   \item{RECORD}{Logger record number}
+#'   \item{retries}{Number of communication retries for the reading}
+#'   \item{SUNA_Nitrate_mgL}{Nitrate concentration (mg N/l)}
+#'   \item{SUNA_Nitrate_Mol}{Nitrate concentration (molar)}
+#'   \item{SUNA_Average_Dark_Meas}{Mean dark-current measurement}
+#'   \item{SUNA_Average_Spectral_Meas}{Mean spectral measurement}
+#'   \item{SUNA_Int_Hum}{Internal humidity of the SUNA sensor (\%)}
+#'   \item{SUNA_LampT}{Lamp temperature (deg C)}
+#'   \item{SUNA_LampV}{Lamp voltage (V)}
+#'   \item{SUNA_Lamp_Time_secs}{Cumulative lamp-on time (s)}
+#'   \item{SUNA_Spectrometer_Temp}{Spectrometer temperature (deg C)}
+#'   \item{SUNA_RegV}{Regulator voltage (V)}
+#'   \item{SUNA_SupplyV}{Supply voltage (V)}
 #' }
 #'
 "Esthwaite_Buoy_SUNA_Data"

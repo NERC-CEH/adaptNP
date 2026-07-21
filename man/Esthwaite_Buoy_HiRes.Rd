@@ -6,10 +6,31 @@
 \title{High resolution physio-chemical data collected from an automatic buoy at
 Esthwaite Water, England (2025)}
 \format{
-A data frame (tibble) with 126,472 rows and 23 columns:
+A data frame with one row per timestamp and 23 variables:
 \describe{
-  \item{TIMESTAMP}{Date and time}
-  \item{others}{Various physical, chemical and meteorological parameters}
+  \item{TIMESTAMP}{Date and time of observation (POSIXct)}
+  \item{RECORD}{Logger record number}
+  \item{AirTemp}{Air temperature (deg C)}
+  \item{RH}{Relative humidity (\%)}
+  \item{Temp_RH}{Temperature at the RH sensor (deg C)}
+  \item{WindSpd}{Wind speed (m/s)}
+  \item{WindDir}{Wind direction (degrees)}
+  \item{SPFD}{Spectral photon flux density / PAR (units as logged)}
+  \item{CMP6}{CMP6 pyranometer shortwave radiation (W/m2)}
+  \item{PonselTemp}{Ponsel probe water temperature (deg C)}
+  \item{PonselCond}{Ponsel probe conductivity (units as logged)}
+  \item{Temp1m}{Water temperature at roughly 1 m depth (deg C)}
+  \item{Temp2m}{Water temperature at roughly 2 m depth (deg C)}
+  \item{Temp3m}{Water temperature at roughly 3 m depth (deg C)}
+  \item{Temp4m}{Water temperature at roughly 4 m depth (deg C)}
+  \item{Temp5m}{Water temperature at roughly 5 m depth (deg C)}
+  \item{Temp6m}{Water temperature at roughly 6 m depth (deg C)}
+  \item{Temp7m}{Water temperature at roughly 7 m depth (deg C)}
+  \item{Temp8m}{Water temperature at roughly 8 m depth (deg C)}
+  \item{Temp9m}{Water temperature at roughly 9 m depth (deg C)}
+  \item{Temp10m}{Water temperature at roughly 10 m depth (deg C)}
+  \item{Temp11m}{Water temperature at roughly 11 m depth (deg C)}
+  \item{Temp12m}{Water temperature at roughly 12 m depth (deg C)}
 }
 }
 \usage{

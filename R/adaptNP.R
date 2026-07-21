@@ -95,7 +95,7 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #' predicted cluster states to the input data frame.
 #'
 #' @param clusters A fitted clustering model object (e.g. `kcca` object)
-#'   returned by \code{\link{adaptNP::find_clusters}}. Must support
+#'   returned by \code{\link{find_clusters}}. Must support
 #'   \code{predict()} and contain training feature ranges in `@xrange`.
 #' @param newdata A data frame containing new observations to classify.
 #'   Must include all variables used to train the clustering model.
@@ -142,7 +142,7 @@ find_clusters = function(x){  # automatically employ elbows method (last point t
 #' # Example: predict clusters for new data
 #' \dontrun{
 #' # Fit clustering model
-#' model <- adaptNP::find_clusters(training_data)
+#' model <- find_clusters(training_data)
 #'
 #' # Predict cluster states for new observations
 #' newdata$TIMESTAMP <- Sys.time() + seq_len(nrow(newdata))

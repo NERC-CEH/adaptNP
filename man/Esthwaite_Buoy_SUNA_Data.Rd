@@ -5,11 +5,22 @@
 \alias{Esthwaite_Buoy_SUNA_Data}
 \title{High resolution optical nitrate data at Esthwaite Water, England (2025)}
 \format{
-A data frame (tibble) with 25,292 rows and 14 columns:
+A data frame with one row per timestamp and 14 variables:
 \describe{
-  \item{TIMESTAMP}{Date and time}
-  \item{SUNA_Nitrate_mgL}{SUNA nitrate concentrations in mg/L collected every 10 minutes}
-  \item{Other columns}{Additional monitoring variables not typically used in package workflows}
+  \item{TIMESTAMP}{Date and time of observation (POSIXct)}
+  \item{RECORD}{Logger record number}
+  \item{retries}{Number of communication retries for the reading}
+  \item{SUNA_Nitrate_mgL}{Nitrate concentration (mg N/l)}
+  \item{SUNA_Nitrate_Mol}{Nitrate concentration (molar)}
+  \item{SUNA_Average_Dark_Meas}{Mean dark-current measurement}
+  \item{SUNA_Average_Spectral_Meas}{Mean spectral measurement}
+  \item{SUNA_Int_Hum}{Internal humidity of the SUNA sensor (\%)}
+  \item{SUNA_LampT}{Lamp temperature (deg C)}
+  \item{SUNA_LampV}{Lamp voltage (V)}
+  \item{SUNA_Lamp_Time_secs}{Cumulative lamp-on time (s)}
+  \item{SUNA_Spectrometer_Temp}{Spectrometer temperature (deg C)}
+  \item{SUNA_RegV}{Regulator voltage (V)}
+  \item{SUNA_SupplyV}{Supply voltage (V)}
 }
 }
 \usage{

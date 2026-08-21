@@ -165,6 +165,7 @@ pp1 = Esthwaite_Buoy_HiRes |>   mutate(
         # axis.line = element_line(linewidth = 3, colour = "grey20"),
         strip.background = element_blank(),
         strip.placement = "outside",
+              # strip.text = element_text(size = 20),   # <- add this explicitly
         #strip.text.y = element_blank(),
         axis.text=element_text(size=20), #change font size of axis text
         axis.title=element_text(size=20), #change font size of axis titles
@@ -172,7 +173,7 @@ pp1 = Esthwaite_Buoy_HiRes |>   mutate(
         legend.text=element_text(size=20), #change font size of legend text
         legend.title=element_text(size=20))+ #change font size of legend title  
   #ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
-  labs(x='',y='')+
+  labs(x='2025',y='')+
   guides(colour = guide_legend(override.aes = list(size=8))) 
 
 # pp1
@@ -181,18 +182,30 @@ pp1 = Esthwaite_Buoy_HiRes |>   mutate(
 After extracting the event periods, the following code snippets uses it to subset the SUNA nitrate dataset.
 ```{r ex1-grab-data}
 # rule 0: every 6h
-baseline <- Esthwaite_Buoy_SUNA_Data |> 
+baseline0 <- Esthwaite_Buoy_SUNA_Data |> 
   select(TIMESTAMP, SUNA_Nitrate_mgL) |> 
   mutate(hour = lubridate::hour(TIMESTAMP), 
          minute = lubridate::minute(TIMESTAMP)) |> 
   filter(minute==0, hour %in% c(3,9,15,21))
 
+mask_baseline <- Esthwaite_Buoy_SUNA_Data |> 
+  select(TIMESTAMP, SUNA_Nitrate_mgL) |> 
+  mutate(hour = lubridate::hour(TIMESTAMP), 
+         minute = lubridate::minute(TIMESTAMP)) |>
+  transmute(sampled =  minute==0 & hour %in% c(3,9,15,21)) |>
+  pull(sampled)
+baseline <- Esthwaite_Buoy_SUNA_Data[mask_baseline, ] |> 
+  select(TIMESTAMP, SUNA_Nitrate_mgL) 
+
+all.equal(baseline0 |> select(-hour, -minute), baseline)
+
 # rule 1: every 10 or 20 minutes within periods
 
 # very fast!
-mask <- Reduce(`|`, lapply(intervals, function(int) Esthwaite_Buoy_SUNA_Data$TIMESTAMP %within% int))
-rule1 <- Esthwaite_Buoy_SUNA_Data[mask, ]
+mask_rule1 <- Reduce(`|`, lapply(intervals, function(int) Esthwaite_Buoy_SUNA_Data$TIMESTAMP %within% int))
+rule1 <- Esthwaite_Buoy_SUNA_Data[mask_rule1, ]
 
+mask_rule0and1 <- mask_baseline | mask_rule1
 ```
 
 Now, we plot the results.
@@ -208,13 +221,13 @@ combined_SUNA <- Esthwaite_Buoy_SUNA_Data |> select(TIMESTAMP, SUNA_Nitrate_mgL)
 
 anno <- data.frame(xtext = c('2025-07-31', '2025-07-31', '2025-07-31'), 
                    ytext = c(0.4,0.4,0.4), 
-                   Rule = c("raw data", "rule 0 (baseline)" ,"rule 1 (adaptive sampling)" ),
+                   Rule = c("raw data", "baseline" ,"rule 1 (adaptive sampling)" ),
                    text = c("Every 10 minutes", "Every 6 hours", "Every 10 minutes only during event")) |> 
   mutate(xtext = as.Date(xtext))
 
 pp2 <- combined_SUNA |> #select(-`baseline_and_rule1`) |> 
   rename( `raw data` = SUNA_Nitrate_mgL, 
-          `rule 0 (baseline)` = baseline,
+          `baseline` = baseline,
           `rule 1 (adaptive sampling)` = rule1,) |> 
 #  filter(TIMESTAMP <'2025-08-15') |> 
   tidyr::pivot_longer(!TIMESTAMP, names_to = "Rule", values_to = "value") |> 
@@ -225,7 +238,7 @@ pp2 <- combined_SUNA |> #select(-`baseline_and_rule1`) |>
   scale_color_manual(
     name   = "",                      # legend title
     values = c("raw data" = "#000000",
-               "rule 0 (baseline)" = "#1b9e77",
+               "baseline" = "#1b9e77",
                "rule 1 (adaptive sampling)" = "#d95f02")
   ) + 
     geom_text(data = anno, aes(x = xtext,  y = ytext, label = text), size=5) +
@@ -244,8 +257,9 @@ pp2 <- combined_SUNA |> #select(-`baseline_and_rule1`) |>
         plot.title=element_text(size=16), #change font size of plot title
         legend.text=element_text(size=20), #change font size of legend text
         legend.title=element_text(size=20))+ #change font size of legend title  
-  ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
-  labs(x='',y='mg/L')+ ylim(0,0.5) + 
+  ggtitle('\n')+
+  #ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +
+  labs(x='2025',y='mg/L')+ ylim(0,0.5) + 
   guides(colour = guide_legend(override.aes = list(size=8), ncol=2)) # change legend point size
 
 # pp2
@@ -259,21 +273,6 @@ plot_grid(pp1,pp2, labels = "auto", label_size = 22)
 # plot periods (hours flagged per day) as rectangles: y axis (date), x axis (hours)
 periods  |> mutate(duration = interval(start,end)%/%minutes(1))
 
-### metrics
-combined_SUNA = combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE))
-metrics <- combined_SUNA |> 
-    summarise(across(where(is.numeric), ~ median(.x, na.rm = TRUE)))
-
-
-## median changed
- (metrics$rule1 - metrics$SUNA_Nitrate_mgL) / metrics$SUNA_Nitrate_mgL
-
-c <- combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
-     summarise(across(where(is.numeric), list(min = min, max = max), na.rm=TRUE))
-
-(c$baseline_max- c$baseline_min) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
-(c$rule1_max- c$rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
-(c$baseline_and_rule1_max - c$baseline_and_rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
 ```
 
 ### Example 2: data-driven rules (state tagging)
@@ -283,6 +282,7 @@ c <- combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1
 # load_all() # load adaptNP
 
 library(flexclust) # for S4 plot/predict(clusters)
+
 
 ```
 
@@ -310,19 +310,35 @@ Esthwaite_Buoy_OLD_daily = Esthwaite_Buoy_OLD_daily  |>
   tidyr::drop_na() |> 
   mutate(state = modeltools::clusters(clusters))
 
+big_text <- theme(
+  axis.title = element_text(size = 18),
+  axis.text  = element_text(size = 18),
+  plot.title = element_text(size = 18),
+)
 
 ## plot
-ggplot2::ggplot(Esthwaite_Buoy_OLD_daily  |> 
+p2010 <- ggplot2::ggplot(Esthwaite_Buoy_OLD_daily  |> 
     pivot_longer(!c(DATE, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
     mutate(state = as.factor(state))
 ) + 
-  geom_point(aes(x=DATE,y=VALUE, color=state)) + 
-  facet_grid(rows = vars(FIELDNAME), scales = "free") +
-  theme_gov() +
-  scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
-  guides(color = guide_legend(override.aes = list(size = 4)))
+  geom_point(aes(x = DATE, y = VALUE, color = state)) + 
+  facet_grid(rows = vars(FIELDNAME), scales = "free", axes = "all_y",
+        switch = "y",                     # moves facet strip to the left
+        labeller = as_labeller(
+              c(
+                Pyranometer = "atop('Solar radiation', W~m^{-2})",
+                Wind_Speed = "atop('Wind speed', m~s^{-1})",
+                Water_temperature_1m = "atop('Water temperature', 'at ~1m depth (°C) ')"
+              ),
+              label_parsed
+            )) +
+  theme_gov() + big_text +
+  scale_colour_brewer(palette = "Dark2") + 
+  guides(color = guide_legend(override.aes = list(size = 4))) +
+  labs(x = NULL, y = NULL) +               # remove axis titles
+  theme(strip.placement = "outside")       # ensures strip sits outside the panel, not over axis
 
-p1 = .Last.value
+p2010
 ```
 
 
@@ -336,8 +352,65 @@ p1 = .Last.value
 plot(clusters)
 
 # 3D
+# p3dclust <-...
+library(plot3D)
 
 
+
+make_cluster_plot <- function() {
+centers <- clusters@centers
+n <- nrow(centers)
+x <- centers[,"Water_temperature_1m"]
+y <- centers[,"Pyranometer"]
+z <- centers[,"Wind_Speed"]
+library(plot3D)
+
+centers <- clusters@centers
+n <- nrow(centers)
+
+x <- centers[,"Water_temperature_1m"]
+y <- centers[,"Pyranometer"]
+z <- centers[,"Wind_Speed"]
+
+# back box only, normal color
+scatter3D(x, y, z, colvar = NULL, col = "black", pch = 19, cex = 0,
+          theta = 40, phi = 25,
+          bty = "b",                    # back panels/edges only
+          border = "lightgray",
+          panel.color = "transparent",          # remove panel fill (was white/grey)
+          ticktype = "detailed",
+          scale = FALSE,
+          xlab = "Water temperature (1m)",
+          ylab = "Solar radiation",
+          zlab = "Wind speed",
+          cex.lab = 1.5,
+          cex.axis = 1.2)
+
+# add front edges manually in light grey to complete the full box
+# pad <- 0  # increase slightly if you want the box to extend beyond the data
+# box3D(x0 = min(x) - pad, y0 = min(y) - pad, z0 = min(z) - pad,
+#       x1 = max(x) + pad, y1 = max(y) + pad, z1 = max(z) + pad,
+#       col = "lightgrey", lwd = 1, add = TRUE,
+#       facets = FALSE)                  # edges only, no shaded faces
+
+# dashed lines between centres
+pairs <- combn(n, 2)
+for (i in seq_len(ncol(pairs))) {
+  a <- pairs[1, i]; b <- pairs[2, i]
+  lines3D(x[c(a,b)], y[c(a,b)], z[c(a,b)],
+          col = "blue", lty = 2, add = TRUE)
+}
+
+# open red circles with numbers
+points3D(x, y, z, add = TRUE, pch = 21, cex = 5,
+         col = "red", bg = "white", lwd = 2,
+         alpha = 1, colkey = FALSE, shade = 0, lighting = FALSE)
+text3D(x, y, z, labels = seq_len(n), add = TRUE,
+       col = "black", font = 2, cex = 1.5)
+}
+
+# call it any time:
+make_cluster_plot()
 ```
 ### make cluster predictions
 
@@ -441,17 +514,31 @@ ggplot2::ggplot(times |> mutate(y=state, state=as.factor(state))) +
 #| fig-alt: "State tagging results"
 #| fig-height: 10
 # left join, plot sampled weather data and their state
-times |> mutate(y=state, state=as.factor(state)) |> 
+p2025 <- times |> mutate(y=state, state=as.factor(state)) |> 
   left_join(newdata |> select(-state), by='TIMESTAMP') |> 
   select(TIMESTAMP,Water_temperature_1m,Pyranometer,Wind_Speed,state)  |> 
   pivot_longer(!c(TIMESTAMP, state), names_to = "FIELDNAME", values_to = "VALUE") |> 
   ggplot2::ggplot() + 
   geom_point(aes(x=TIMESTAMP,y=VALUE, color=state)) + 
-  facet_grid(rows = vars(FIELDNAME), scales = "free") +
-  theme_gov() +
+  facet_grid(rows = vars(FIELDNAME), scales = "free", axes = "all_y",
+        switch = "y",                     # moves facet strip to the left
+        labeller = as_labeller(
+              c(
+                Pyranometer = "atop('Solar radiation', W~m^{-2})",
+                Wind_Speed = "atop('Wind speed', m~s^{-1})",
+                Water_temperature_1m = "atop('Water temperature', 'at ~1m depth (°C) ')"
+              ),
+              label_parsed
+            )
+  
+  ) +
+  theme_gov() + big_text+               # remove axis titles
+  theme(strip.placement = "outside")  +     # ensures strip sits outside the panel
   scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
-  guides(color = guide_legend(override.aes = list(size = 4)))
+  guides(color = guide_legend(override.aes = list(size = 4))) + xlab('2025') + ylab('')
 ```
+
+
 
 ```{r}
 #| fig-cap: "Nitrate adpative sampling results based on state tagging (i.e. clustering)"
@@ -461,20 +548,82 @@ times |> mutate(y=state, state=as.factor(state)) |>
 rule_statetag <-times |> mutate(y=state, state=as.factor(state)) |> 
   left_join(Esthwaite_Buoy_SUNA_Data , by='TIMESTAMP') 
   
-rule_statetag  |> 
+p_nitrate <- rule_statetag  |> 
   ggplot2::ggplot() + 
   geom_point(aes(x=TIMESTAMP,y=SUNA_Nitrate_mgL , color=state)) + 
   theme_gov() +
   scale_colour_discrete(palette = scales::pal_brewer(palette = "Dark2")) + 
-  guides(color = guide_legend(override.aes = list(size = 4)))
+  guides(color = guide_legend(override.aes = list(size = 4))) + xlab('2025') + ylab('Nitrate (mg/L)') + big_text +
+  theme(plot.margin = margin(t = 30, r = 5, b = 5, l = 5)) 
 
+# extract timestamps, need to ensure timestamps are unique and sequential
+mask_statetag <- Esthwaite_Buoy_SUNA_Data$TIMESTAMP %in% rule_statetag$TIMESTAMP
+```
 
+```{r statetag-plots}
+## note: 1: Package `gridGraphics` is required to handle base-R plots.
+
+plot_grid(
+  p2010, ggdraw(as_grob(make_cluster_plot)), p2025, p_nitrate,
+  labels = letters[c(1,3,2,4)],label_x = 0.05,ncol=2, byrow = FALSE, label_size = 18
+)
+```
 # metrics
-a = diff(range(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE))
-diff(range(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE)) /a
+```{r}
 
-b = median(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE)
-(median(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE) -b) /b 
+
+### metrics
+combined_SUNA = combined_SUNA |> 
+  mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+  left_join(rule_statetag |> select(TIMESTAMP, rule_statetag = SUNA_Nitrate_mgL),
+            by = "TIMESTAMP")
+
+
+raw_col <- "SUNA_Nitrate_mgL"
+
+# reference stats
+ref_median <- median(combined_SUNA[[raw_col]], na.rm = TRUE)
+ref_range  <- diff(range(combined_SUNA[[raw_col]], na.rm = TRUE))
+ref_nrows <-  sum(!is.na(combined_SUNA$SUNA_Nitrate_mgL))
+
+metrics <- combined_SUNA |>
+  select(where(is.numeric), -all_of(raw_col)) |>
+  pivot_longer(everything(), names_to = "series", values_to = "value") |>
+  group_by(series) |>
+  summarise(
+    non_na_count = sum(!is.na(value)),
+    median_val       = median(value, na.rm = TRUE),
+    range_val        = diff(range(value, na.rm = TRUE)),
+    .groups = "drop"
+  ) |>
+  mutate(
+    pct_median_change = (median_val - ref_median) / ref_median * 100,
+    pct_range_change  = range_val / ref_range * 100
+  ) |>
+  select(series, median_val, non_na_count, pct_range_change, pct_median_change)
+
+metrics |> pivot_longer(series)  |> pivot_wider()
+
+# metrics <- combined_SUNA |> 
+#     summarise(across(where(is.numeric), ~ median(.x, na.rm = TRUE)))
+
+
+# ## median changed
+#  (metrics$rule1 - metrics$SUNA_Nitrate_mgL) / metrics$SUNA_Nitrate_mgL
+
+# c <- combined_SUNA |> mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |> 
+#      summarise(across(where(is.numeric), list(min = min, max = max), na.rm=TRUE))
+
+# (c$baseline_max- c$baseline_min) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
+# (c$rule1_max- c$rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
+# (c$baseline_and_rule1_max - c$baseline_and_rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100
+
+
+# a = diff(range(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE))
+# diff(range(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE)) /a
+
+# b = median(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE)
+# (median(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE) -b) /b 
 ```
 ## Kolmogorov-Smirnov Tests and `ecdf`
 A test to show how good a sub-sampled dataset preseves the characteristics of the orignial one is to overlay their empirical cumulative distribution functions (ecdf). In a perfect scenario, the ecdf of the two time series would completely overlap.
@@ -557,4 +706,41 @@ theme(
 
 ```{r predict-clusters-online}
 
+```
+
+## Evaluating extremes performance
+```{r extreme}
+
+masks <- list(
+  all_data = rep(TRUE,length(mask_baseline)),
+  mask_baseline = mask_baseline,
+  mask_rule1 = mask_rule1,
+  mask_rule0and1 = mask_rule0and1,
+  mask_statetag = mask_statetag
+)
+
+library(purrr)
+
+# show sampling fraction
+tibble(
+  method = names(masks),
+  sampling_fraction = purrr::map_dbl(masks, mean)
+)
+
+results <- imap_dfr(
+  masks,
+  ~ extreme_sampling_metrics(
+      full_values = Esthwaite_Buoy_SUNA_Data$SUNA_Nitrate_mgL,
+      sampled_mask = .x,
+      percentile = 0.99,
+      alpha = 2
+    ) |>
+    mutate(method = .y)
+) |> 
+  rename(P99_recall = extreme_recall,
+          P99_oversampling_factor = oversampling_factor )
+
+results   %>%
+  pivot_longer(-method, names_to = "variable") %>%
+  pivot_wider(names_from = method, values_from = value)
 ```

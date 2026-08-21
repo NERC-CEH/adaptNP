@@ -98,12 +98,16 @@ plot(scores$time, scores$PC2, type = "l",
 par(mfrow = c(1,1), mar = c(4,4,2,1))
 
 ## plot loadings only
+par(mar = c(5, 5, 4, 4) + 0.1)  # bottom, left, top, right margins (in lines)
+
 plot(
   pca$rotation[, 1],
   pca$rotation[, 2],
   type = "n",
   xlab = "PC1",
-  ylab = "PC2"
+  ylab = "PC2",
+  cex.lab = 1.5,
+  cex.axis = 1.3
 )
 
 arrows(
@@ -118,7 +122,8 @@ text(
   pca$rotation[, 1],
   pca$rotation[, 2],
   labels = rownames(pca$rotation),
-  pos = 3
+  pos = 3,
+  cex = 1.3
 )
 ```
 
@@ -131,6 +136,14 @@ TheCutDataXTS$bf_turning <- (TheCutDataXTS$baseflow == TheCutDataXTS$discharge)
 
 # this method gives 1000+ turning points
 index(TheCutDataXTS[TheCutDataXTS$bf_turning==1]) |> length()
+
+plot(TheCutDataXTS$discharge, type = "l",
+     main = "", main.timespan = FALSE,
+     cex.axis = 1.3,
+     cex.lab = 1.5)
+lines(TheCutDataXTS$baseflow, col = 2, lwd = 2)
+abline(v = index(TheCutDataXTS[TheCutDataXTS$bf_turning == 1]), col = "red", lwd = 2)
+title(main = expression("Discharge and baseflow (m"^3*"/s)"))
 
 plot(TheCutDataXTS$discharge, type = "l")
 lines(TheCutDataXTS$baseflow, col = 2)
@@ -157,9 +170,24 @@ Driven by flow:
 
 # 1. Baseflow: every week at 1500>> sample everything
 
-baseline <- TheCutData |> 
+baseline0 <- TheCutData |> 
   mutate(hour = lubridate::hour(`Date / time`), dayofweek = lubridate::wday(`Date / time`)) |> 
   filter(dayofweek==4, hour %in% c(15))
+
+
+mask_baseline <- TheCutData |>
+  mutate(
+    hour = lubridate::hour(`Date / time`),
+    dayofweek = lubridate::wday(`Date / time`)
+  ) |>
+  transmute(
+    sampled = dayofweek == 4 & hour %in% 15
+  ) |>
+  pull(sampled)
+baseline <- TheCutData[mask_baseline, ]
+
+all.equal(baseline0 |> select(-hour, -dayofweek), baseline)
+
 
 # 2. Low flow/algal flush + favourable temperature: every day >> sample cholorophyll
 
@@ -177,16 +205,17 @@ intervals <- periods |>
   mutate(int = lubridate::interval(start,end) ) |> 
   pull(int)
 
-# intervals
 
+# interval mask (full length of TheCutData)
+mask_interval <- Reduce(`|`, lapply(intervals, function(int) TheCutData$`Date / time` %within% int))
 
+# hour mask (full length of TheCutData)
+mask_hour <- lubridate::hour(TheCutData$`Date / time`) %in% c(6, 18)
 
-# very fast!
-mask <- Reduce(`|`, lapply(intervals, function(int) TheCutData$`Date / time` %within% int))
-rule_low_DO <- TheCutData[mask, ] |> 
-  mutate(hour = lubridate::hour(`Date / time`)) |>  
-  filter( hour %in% c(18))
+# combined mask — still full length of TheCutData
+mask_DO <- mask_interval & mask_hour
 
+rule_low_DO <- TheCutData[mask_DO, ] 
 
 ```
 
@@ -212,15 +241,17 @@ intervals <- periods |>
   mutate(int = lubridate::interval(start,end) ) |> 
   pull(int)
 
-# intervals
 
+# interval mask (full length of TheCutData)
+mask_interval <- Reduce(`|`, lapply(intervals, function(int) TheCutData$`Date / time` %within% int))
 
+# hour mask (full length of TheCutData)
+mask_hour <- lubridate::hour(TheCutData$`Date / time`) %in% c(0, 3, 6, 9, 12, 15, 18, 21)
 
-# very fast!
-mask <- Reduce(`|`, lapply(intervals, function(int) TheCutData$`Date / time` %within% int))
-rule_above_baseflow <- TheCutData[mask, ]|> 
-  mutate(hour = lubridate::hour(`Date / time`)) |>  
-  filter(hour %in% c(0,3,6,9,12,15,18,21))
+# combined mask — still full length of TheCutData
+mask_HF <- mask_interval & mask_hour
+
+rule_above_baseflow <- TheCutData[mask_HF, ] 
 ```
 
 
@@ -291,8 +322,8 @@ abline(a=NULL,b=NULL,h=NULL,v=flow_state$time, col="red")
 times = flow_state$time
 
 # subset data by mask, note use %in% for exact time, %within% for intervals
-mask <- Reduce(`|`, lapply(times, function(int) TheCutData$`Date / time` %in% int)) 
-rule_state_machine <- TheCutData[mask, ]
+mask_Wong <- Reduce(`|`, lapply(times, function(int) TheCutData$`Date / time` %in% int)) 
+rule_state_machine <- TheCutData[mask_Wong, ]
  ```
 
 
@@ -303,20 +334,27 @@ rule_state_machine <- TheCutData[mask, ]
 
 # plot flow, and chlrophyll and P for all 4 rules
 size = 0.75
-sm_title = theme(plot.title = element_text(size = 20, face = "plain")) +
-   theme(plot.subtitle=element_text(size=14, hjust=0.0, vjust=-0.0, 
-    margin = margin(t = -10, b = -10)), face="plain", color="black")
-
+sm_title = theme(
+  plot.title = element_text(size = 20, face = "plain"),
+  plot.subtitle = ggtext::element_markdown(
+    size = 14, 
+    hjust = 0.0, 
+    vjust = -0.0, 
+    margin = margin(t = -10, b = -10),
+    face = "plain",
+    colour = "black"
+  )
+)
 # TOCA
 pTOCA1 = ggplot() + 
   geom_point(data=TheCutData,aes(x=`Date / time`, y=`Total chlorophyll (ug/l)`), size=size) +
   geom_point(data=baseline, aes(x=`Date / time`, y=`Total chlorophyll (ug/l)`), color= 'red' ,size=2)+
-   theme_gov()+ ylab('') + ggtitle('1. Full dataset and baseline', subtitle = 'Total chlorophyll (ug/l)') + ylim(0,80) + sm_title
+   theme_gov()+ ylab('') + ggtitle('1. Full dataset and baseline', subtitle = 'Total chlorophyll *a* (\u00B5g/L)') + ylim(0,80) + sm_title
 pTOCA2 = ggplot(rule_low_DO) + geom_point(aes(`Date / time`, `Total chlorophyll (ug/l)`), size=size) +
-   theme_gov()+ ylab('') + ggtitle('2. low flow, low DO', subtitle = 'Total chlorophyll (ug/l)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`))+ sm_title
-pTOCA3 = ggplot(rule_above_baseflow) + geom_point(aes(`Date / time`, `Total chlorophyll (ug/l)`), size=size) +   theme_gov()+ ylab('') + ggtitle('3. Flow above baseflow', subtitle = 'Total chlorophyll (ug/l)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`)) + sm_title
+   theme_gov()+ ylab('') + ggtitle('2. low flow, low DO', subtitle = 'Total chlorophyll (\u00B5g/L)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`))+ sm_title
+pTOCA3 = ggplot(rule_above_baseflow) + geom_point(aes(`Date / time`, `Total chlorophyll (ug/l)`), size=size) +   theme_gov()+ ylab('') + ggtitle('3. Flow above baseflow', subtitle = 'Total chlorophyll (\u00B5g/L)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`)) + sm_title
 pTOCA4 = ggplot(rule_state_machine) + geom_point(aes(`Date / time`, `Total chlorophyll (ug/l)`), size=size) +
-   theme_gov()+ ylab('') + ggtitle('4. modfied Wong and Kerkez', subtitle = 'Total chlorophyll (ug/l)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`)) + sm_title
+   theme_gov()+ ylab('') + ggtitle('4. modfied Wong and Kerkez', subtitle = 'Total chlorophyll (\u00B5g/L)') + ylim(0,80) + xlim(range(TheCutData$`Date / time`)) + sm_title
 
 # total P
 pTP1 = ggplot() + 
@@ -365,48 +403,110 @@ plot_grid(
 # plot_grid(p1,p2,ncol=2)
 ```
 
-```{r metrics}
+```{r metrics TP}
+raw_col <- "Total Phosphorus (mg/l)"
 
-a = diff(range(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE))
+# reference stats
+ref_median <- median(TheCutData[[raw_col]], na.rm = TRUE)
+ref_range  <- diff(range(TheCutData[[raw_col]], na.rm = TRUE))
+ref_nrows <-  sum(!is.na(TheCutData$`Total Phosphorus (mg/l)`))
 
-diff(range(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
-diff(range(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
-diff(range(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
-diff(range(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
+combined_TP <- TheCutData |> select(`Date / time`, !!raw_col) |> 
+  left_join(baseline |> select(`Date / time`, !!raw_col) |> rename(baseline = !!raw_col) )|> 
+  left_join(rule_low_DO |> select(`Date / time`, !!raw_col) |> rename(rule_low_DO = !!raw_col) )|> 
+  left_join(rule_above_baseflow |> select(`Date / time`, !!raw_col) |> rename(rule_above_baseflow = !!raw_col) )|> 
+  left_join(rule_state_machine |> select(`Date / time`, !!raw_col) |> rename(rule_state_machine = !!raw_col) ) 
 
-b = median(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE)
-(median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
-(median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
-(median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
-(median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
+metrics_TC <- combined_TP |>
+  select(where(is.numeric), -all_of(raw_col)) |>
+  pivot_longer(everything(), names_to = "series", values_to = "value") |>
+  group_by(series) |>
+  summarise(
+    non_na_count = sum(!is.na(value)),
+    median_val       = median(value, na.rm = TRUE),
+    range_val        = diff(range(value, na.rm = TRUE)),
+    .groups = "drop"
+  ) |>
+  mutate(
+    pct_median_change = (median_val - ref_median) / ref_median * 100,
+    pct_range_change  = range_val / ref_range * 100
+  ) |>
+  select(series, median_val, non_na_count, pct_range_change, pct_median_change)
 
-b 
-median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
-median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)
-median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
-median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)
+metrics_TC |> pivot_longer(series)  |> pivot_wider()
+
+# a = diff(range(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE))
+
+# diff(range(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
+# diff(range(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
+# diff(range(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
+# diff(range(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a
+
+# b = median(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE)
+# (median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b 
+
+# b 
+# median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
+# median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)
+# median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) 
+# median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)
 
 
 ```
 
-```{r}
-a = diff(range(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE))
 
-diff(range(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
-diff(range(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
-diff(range(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
-diff(range(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
+```{r metrics TC}
+raw_col <- "Total chlorophyll (ug/l)"
 
-b = median(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE)
-(median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
-(median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
-(median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
-(median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+# reference stats
+ref_median <- median(TheCutData[[raw_col]], na.rm = TRUE)
+ref_range  <- diff(range(TheCutData[[raw_col]], na.rm = TRUE))
+ref_nrows <-  sum(!is.na(TheCutData[[raw_col]]))
 
-median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)
-median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)
-median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)
-median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+combined_TP <- TheCutData |> select(`Date / time`, !!raw_col) |> 
+  left_join(baseline |> select(`Date / time`, !!raw_col) |> rename(baseline = !!raw_col) )|> 
+  left_join(rule_low_DO |> select(`Date / time`, !!raw_col) |> rename(rule_low_DO = !!raw_col) )|> 
+  left_join(rule_above_baseflow |> select(`Date / time`, !!raw_col) |> rename(rule_above_baseflow = !!raw_col) )|> 
+  left_join(rule_state_machine |> select(`Date / time`, !!raw_col) |> rename(rule_state_machine = !!raw_col) ) 
+
+metrics_TP <- combined_TP |>
+  select(where(is.numeric), -all_of(raw_col)) |>
+  pivot_longer(everything(), names_to = "series", values_to = "value") |>
+  group_by(series) |>
+  summarise(
+    non_na_count = sum(!is.na(value)),
+    median_val       = median(value, na.rm = TRUE),
+    range_val        = diff(range(value, na.rm = TRUE)),
+    .groups = "drop"
+  ) |>
+  mutate(
+    pct_median_change = (median_val - ref_median) / ref_median * 100,
+    pct_range_change  = range_val / ref_range * 100
+  ) |>
+  select(series, median_val, non_na_count, pct_range_change, pct_median_change)
+
+metrics_TP |> pivot_longer(series)  |> pivot_wider()
+
+# a = diff(range(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE))
+
+# diff(range(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
+# diff(range(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
+# diff(range(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
+# diff(range(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a
+
+# b = median(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+# (median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+# (median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b 
+
+# median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+# median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+# median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)
+# median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)
 ```
 
 ## Kolmogorov-Smirnov Tests and `ecdf`
@@ -487,7 +587,7 @@ pp2 = list(
 ggplot(aes(values, colour = ind)) +
   stat_ecdf(linewidth = 1.5) +
   labs(x = "Value", y = "ECDF      ", colour = NULL) +
-  xlab('Total chlorophyll *a* (ug/L)')+
+  xlab('Total chlorophyll *a* (\u00B5g/L)')+
   guides(
     colour = guide_legend(ncol = 1)
   ) + 
@@ -554,3 +654,129 @@ plot_grid(pp1+ theme(aspect.ratio=1),pp2+ theme(aspect.ratio=1)+ xlim(0,40), lab
 #   pos = 3
 # )
 ```
+
+
+## extreme statistics
+**Extreme Recall**
+Extreme Recall measures how many of the truly extreme observations in the full time series were retained after sub-sampling.
+
+Under uniform random sampling:
+
+ExtremeRecallp≈Pr⁡(sampled)\mathrm{ExtremeRecall}_p \approx \Pr(\mathrm{sampled})ExtremeRecallp​≈Pr(sampled)
+
+$$
+\mathrm{ExtremeRecall}_p =
+\frac{
+\#\left(\mathrm{sampled} \cap \{x>P_p\}\right)
+}{
+\#\left(x>P_p\right)
+}
+$$
+
+**Oversampling Factor**
+If > 1 means, the extremes are X times more frquently sampled than expected under uniform sampling.
+$$
+\mathrm{OversamplingFactor}_p =
+\frac{
+\Pr(\mathrm{sampled}\mid x>P_p)
+}{
+\Pr(\mathrm{sampled})
+}
+$$
+
+**Tail-Weighted Recall**
+It is a ranked-weighted recall that gives more weights to extremes
+$$
+\mathrm{TailWeightedRecall} =
+\frac{
+\sum_{i\in S} p_i^{\alpha}
+}{
+\sum_{i=1}^{N} p_i^{\alpha}
+}
+$$
+
+**Percentile Exposure**
+This is the mean percentile of sampled observations. Complete random sampling should be ¬0.5.
+$$
+\mathrm{PercentileExposure} =
+\frac{1}{|S|}
+\sum_{i\in S} p_i
+$$
+
+where
+
+$P_p$​ is the ppp-th percentile of the full time series,
+$x_i$​ is the value of observation iii,
+$N$ is the total number of observations,
+$S$ is the set of sampled observations,
+$∣S∣$ is the number of sampled observations,
+$p_i$​ is the empirical percentile rank of observation iii,
+$\alpha$ is the tail-weighting exponent.
+
+```{r extreme}
+
+## need to compare it with full uniform dataset
+
+x = TheCutData$`Total chlorophyll (ug/l)`
+sampled_mask = mask_DO
+
+extreme_sampling_metrics(
+  full_values = x,
+  sampled_mask = sampled_mask,
+  percentile = 0.99,
+  alpha = 2
+)
+
+masks <- list(
+  all_data = rep(TRUE,length(mask_baseline)),
+  mask_baseline = mask_baseline,
+  mask_DO = mask_DO, ## filter timing also
+  mask_HF = mask_HF,
+  mask_Wong = mask_Wong
+)
+
+library(purrr)
+library(dplyr)
+
+# show sampling fraction
+tibble(
+  method = names(masks),
+  sampling_fraction = purrr::map_dbl(masks, mean)
+)
+
+results <- imap_dfr(
+  masks,
+  ~ extreme_sampling_metrics(
+      full_values = TheCutData$`Total chlorophyll (ug/l)`,
+      sampled_mask = .x,
+      percentile = 0.99,
+      alpha = 2
+    ) |>
+    mutate(method = .y)
+)
+
+results
+```
+The adaptive sampling scheme perform very well to capture extremes in total chlorophyll *a*. P99 extreme recall shows 34.3% (HF), 9.8% (Wong) and 4.9% (DO) of P99 extremes captured. Tail wegithed recall HF (0.59) and DO (0.16) also shows good performance to retain tail-weighted infromation. 
+
+
+```{r}
+
+# show sampling fraction
+tibble(
+  method = names(masks),
+  sampling_fraction = purrr::map_dbl(masks, mean)
+)
+
+imap_dfr(
+  masks,
+  ~ extreme_sampling_metrics(
+      full_values = TheCutData$`Total Phosphorus (mg/l)`,
+      sampled_mask = .x,
+      percentile = 0.99,
+      alpha = 2
+    ) |>
+    mutate(method = .y)
+)
+```
+<!-- Baseline and mask_Wong basically picks up no phosphus P99 extremes. As we see in the PDF, the data has a long tail. mask_DO captures 21.3% of all P99 phosphorus observations and 22.3% of overall tail information (if we weighted the data by a factor of $\alpha$ = 2). its oversampling factor is also > 1 meaning it is more likely to sample P99 data than random sampling. mask_HF retains 48% of tail-weghted information. But given it has a high sampling fraction of 64%, this is actually not very good and also explains its low over-sampling factor. -->

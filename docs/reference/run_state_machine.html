@@ -82,7 +82,7 @@ same length as `time`.</p></dd>
 
 <dt id="arg-params">params<a class="anchor" aria-label="anchor" href="#arg-params"></a></dt>
 <dd><p>A list of parameters controlling state transitions.
-Passed to <code>update_state_no_forecast()</code>.</p></dd>
+Passed to <code><a href="update_state_no_forecast.html">update_state_no_forecast()</a></code>.</p></dd>
 
 
 <dt id="arg-kernel-l">kernel_l<a class="anchor" aria-label="anchor" href="#arg-kernel-l"></a></dt>
@@ -92,12 +92,12 @@ state estimation. Default is `60`.</p></dd>
 
 <dt id="arg-time-units">time_units<a class="anchor" aria-label="anchor" href="#arg-time-units"></a></dt>
 <dd><p>Character string specifying the time units of the input
-series (e.g. `"mins"`, `"hours"`). Passed to <code>estimate_state()</code>.</p></dd>
+series (e.g. `"mins"`, `"hours"`). Passed to <code><a href="estimate_derivatives.html">estimate_derivatives()</a></code>.</p></dd>
 
 
 <dt id="arg-derivative-units">derivative_units<a class="anchor" aria-label="anchor" href="#arg-derivative-units"></a></dt>
 <dd><p>Character string specifying the units of the
-estimated derivatives (e.g. `"per_minute"`). Passed to <code>estimate_state()</code>.</p></dd>
+estimated derivatives (e.g. `"per_minute"`). Passed to <code><a href="estimate_derivatives.html">estimate_derivatives()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -108,11 +108,11 @@ estimated derivatives (e.g. `"per_minute"`). Passed to <code>estimate_state()</c
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function first estimates a smoothed version of the flow signal and its
-first and second derivatives using <code>estimate_state()</code>.</p>
+first and second derivatives using <code><a href="estimate_derivatives.html">estimate_derivatives()</a></code>.</p>
 <p>A baseline flow (`baseflow_Q`) is computed as the median of the input
 flow series. This is used as a reference level in state transitions.</p>
 <p>The state machine is initialised in the `"BASEFLOW"` state and updated
-sequentially using <code>update_state_no_forecast()</code>, which determines
+sequentially using <code><a href="update_state_no_forecast.html">update_state_no_forecast()</a></code>, which determines
 the next state based on:</p><ul><li><p>current flow (`Q`)</p></li>
 <li><p>first derivative (`dQ`)</p></li>
 <li><p>second derivative (`ddQ`)</p></li>
@@ -123,7 +123,7 @@ representation of regime transitions rather than a full time series.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code>estimate_state</code>, <code>update_state_no_forecast</code></p></div>
+    <div class="dont-index"><p><code><a href="estimate_derivatives.html">estimate_derivatives</a></code>, <code><a href="update_state_no_forecast.html">update_state_no_forecast</a></code></p></div>
     </div>
 
     <div class="section level2">

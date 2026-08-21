@@ -87,6 +87,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/ggtext/" class="external-link">ggtext</a></span><span class="op">)</span> <span class="co"># for markdown support in ggplot</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">lfstat</span><span class="op">)</span> <span class="co"># baseflow separation</span></span>
 <span></span>
@@ -220,12 +221,16 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## plot loadings only</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span>  <span class="co"># bottom, left, top, right margins (in lines)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span>  <span class="va">pca</span><span class="op">$</span><span class="va">rotation</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
 <span>  <span class="va">pca</span><span class="op">$</span><span class="va">rotation</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"PC1"</span>,</span>
-<span>  ylab <span class="op">=</span> <span class="st">"PC2"</span></span>
+<span>  ylab <span class="op">=</span> <span class="st">"PC2"</span>,</span>
+<span>  cex.lab <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  cex.axis <span class="op">=</span> <span class="fl">1.3</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/arrows.html" class="external-link">arrows</a></span><span class="op">(</span></span>
@@ -240,7 +245,8 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span>  <span class="va">pca</span><span class="op">$</span><span class="va">rotation</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
 <span>  <span class="va">pca</span><span class="op">$</span><span class="va">rotation</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>,</span>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pca</span><span class="op">$</span><span class="va">rotation</span><span class="op">)</span>,</span>
-<span>  pos <span class="op">=</span> <span class="fl">3</span></span>
+<span>  pos <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div>
@@ -263,7 +269,10 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <pre><code>[1] 1559</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">discharge</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">discharge</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">""</span>, main.timespan <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>     cex.axis <span class="op">=</span> <span class="fl">1.3</span>,</span>
+<span>     cex.lab <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure><p><img src="TheCut_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
@@ -271,8 +280,9 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">baseflow</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="cn">NULL</span>,b<span class="op">=</span><span class="cn">NULL</span>,h<span class="op">=</span><span class="cn">NULL</span>,v<span class="op">=</span><span class="fu">index</span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">[</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">bf_turning</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span>    </span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">baseflow</span>, col <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu">index</span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">[</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">bf_turning</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span>main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Discharge and baseflow (m"</span><span class="op">^</span><span class="fl">3</span><span class="op">*</span><span class="st">"/s)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure><p><img src="TheCut_files/figure-html/unnamed-chunk-5-2.png" width="672"></p>
@@ -280,11 +290,28 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">discharge</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="TheCut_files/figure-html/unnamed-chunk-5-3.png" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">baseflow</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="cn">NULL</span>,b<span class="op">=</span><span class="cn">NULL</span>,h<span class="op">=</span><span class="cn">NULL</span>,v<span class="op">=</span><span class="fu">index</span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">[</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">bf_turning</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span>    </span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="TheCut_files/figure-html/unnamed-chunk-5-4.png" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">TheCutDataXTS</span><span class="op">$</span><span class="va">baseflow</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1215556</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># lf &lt;- createlfobj(</span></span>
 <span><span class="co">#   h     = as.numeric(x[, 1]),</span></span>
 <span><span class="co">#   dates = as.POSIXct(index(x)),</span></span>
@@ -293,14 +320,31 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 </div>
 <p>Samples rules: Driven by flow: 1. Baseflow: every week &gt;&gt; sample everything 1. Low flow/algal flush + favourable DO: every day &gt;&gt; sample cholorophyll 1. Track hydrograph: hourly or 3 hourly TP above baseflow (median) 1. High flow for load: track hydrograph like Wong and Kerkez &gt;&gt; 6 points &gt;&gt; TP, assume perfect knowledge of storm coming</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. Baseflow: every week at 1500&gt;&gt; sample everything</span></span>
 <span></span>
-<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">baseline0</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span>, dayofweek <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">wday</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">dayofweek</span><span class="op">==</span><span class="fl">4</span>, <span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># 2. Low flow/algal flush + favourable temperature: every day &gt;&gt; sample cholorophyll</span></span>
+<span></span>
+<span><span class="va">mask_baseline</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span>,</span>
+<span>    dayofweek <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">wday</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">transmute</a></span><span class="op">(</span></span>
+<span>    sampled <span class="op">=</span> <span class="va">dayofweek</span> <span class="op">==</span> <span class="fl">4</span> <span class="op">&amp;</span> <span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">15</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">sampled</span><span class="op">)</span></span>
+<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask_baseline</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">baseline0</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">hour</span>, <span class="op">-</span><span class="va">dayofweek</span><span class="op">)</span>, <span class="va">baseline</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 2. Low flow/algal flush + favourable temperature: every day &gt;&gt; sample cholorophyll</span></span>
 <span></span>
 <span><span class="va">criteria</span> <span class="op">&lt;-</span><span class="st">"(`Flow at Binfield gauging station (m3/s)` &lt; 1.0) &amp; (`Dissolved Oxygen (% saturation)` &lt; 60)"</span></span>
 <span></span>
@@ -316,22 +360,24 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>int <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span><span class="va">start</span>,<span class="va">end</span><span class="op">)</span> <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">int</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># intervals</span></span>
 <span></span>
+<span><span class="co"># interval mask (full length of TheCutData)</span></span>
+<span><span class="va">mask_interval</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># hour mask (full length of TheCutData)</span></span>
+<span><span class="va">mask_hour</span> <span class="op">&lt;-</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">18</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># very fast!</span></span>
-<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">rule_low_DO</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask</span>, <span class="op">]</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span> <span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># combined mask — still full length of TheCutData</span></span>
+<span><span class="va">mask_DO</span> <span class="op">&lt;-</span> <span class="va">mask_interval</span> <span class="op">&amp;</span> <span class="va">mask_hour</span></span>
+<span></span>
+<span><span class="va">rule_low_DO</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask_DO</span>, <span class="op">]</span> </span></code></pre></div>
 </div>
 <ol type="1">
 <li><p>Track hydrograph: hourly or 3 hourly TP above baseflow (median)</p></li>
 <li><p>High flow for load: track hydrograph like Wong and Kerkez &gt;&gt; 6 points &gt;&gt; TP, assume perfect knowledge of storm coming</p></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 3. Track hydrograph: hourly or 3 hourly TP above baseflow (median)</span></span>
 <span><span class="va">criteria</span> <span class="op">&lt;-</span><span class="st">"(`Flow at Binfield gauging station (m3/s)` &gt; 0.122)"</span></span>
 <span></span>
@@ -347,15 +393,17 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>int <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span><span class="va">start</span>,<span class="va">end</span><span class="op">)</span> <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">int</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># intervals</span></span>
 <span></span>
+<span><span class="co"># interval mask (full length of TheCutData)</span></span>
+<span><span class="va">mask_interval</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># hour mask (full length of TheCutData)</span></span>
+<span><span class="va">mask_hour</span> <span class="op">&lt;-</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">21</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># very fast!</span></span>
-<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">rule_above_baseflow</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask</span>, <span class="op">]</span><span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span>,<span class="fl">6</span>,<span class="fl">9</span>,<span class="fl">12</span>,<span class="fl">15</span>,<span class="fl">18</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># combined mask — still full length of TheCutData</span></span>
+<span><span class="va">mask_HF</span> <span class="op">&lt;-</span> <span class="va">mask_interval</span> <span class="op">&amp;</span> <span class="va">mask_hour</span></span>
+<span></span>
+<span><span class="va">rule_above_baseflow</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask_HF</span>, <span class="op">]</span> </span></code></pre></div>
 </div>
 </section><section class="level3"><h3 id="adaptive-sampling-using-wong-and-kerkez-2016-algorithm">Adaptive sampling using Wong and Kerkez (2016) algorithm<a class="anchor" aria-label="anchor" href="#adaptive-sampling-using-wong-and-kerkez-2016-algorithm"></a>
 </h3>
@@ -375,7 +423,7 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <figcaption>Adaptive sampling algorithm (above) and corresponding state machine (below) by Wong and Kerkez (2016).</figcaption></figure>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">RBI</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Flow at Binfield gauging station (m3/s)`</span><span class="op">)</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Flow at Binfield gauging station (m3/s)`</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">'The Richards-Baker Flashiness Index (RBI) of the station is'</span>, <span class="va">RBI</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -384,7 +432,7 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 </div>
 </div>
 <p>::: {.cell}</p>
-<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># parameters</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span> <span class="co"># forecast_prob_thresh = 0.10,     # 10% POP</span></span>
@@ -410,12 +458,12 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 5 2010-05-30 10:00:00 RETURN_TO_BASEFLOW
 6 2010-05-30 11:00:00           BASEFLOW</code></pre>
 <p>:::</p>
-<div class="sourceCode cell-code" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">flow_state</span><span class="op">)</span></span></code></pre></div>
 <p>::: {.cell-output .cell-output-stdout}</p>
 <pre><code>[1] 418</code></pre>
 <p>:::</p>
-<div class="sourceCode cell-code" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
 <span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span>, </span>
 <span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Flow at Binfield gauging station (m3/s)`</span>, </span>
@@ -428,32 +476,39 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span><span class="co"># abline(h = baseflow, col = "gray", lty = 2)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a<span class="op">=</span><span class="cn">NULL</span>,b<span class="op">=</span><span class="cn">NULL</span>,h<span class="op">=</span><span class="cn">NULL</span>,v<span class="op">=</span><span class="va">flow_state</span><span class="op">$</span><span class="va">time</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span>    </span></code></pre></div>
 <p>::: {.cell-output-display} <img src="TheCut_files/figure-html/unnamed-chunk-8-1.png" width="672"> :::</p>
-<div class="sourceCode cell-code" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># very fast!</span></span>
 <span><span class="va">times</span> <span class="op">=</span> <span class="va">flow_state</span><span class="op">$</span><span class="va">time</span></span>
 <span></span>
 <span><span class="co"># subset data by mask, note use %in% for exact time, %within% for intervals</span></span>
-<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">times</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="va">rule_state_machine</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask</span>, <span class="op">]</span></span></code></pre></div>
+<span><span class="va">mask_Wong</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">times</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">rule_state_machine</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span><span class="op">[</span><span class="va">mask_Wong</span>, <span class="op">]</span></span></code></pre></div>
 <p>:::</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot flow, and chlrophyll and P for all 4 rules</span></span>
 <span><span class="va">size</span> <span class="op">=</span> <span class="fl">0.75</span></span>
-<span><span class="va">sm_title</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.subtitle<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">14</span>, hjust<span class="op">=</span><span class="fl">0.0</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.0</span>, </span>
-<span>    margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>, face<span class="op">=</span><span class="st">"plain"</span>, color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span></span>
-<span></span>
+<span><span class="va">sm_title</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>  plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">20</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span>,</span>
+<span>  plot.subtitle <span class="op">=</span> <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html" class="external-link">element_markdown</a></span><span class="op">(</span></span>
+<span>    size <span class="op">=</span> <span class="fl">14</span>, </span>
+<span>    hjust <span class="op">=</span> <span class="fl">0.0</span>, </span>
+<span>    vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.0</span>, </span>
+<span>    margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="op">-</span><span class="fl">10</span>, b <span class="op">=</span> <span class="op">-</span><span class="fl">10</span><span class="op">)</span>,</span>
+<span>    face <span class="op">=</span> <span class="st">"plain"</span>,</span>
+<span>    colour <span class="op">=</span> <span class="st">"black"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># TOCA</span></span>
 <span><span class="va">pTOCA1</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">TheCutData</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">`Date / time`</span>, y<span class="op">=</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, size<span class="op">=</span><span class="va">size</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">baseline</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">`Date / time`</span>, y<span class="op">=</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, color<span class="op">=</span> <span class="st">'red'</span> ,size<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
-<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'1. Full dataset and baseline'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (ug/l)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
+<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'1. Full dataset and baseline'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll *a* (\u00B5g/L)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
 <span><span class="va">pTOCA2</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">rule_low_DO</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, size<span class="op">=</span><span class="va">size</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'2. low flow, low DO'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (ug/l)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="va">sm_title</span></span>
-<span><span class="va">pTOCA3</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, size<span class="op">=</span><span class="va">size</span><span class="op">)</span> <span class="op">+</span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'3. Flow above baseflow'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (ug/l)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
+<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'2. low flow, low DO'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (\u00B5g/L)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="va">sm_title</span></span>
+<span><span class="va">pTOCA3</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, size<span class="op">=</span><span class="va">size</span><span class="op">)</span> <span class="op">+</span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'3. Flow above baseflow'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (\u00B5g/L)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
 <span><span class="va">pTOCA4</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">rule_state_machine</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span>, size<span class="op">=</span><span class="va">size</span><span class="op">)</span> <span class="op">+</span></span>
-<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'4. modfied Wong and Kerkez'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (ug/l)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
+<span>   <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'4. modfied Wong and Kerkez'</span>, subtitle <span class="op">=</span> <span class="st">'Total chlorophyll (\u00B5g/L)'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Date / time`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">sm_title</span></span>
 <span></span>
 <span><span class="co"># total P</span></span>
 <span><span class="va">pTP1</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -496,7 +551,7 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <figcaption>Total chlorophyll and total phosphorus concentration plots using different regular and adaptive sub-sampling approaches. For plot (a) and (b), the full dataset is shown in black while the weekly baseline dataset is shown in red.</figcaption></figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print(pTOCA1)</span></span>
 <span><span class="co"># print(pTOCA2)</span></span>
 <span><span class="co"># print(pTOCA3)</span></span>
@@ -509,97 +564,242 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span><span class="co"># plot_grid(p1,p2,ncol=2)</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.312253</code></pre>
-</div>
 <div class="sourceCode cell-code" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">raw_col</span> <span class="op">&lt;-</span> <span class="st">"Total Phosphorus (mg/l)"</span></span>
+<span></span>
+<span><span class="co"># reference stats</span></span>
+<span><span class="va">ref_median</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ref_range</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ref_nrows</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">combined_TP</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">baseline</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_low_DO</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_low_DO <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_above_baseflow <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_state_machine</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_state_machine <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span> </span>
+<span></span>
+<span><span class="va">metrics_TC</span> <span class="op">&lt;-</span> <span class="va">combined_TP</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">raw_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"series"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    non_na_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    median_val       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    range_val        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    pct_median_change <span class="op">=</span> <span class="op">(</span><span class="va">median_val</span> <span class="op">-</span> <span class="va">ref_median</span><span class="op">)</span> <span class="op">/</span> <span class="va">ref_median</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_range_change  <span class="op">=</span> <span class="va">range_val</span> <span class="op">/</span> <span class="va">ref_range</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">median_val</span>, <span class="va">non_na_count</span>, <span class="va">pct_range_change</span>, <span class="va">pct_median_change</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics_TC</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7818182</code></pre>
+<pre><code># A tibble: 4 × 5
+  median_val non_na_count pct_range_change pct_median_change series
+       &lt;dbl&gt;        &lt;int&gt;            &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;
+1      0.653           54             60              -0.836 baseline
+2      0.610         1752             78.2            -7.22  rule_above_baseflow
+3      0.716          189             85.1             8.81  rule_low_DO
+4      0.673          281             65.6             2.28  rule_state_machine </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6561265</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.008358663</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2431611</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.07218845</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02279635</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># a = diff(range(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE))</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3275862</code></pre>
+<span><span class="co"># diff(range(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)) /a</span></span>
+<span></span>
+<span><span class="co"># b = median(TheCutData$`Total Phosphorus (mg/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># (median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE) -b) /b </span></span>
+<span></span>
+<span><span class="co"># b </span></span>
+<span><span class="co"># median(baseline$`Total Phosphorus (mg/l)`, na.rm = TRUE) </span></span>
+<span><span class="co"># median(rule_low_DO$`Total Phosphorus (mg/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># median(rule_above_baseflow$`Total Phosphorus (mg/l)`, na.rm = TRUE) </span></span>
+<span><span class="co"># median(rule_state_machine$`Total Phosphorus (mg/l)`, na.rm = TRUE)</span></span></code></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">raw_col</span> <span class="op">&lt;-</span> <span class="st">"Total chlorophyll (ug/l)"</span></span>
+<span></span>
+<span><span class="co"># reference stats</span></span>
+<span><span class="va">ref_median</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ref_range</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ref_nrows</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">combined_TP</span> <span class="op">&lt;-</span> <span class="va">TheCutData</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">baseline</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_low_DO</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_low_DO <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_above_baseflow <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span><span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_state_machine</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Date / time`</span>, <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule_state_machine <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="va">raw_col</span><span class="op">)</span> <span class="op">)</span> </span>
+<span></span>
+<span><span class="va">metrics_TP</span> <span class="op">&lt;-</span> <span class="va">combined_TP</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">raw_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"series"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    non_na_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    median_val       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    range_val        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    pct_median_change <span class="op">=</span> <span class="op">(</span><span class="va">median_val</span> <span class="op">-</span> <span class="va">ref_median</span><span class="op">)</span> <span class="op">/</span> <span class="va">ref_median</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_range_change  <span class="op">=</span> <span class="va">range_val</span> <span class="op">/</span> <span class="va">ref_range</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">median_val</span>, <span class="va">non_na_count</span>, <span class="va">pct_range_change</span>, <span class="va">pct_median_change</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics_TP</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.01400862</code></pre>
+<pre><code># A tibble: 4 × 5
+  median_val non_na_count pct_range_change pct_median_change series
+       &lt;dbl&gt;        &lt;int&gt;            &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;
+1        3.2           85             32.8             -5.88 baseline
+2        3.4         2943             70.9              0    rule_above_baseflow
+3        3.8          235             30.9             11.8  rule_low_DO
+4        3.3          377             37.8             -2.94 rule_state_machine </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7090517</code></pre>
+<div class="sourceCode cell-code" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># a = diff(range(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE))</span></span>
+<span></span>
+<span><span class="co"># diff(range(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a</span></span>
+<span><span class="co"># diff(range(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)) /a</span></span>
+<span></span>
+<span><span class="co"># b = median(TheCutData$`Total chlorophyll (ug/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># (median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b </span></span>
+<span><span class="co"># (median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE) -b) /b </span></span>
+<span></span>
+<span><span class="co"># median(baseline$`Total chlorophyll (ug/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># median(rule_low_DO$`Total chlorophyll (ug/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># median(rule_above_baseflow$`Total chlorophyll (ug/l)`, na.rm = TRUE)</span></span>
+<span><span class="co"># median(rule_state_machine$`Total chlorophyll (ug/l)`, na.rm = TRUE)</span></span></code></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3782328</code></pre>
+</section><section class="level2"><h2 id="kolmogorov-smirnov-tests-and-ecdf">Kolmogorov-Smirnov Tests and <code>ecdf</code>
+<a class="anchor" aria-label="anchor" href="#kolmogorov-smirnov-tests-and-ecdf"></a>
+</h2>
+<p>A test to show how good a sub-sampled dataset preseves the characteristics of the orignial one is to overlay their empirical cumulative distribution functions (ecdf). In a perfect scenario, the ecdf of the two time series would completely overlap.</p>
+<p>Kolmogorov-Smirnov tests returns the KS statistic, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>, which is the maximum vertical distance between two cumulative distribution functions (CDFs).</p>
+<p>The accompanying p-values tests whether the two time series comes from the same statistical distribution. p-value &lt; 0.05 shows strong evidence that the distrutions differ.</p>
+<p><em>Caveat:</em> With very large datasets (common in environmental time series), the KS test becomes extremely sensitive. Even tiny, practically unimportant differences can become statistically significant. In those cases, D is often more informative than the p-value.</p>
+<p>Interpretation guide: D &lt; 0.05 Very similar 0.05-0.10 Small difference 0.10-0.20 Moderate difference &gt; 0.20 Large difference</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## ECDF for TP</span></span>
+<span><span class="va">pp1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  `raw data` <span class="op">=</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>,</span>
+<span>  `baseline` <span class="op">=</span> <span class="va">baseline</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>,</span>
+<span>  `low flow, low DO` <span class="op">=</span> <span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>,</span>
+<span>  `flow above baseflow` <span class="op">=</span> <span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>,</span>
+<span>  `modified Wong and Kerkez` <span class="op">=</span> <span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">values</span>, colour <span class="op">=</span> <span class="va">ind</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Value"</span>, y <span class="op">=</span> <span class="st">"ECDF      "</span>, colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Total Phosphorus (mg/L)'</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>  legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>lineheight <span class="op">=</span> <span class="fl">0.9</span>, size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co"># add legend space</span></span>
+<span>  legend.position<span class="op">=</span><span class="st">'bottom'</span>,</span>
+<span>        panel.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>        text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of all text</span></span>
+<span>        <span class="co"># axis.line = element_line(linewidth = 3, colour = "grey20"),</span></span>
+<span>        strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        strip.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis text</span></span>
+<span>        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis titles</span></span>
+<span>        plot.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>, <span class="co">#change font size of plot title</span></span>
+<span>        legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">+</span> </span>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="st">"#0072B2"</span>,          <span class="co"># Okabe-Ito blue</span></span>
+<span>    <span class="st">"low flow, low DO"</span> <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
+<span>    <span class="st">"flow above baseflow"</span> <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
+<span>    <span class="st">"modified Wong and Kerkez"</span> <span class="op">=</span> <span class="st">"#CC79A7"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"raw data"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"baseline"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, <span class="va">baseline</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span> ,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"low flow, low DO"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"low flow, low DO"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, <span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"flow above baseflow"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"flow above baseflow"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, <span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span> <span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"modified Wong and Kerkez"</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"modified Wong and Kerkez"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>, <span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># ECDF for TC</span></span>
+<span><span class="va">pp2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  `raw data` <span class="op">=</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>,</span>
+<span>  `baseline` <span class="op">=</span> <span class="va">baseline</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>,</span>
+<span>  `low flow, low DO` <span class="op">=</span> <span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>,</span>
+<span>  `flow above baseflow` <span class="op">=</span> <span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>,</span>
+<span>  `modified Wong and Kerkez` <span class="op">=</span> <span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">values</span>, colour <span class="op">=</span> <span class="va">ind</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Value"</span>, y <span class="op">=</span> <span class="st">"ECDF      "</span>, colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'Total chlorophyll *a* (\u00B5g/L)'</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>  axis.title.x <span class="op">=</span> <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html" class="external-link">element_markdown</a></span><span class="op">(</span><span class="op">)</span>, <span class="co"># enable markdown in xlabel</span></span>
+<span>  legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>lineheight <span class="op">=</span> <span class="fl">0.9</span>, size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co"># add legend space</span></span>
+<span>  legend.position<span class="op">=</span><span class="st">'bottom'</span>,</span>
+<span>        panel.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>        text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of all text</span></span>
+<span>        <span class="co"># axis.line = element_line(linewidth = 3, colour = "grey20"),</span></span>
+<span>        strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        strip.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis text</span></span>
+<span>        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis titles</span></span>
+<span>        plot.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>, <span class="co">#change font size of plot title</span></span>
+<span>        legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">+</span> </span>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="st">"#0072B2"</span>,          <span class="co"># Okabe-Ito blue</span></span>
+<span>    <span class="st">"low flow, low DO"</span> <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
+<span>    <span class="st">"flow above baseflow"</span> <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
+<span>    <span class="st">"modified Wong and Kerkez"</span> <span class="op">=</span> <span class="st">"#CC79A7"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"raw data"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"baseline"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, <span class="va">baseline</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span> ,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"low flow, low DO"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"low flow, low DO"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, <span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"flow above baseflow"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"flow above baseflow"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, <span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span> <span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"modified Wong and Kerkez"</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"modified Wong and Kerkez"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, <span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">pp1</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,<span class="va">pp2</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">40</span><span class="op">)</span>, labels <span class="op">=</span> <span class="st">"auto"</span>, label_size <span class="op">=</span> <span class="fl">22</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="TheCut_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+</figure>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">baseline</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.05882353</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_low_DO</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.05882353</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_above_baseflow</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_state_machine</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.02941176</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ## plot flow and PCA loadings</span></span>
 <span></span>
 <span><span class="co"># ## plot loadings only</span></span>
@@ -626,6 +826,156 @@ NH4 (mg N /l)                            0.34  0.23  0.10 -0.02</code></pre>
 <span><span class="co">#   pos = 3</span></span>
 <span><span class="co"># )</span></span></code></pre></div>
 </div>
+</section><section class="level2"><h2 id="extreme-statistics">extreme statistics<a class="anchor" aria-label="anchor" href="#extreme-statistics"></a>
+</h2>
+<p><strong>Extreme Recall</strong> Extreme Recall measures how many of the truly extreme observations in the full time series were retained after sub-sampling.</p>
+<p>Under uniform random sampling:</p>
+<p>ExtremeRecallp≈Pr⁡(sampled)_p ()ExtremeRecallp​≈Pr(sampled)</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi></mrow><mi>p</mi></msub><mo>=</mo><mfrac><mrow><mi>#</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow><mo>∩</mo><mo stretchy="false" form="prefix">{</mo><mi>x</mi><mo>&gt;</mo><msub><mi>P</mi><mi>p</mi></msub><mo stretchy="false" form="postfix">}</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>#</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>&gt;</mo><msub><mi>P</mi><mi>p</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+\mathrm{ExtremeRecall}_p =
+\frac{
+\#\left(\mathrm{sampled} \cap \{x&gt;P_p\}\right)
+}{
+\#\left(x&gt;P_p\right)
+}
+</annotation></semantics></math></p>
+<p><strong>Oversampling Factor</strong> If &gt; 1 means, the extremes are X times more frquently sampled than expected under uniform sampling. <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">F</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi></mrow><mi>p</mi></msub><mo>=</mo><mfrac><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow><mo>∣</mo><mi>x</mi><mo>&gt;</mo><msub><mi>P</mi><mi>p</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+\mathrm{OversamplingFactor}_p =
+\frac{
+\Pr(\mathrm{sampled}\mid x&gt;P_p)
+}{
+\Pr(\mathrm{sampled})
+}
+</annotation></semantics></math></p>
+<p><strong>Tail-Weighted Recall</strong> It is a ranked-weighted recall that gives more weights to extremes <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">W</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">R</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi></mrow><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>S</mi></mrow></munder><msubsup><mi>p</mi><mi>i</mi><mi>α</mi></msubsup></mrow><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msubsup><mi>p</mi><mi>i</mi><mi>α</mi></msubsup></mrow></mfrac></mrow><annotation encoding="application/x-tex">
+\mathrm{TailWeightedRecall} =
+\frac{
+\sum_{i\in S} p_i^{\alpha}
+}{
+\sum_{i=1}^{N} p_i^{\alpha}
+}
+</annotation></semantics></math></p>
+<p><strong>Percentile Exposure</strong> This is the mean percentile of sampled observations. Complete random sampling should be ¬0.5. <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">E</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">|</mo><mi>S</mi><mo stretchy="false" form="prefix">|</mo></mrow></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>S</mi></mrow></munder><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">
+\mathrm{PercentileExposure} =
+\frac{1}{|S|}
+\sum_{i\in S} p_i
+</annotation></semantics></math></p>
+<p>where</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>P</mi><mi>p</mi></msub><annotation encoding="application/x-tex">P_p</annotation></semantics></math>​ is the ppp-th percentile of the full time series, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>​ is the value of observation iii, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> is the total number of observations, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math> is the set of sampled observations, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∣</mo><mi>S</mi><mo>∣</mo></mrow><annotation encoding="application/x-tex">∣S∣</annotation></semantics></math> is the number of sampled observations, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>​ is the empirical percentile rank of observation iii, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> is the tail-weighting exponent.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## need to compare it with full uniform dataset</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">=</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span></span>
+<span><span class="va">sampled_mask</span> <span class="op">=</span> <span class="va">mask_DO</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/extreme_sampling_metrics.html">extreme_sampling_metrics</a></span><span class="op">(</span></span>
+<span>  full_values <span class="op">=</span> <span class="va">x</span>,</span>
+<span>  sampled_mask <span class="op">=</span> <span class="va">sampled_mask</span>,</span>
+<span>  percentile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  percentile alpha extreme_recall oversampling_factor tail_weighted_recall
+       &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;
+1       0.99     2        0.00699               0.424               0.0187
+# ℹ 1 more variable: percentile_exposure &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">masks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mask_baseline</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  mask_baseline <span class="op">=</span> <span class="va">mask_baseline</span>,</span>
+<span>  mask_DO <span class="op">=</span> <span class="va">mask_DO</span>, <span class="co">## filter timing also</span></span>
+<span>  mask_HF <span class="op">=</span> <span class="va">mask_HF</span>,</span>
+<span>  mask_Wong <span class="op">=</span> <span class="va">mask_Wong</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># show sampling fraction</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">masks</span><span class="op">)</span>,</span>
+<span>  sampling_fraction <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">masks</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  method        sampling_fraction
+  &lt;chr&gt;                     &lt;dbl&gt;
+1 all_data                1
+2 mask_baseline           0.00595
+3 mask_DO                 0.0150
+4 mask_HF                 0.214
+5 mask_Wong               0.0267 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">imap_dfr</a></span><span class="op">(</span></span>
+<span>  <span class="va">masks</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="../reference/extreme_sampling_metrics.html">extreme_sampling_metrics</a></span><span class="op">(</span></span>
+<span>      full_values <span class="op">=</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total chlorophyll (ug/l)`</span>,</span>
+<span>      sampled_mask <span class="op">=</span> <span class="va">.x</span>,</span>
+<span>      percentile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>      alpha <span class="op">=</span> <span class="fl">2</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">.y</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  percentile alpha extreme_recall oversampling_factor tail_weighted_recall
+       &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;
+1       0.99     2        1                     1                  1
+2       0.99     2        0.00699               1.17               0.00547
+3       0.99     2        0.00699               0.424              0.0187
+4       0.99     2        0.0979                0.474              0.198
+5       0.99     2        0.0979                3.70               0.0248
+# ℹ 2 more variables: percentile_exposure &lt;dbl&gt;, method &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>The adaptive sampling scheme perform very well to capture extremes in total chlorophyll <em>a</em>. P99 extreme recall shows 34.3% (HF), 9.8% (Wong) and 4.9% (DO) of P99 extremes captured. Tail wegithed recall HF (0.59) and DO (0.16) also shows good performance to retain tail-weighted infromation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># show sampling fraction</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">masks</span><span class="op">)</span>,</span>
+<span>  sampling_fraction <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">masks</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  method        sampling_fraction
+  &lt;chr&gt;                     &lt;dbl&gt;
+1 all_data                1
+2 mask_baseline           0.00595
+3 mask_DO                 0.0150
+4 mask_HF                 0.214
+5 mask_Wong               0.0267 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">imap_dfr</a></span><span class="op">(</span></span>
+<span>  <span class="va">masks</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="../reference/extreme_sampling_metrics.html">extreme_sampling_metrics</a></span><span class="op">(</span></span>
+<span>      full_values <span class="op">=</span> <span class="va">TheCutData</span><span class="op">$</span><span class="va">`Total Phosphorus (mg/l)`</span>,</span>
+<span>      sampled_mask <span class="op">=</span> <span class="va">.x</span>,</span>
+<span>      percentile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>      alpha <span class="op">=</span> <span class="fl">2</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">.y</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 7
+  percentile alpha extreme_recall oversampling_factor tail_weighted_recall
+       &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;               &lt;dbl&gt;                &lt;dbl&gt;
+1       0.99     2         1                   1                   1
+2       0.99     2         0                   0                   0.00569
+3       0.99     2         0.0319              1.57                0.0261
+4       0.99     2         0.0106              0.0565              0.159
+5       0.99     2         0                   0                   0.0307
+# ℹ 2 more variables: percentile_exposure &lt;dbl&gt;, method &lt;chr&gt;</code></pre>
+</div>
+</div>
+<!-- Baseline and mask_Wong basically picks up no phosphus P99 extremes. As we see in the PDF, the data has a long tail. mask_DO captures 21.3% of all P99 phosphorus observations and 22.3% of overall tail information (if we weighted the data by a factor of $\alpha$ = 2). its oversampling factor is also > 1 meaning it is more likely to sample P99 data than random sampling. mask_HF retains 48% of tail-weghted information. But given it has a high sampling fraction of 64%, this is actually not very good and also explains its low over-sampling factor. -->
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);

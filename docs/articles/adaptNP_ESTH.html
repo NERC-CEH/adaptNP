@@ -77,11 +77,11 @@
 
 
 
-    <section class="level3"><h3 id="what-is-adatpive-sampling">What is adatpive sampling?<a class="anchor" aria-label="anchor" href="#what-is-adatpive-sampling"></a>
-</h3>
+    <section class="section level4"><h4 id="what-is-adatpive-sampling">What is adatpive sampling?<a class="anchor" aria-label="anchor" href="#what-is-adatpive-sampling"></a>
+</h4>
 <p>Adpative sampling is the opposite of sampling with a fixed design. A majority of previous adaptive sampling is applied spatially, where collected data determined the spatial location of the samples in the next sampling round. Here we focus on temporal adatpive sampling, where sampling frequencies effectively changes based on measured data or other information.</p>
-</section><section class="level3"><h3 id="the-multi-rule-approach">The multi-rule approach<a class="anchor" aria-label="anchor" href="#the-multi-rule-approach"></a>
-</h3>
+</section><section class="section level4"><h4 id="the-multi-rule-approach">The multi-rule approach<a class="anchor" aria-label="anchor" href="#the-multi-rule-approach"></a>
+</h4>
 <p>Adaptive sampling means sampling that goes beyonds fixed designs of sampmling at regular intervals. In practice, changing sampling frequencies all the time can lead to a variety of issues. Therefore, using a combination of multiple rules, each sampling at regular intervals and activated by different criteria, to achieve adaptive sampling is more flexible and is preferred.</p>
 <table class="table caption-top">
 <caption>Table: Multi-rule vs dynamic frquency approach to adaptive sammpling</caption>
@@ -115,16 +115,16 @@
 <td></td>
 </tr>
 </tbody>
-</table></section><section class="level3"><h3 id="example-data-esthwaite-lake-monitoring-data-and-suna-nitrate-sensor">Example data: Esthwaite lake monitoring data and SUNA nitrate sensor<a class="anchor" aria-label="anchor" href="#example-data-esthwaite-lake-monitoring-data-and-suna-nitrate-sensor"></a>
-</h3>
+</table></section><section class="section level4"><h4 id="example-data-esthwaite-lake-monitoring-data-and-suna-nitrate-sensor">Example data: Esthwaite lake monitoring data and SUNA nitrate sensor<a class="anchor" aria-label="anchor" href="#example-data-esthwaite-lake-monitoring-data-and-suna-nitrate-sensor"></a>
+</h4>
 <p>For demonstration, we use field trial data from in-lake physico-chemical sensors (water temperature at 12 depths, and Ponsel temperature and conductivity), over-lake weather sensors (air temperature, wind speed, wind direction, solar radiation, relative humidity) sonde and a SUNA optical nitrate sensor on an automatic buoy located on Esthwaite water in Lake District, England collected between 29th April to 22nd October 2025. Optical nitrate data was collected every 10 minutes, while the other determinants are measured at every 2 minutes. While no specific events are expected in this lake, we use this dataset to demonstrate the various techniques for adaptive sampling.</p>
-</section><section class="level3"><h3 id="evaluation-some-metrics">Evaluation: some metrics<a class="anchor" aria-label="anchor" href="#evaluation-some-metrics"></a>
-</h3>
+</section><section class="section level4"><h4 id="evaluation-some-metrics">Evaluation: some metrics<a class="anchor" aria-label="anchor" href="#evaluation-some-metrics"></a>
+</h4>
 <p>Following Elfferich et al. (2024), we will report the median and range captured by the downsampled time series, which is applicable to adaptively sampled time series in retrospective experiments. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> is the orginal time series, while <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mtext mathvariant="normal">sub</mtext></msub><annotation encoding="application/x-tex">x_{\text{sub}}</annotation></semantics></math> is the sub-sampled time series.</p>
 <p><strong>Percentage of range captured</strong><br><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mtext mathvariant="normal">sub</mtext></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mtext mathvariant="normal">sub</mtext></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><annotation encoding="application/x-tex"> \frac{\max(x_{\text{sub}})-\min(x_{\text{sub}})}{\max(x)-\min(x)} </annotation></semantics></math></p>
 <p><strong>Percentage change of median</strong><br><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mtext mathvariant="normal">median</mtext><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><mtext mathvariant="normal">median</mtext><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mrow><mi>s</mi><mi>u</mi><mi>b</mi></mrow></msub><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mtext mathvariant="normal">median</mtext><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac><annotation encoding="application/x-tex"> \frac{\text{median}(x)-\text{median}(x_{sub})}{\text{median}(x)} </annotation></semantics></math></p>
-</section><section class="level3"><h3 id="loading-libraries">Loading libraries<a class="anchor" aria-label="anchor" href="#loading-libraries"></a>
-</h3>
+</section><section class="section level4"><h4 id="loading-libraries">Loading libraries<a class="anchor" aria-label="anchor" href="#loading-libraries"></a>
+</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org" class="external-link">readxl</a></span><span class="op">)</span></span>
@@ -132,14 +132,15 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># devtools::load_all() # to replace with library(adaptNP)</span></span>
+<span><span class="co">#devtools::load_all() </span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nerc-ceh.github.io/adaptNP/">adaptNP</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># source('../temp/theme_gov.R') # optional theming for plots</span></span></code></pre></div>
 </div>
-</section><section class="level3"><h3 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
-</h3>
+</section><section class="section level4"><h4 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+</h4>
 <p>The following data has been loaded in the adaptNP R package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
@@ -157,8 +158,8 @@
 <span></span>
 <span><span class="co"># Esthwaite_Buoy_SUNA_Data &lt;- read_excel(filepath, sheet = "Esthwaite_Buoy_SUNA_Data", skip=1) # every 10 minutes</span></span></code></pre></div>
 </div>
-</section><section class="level3"><h3 id="example-1-threshold-rules">Example 1: threshold rules<a class="anchor" aria-label="anchor" href="#example-1-threshold-rules"></a>
-</h3>
+</section><section class="section level4"><h4 id="example-1-threshold-rules">Example 1: threshold rules<a class="anchor" aria-label="anchor" href="#example-1-threshold-rules"></a>
+</h4>
 <p>We will illustrate the method by using a simple rule:</p>
 <p><code>criteria &lt;-"(Temp4m &gt; 18) | (SPFD &gt;800)"</code></p>
 <p>The <code>adapt-NP</code> R package make it very easy to do so.</p>
@@ -179,46 +180,131 @@
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>timestamp<span class="op">=</span><span class="va">TIMESTAMP</span>,flag<span class="op">=</span><span class="va">event_flag</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">flag</span><span class="op">)</span>,</span>
 <span>  min_length<span class="op">=</span><span class="fl">50</span><span class="op">)</span> </span>
 <span></span>
-<span><span class="co"># convert period to R lubridate intervals</span></span>
+<span> <span class="co"># stats</span></span>
+<span> </span>
+<span><span class="va">periods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    duration <span class="op">=</span></span>
+<span>      <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">parse_date_time</a></span><span class="op">(</span><span class="va">end</span>, orders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ymd HMS"</span>, <span class="st">"ymd"</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span></span>
+<span>      <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">parse_date_time</a></span><span class="op">(</span><span class="va">start</span>, orders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ymd HMS"</span>, <span class="st">"ymd"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">duration</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mean
+1 5.137815 hours</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># convert period to R lubridate intervals</span></span>
 <span><span class="va">intervals</span> <span class="op">&lt;-</span> <span class="va">periods</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>int <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span><span class="va">start</span>,<span class="va">end</span><span class="op">)</span> <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">int</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>After extracting the event periods, the following code snippets uses it to subset the dataset.</p>
+<p>We can show the periods during which the rule is activated in the Temp4m and SPFD data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Esthwaite_Buoy_HiRes</span><span class="op">$</span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">Esthwaite_Buoy_HiRes</span><span class="op">$</span><span class="va">TIMESTAMP</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="va">pp1</span> <span class="op">=</span> <span class="va">Esthwaite_Buoy_HiRes</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>   </span>
+<span>    Rule <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">mask</span> <span class="op">==</span> <span class="cn">TRUE</span>, <span class="st">"rule 1 active"</span>, <span class="st">"rule 0 only"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>,<span class="va">Rule</span>,<span class="va">Temp4m</span>,<span class="va">SPFD</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SPFD</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">1.0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">Rule</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"fieldname"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">TIMESTAMP</span>, y<span class="op">=</span><span class="va">value</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Rule</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">fieldname</span>, ncol <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"free_y"</span>, axes <span class="op">=</span> <span class="st">"all_y"</span>,</span>
+<span>        labeller <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>                SPFD   <span class="op">=</span> <span class="st">"atop('Solar radiation', W~m^{-2})"</span>,</span>
+<span>                Temp4m <span class="op">=</span> <span class="st">"atop('Water temperature', 'at ~4m depth')"</span></span>
+<span>              <span class="op">)</span>,</span>
+<span>              <span class="va">label_parsed</span></span>
+<span>            <span class="op">)</span>, </span>
+<span>             strip.position <span class="op">=</span> <span class="st">"left"</span></span>
+<span>             <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
+<span>    name   <span class="op">=</span> <span class="st">""</span>,                      <span class="co"># legend title</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="co">#"raw data" = "#000000",</span></span>
+<span>               <span class="st">"rule 0 only"</span> <span class="op">=</span> <span class="st">"#1b9e77"</span>,</span>
+<span>               <span class="st">"rule 1 active"</span> <span class="op">=</span> <span class="st">"#d95f02"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span> </span>
+<span>   <span class="co"># geom_text(data = anno, aes(x = xtext,  y = ytext, label = text), size=5) +</span></span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="co">#   geom_rect(data = periods |&gt; mutate(start=as.Date(start), end=as.Date(end)),</span></span>
+<span><span class="co">#             aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),</span></span>
+<span><span class="co">#             fill = "lightpink", alpha= 0.3)+ </span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">'bottom'</span>,</span>
+<span>        panel.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>        text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of all text</span></span>
+<span>        <span class="co"># axis.line = element_line(linewidth = 3, colour = "grey20"),</span></span>
+<span>        strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        strip.placement <span class="op">=</span> <span class="st">"outside"</span>,</span>
+<span>              <span class="co"># strip.text = element_text(size = 20),   # &lt;- add this explicitly</span></span>
+<span>        <span class="co">#strip.text.y = element_blank(),</span></span>
+<span>        axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis text</span></span>
+<span>        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis titles</span></span>
+<span>        plot.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>, <span class="co">#change font size of plot title</span></span>
+<span>        legend.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of legend text</span></span>
+<span>        legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="co">#change font size of legend title  </span></span>
+<span>  <span class="co">#ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">'2025'</span>,y<span class="op">=</span><span class="st">''</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># pp1</span></span></code></pre></div>
+</div>
+<p>After extracting the event periods, the following code snippets uses it to subset the SUNA nitrate dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rule 0: every 6h</span></span>
-<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">baseline0</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span>, </span>
 <span>         minute <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/minute.html" class="external-link">minute</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">minute</span><span class="op">==</span><span class="fl">0</span>, <span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">9</span>,<span class="fl">15</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># rule 1: every 10 or 20 minutes within periods</span></span>
+<span><span class="va">mask_baseline</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>hour <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hour.html" class="external-link">hour</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span>, </span>
+<span>         minute <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/minute.html" class="external-link">minute</a></span><span class="op">(</span><span class="va">TIMESTAMP</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html" class="external-link">transmute</a></span><span class="op">(</span>sampled <span class="op">=</span>  <span class="va">minute</span><span class="op">==</span><span class="fl">0</span> <span class="op">&amp;</span> <span class="va">hour</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">9</span>,<span class="fl">15</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">sampled</span><span class="op">)</span></span>
+<span><span class="va">baseline</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">[</span><span class="va">mask_baseline</span>, <span class="op">]</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">baseline0</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">hour</span>, <span class="op">-</span><span class="va">minute</span><span class="op">)</span>, <span class="va">baseline</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># rule 1: every 10 or 20 minutes within periods</span></span>
 <span></span>
 <span><span class="co"># very fast!</span></span>
-<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">TIMESTAMP</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">rule1</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">[</span><span class="va">mask</span>, <span class="op">]</span></span></code></pre></div>
+<span><span class="va">mask_rule1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html" class="external-link">Reduce</a></span><span class="op">(</span><span class="va">`|`</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">intervals</span>, <span class="kw">function</span><span class="op">(</span><span class="va">int</span><span class="op">)</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">TIMESTAMP</span> <span class="op"><a href="https://lubridate.tidyverse.org/reference/within-interval.html" class="external-link">%within%</a></span> <span class="va">int</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">rule1</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">[</span><span class="va">mask_rule1</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="va">mask_rule0and1</span> <span class="op">&lt;-</span> <span class="va">mask_baseline</span> <span class="op">|</span> <span class="va">mask_rule1</span></span></code></pre></div>
 </div>
 <p>Now, we plot the results.</p>
-<div class="cell" data-fig-heights="{}">
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># now plot: (1) all SUNA, (2) baseline SUNA, (3) rule 1 SUNA</span></span>
 <span></span>
 <span><span class="va">combined_SUNA</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule1</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>rule1 <span class="op">=</span> <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span>, by<span class="op">=</span><span class="st">'TIMESTAMP'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">baseline</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>baseline <span class="op">=</span> <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span>, by<span class="op">=</span><span class="st">'TIMESTAMP'</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">anno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>xtext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'2025-07-15'</span>, <span class="st">'2025-07-15'</span>, <span class="st">'2025-07-15'</span><span class="op">)</span>, </span>
+<span><span class="va">anno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>xtext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'2025-07-31'</span>, <span class="st">'2025-07-31'</span>, <span class="st">'2025-07-31'</span><span class="op">)</span>, </span>
 <span>                   ytext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>,<span class="fl">0.4</span>,<span class="fl">0.4</span><span class="op">)</span>, </span>
-<span>                   Rule <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw data"</span>, <span class="st">"rule 0 (baseline)"</span> ,<span class="st">"rule 1 (algal bloom likely)"</span> <span class="op">)</span>,</span>
+<span>                   Rule <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw data"</span>, <span class="st">"baseline"</span> ,<span class="st">"rule 1 (adaptive sampling)"</span> <span class="op">)</span>,</span>
 <span>                   text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Every 10 minutes"</span>, <span class="st">"Every 6 hours"</span>, <span class="st">"Every 10 minutes only during event"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>xtext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">xtext</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">combined_SUNA</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">pp2</span> <span class="op">&lt;-</span> <span class="va">combined_SUNA</span> <span class="op">|&gt;</span> <span class="co">#select(-`baseline_and_rule1`) |&gt; </span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span> `raw data` <span class="op">=</span> <span class="va">SUNA_Nitrate_mgL</span>, </span>
-<span>          `rule 0 (baseline)` <span class="op">=</span> <span class="va">baseline</span>,</span>
-<span>          `rule 1 (algal bloom likely)` <span class="op">=</span> <span class="va">rule1</span>,<span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>          `baseline` <span class="op">=</span> <span class="va">baseline</span>,</span>
+<span>          `rule 1 (adaptive sampling)` <span class="op">=</span> <span class="va">rule1</span>,<span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span><span class="co">#  filter(TIMESTAMP &lt;'2025-08-15') |&gt; </span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="va">TIMESTAMP</span>, names_to <span class="op">=</span> <span class="st">"Rule"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -228,8 +314,8 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span></span>
 <span>    name   <span class="op">=</span> <span class="st">""</span>,                      <span class="co"># legend title</span></span>
 <span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"#000000"</span>,</span>
-<span>               <span class="st">"rule 0 (baseline)"</span> <span class="op">=</span> <span class="st">"#1b9e77"</span>,</span>
-<span>               <span class="st">"rule 1 (algal bloom likely)"</span> <span class="op">=</span> <span class="st">"#d95f02"</span><span class="op">)</span></span>
+<span>               <span class="st">"baseline"</span> <span class="op">=</span> <span class="st">"#1b9e77"</span>,</span>
+<span>               <span class="st">"rule 1 (adaptive sampling)"</span> <span class="op">=</span> <span class="st">"#d95f02"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">anno</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xtext</span>,  y <span class="op">=</span> <span class="va">ytext</span>, label <span class="op">=</span> <span class="va">text</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -247,125 +333,155 @@
 <span>        plot.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>, <span class="co">#change font size of plot title</span></span>
 <span>        legend.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of legend text</span></span>
 <span>        legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span><span class="op">+</span> <span class="co">#change font size of legend title  </span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n'</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">''</span>,y<span class="op">=</span><span class="st">'mg/L'</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># change legend point size</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">'\n'</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="co">#ggtitle('2025 SUNA nitrate sensor field trial, Esthwaitewater, UK \n') +</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">'2025'</span>,y<span class="op">=</span><span class="st">'mg/L'</span><span class="op">)</span><span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">8</span><span class="op">)</span>, ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># change legend point size</span></span>
+<span></span>
+<span><span class="co"># pp2</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># combine plots</span></span>
+<span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">pp1</span>,<span class="va">pp2</span>, labels <span class="op">=</span> <span class="st">"auto"</span>, label_size <span class="op">=</span> <span class="fl">22</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure><p><img src="adaptNP_ESTH_files/figure-html/ex1-combine-plot-1.png" alt="A line plot illustrating adaptive sampling" width="672"></p>
-<figcaption>Illustration of the adaptive sampling approach using SUNA nitrate data. Black line denotes all data from the field trail. Baseline denotes baseline sampling at every 6 hours (aligned to 03:00), and rule 1 denotes event sampling at every 10 minutes. The shaded area denotes periods where rule 1 is activated</figcaption></figure>
+<div>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+</figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot periods (hours flagged per day) as rectangles: y axis (date), x axis (hours)</span></span>
 <span><span class="va">periods</span>  <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>duration <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/interval.html" class="external-link">interval</a></span><span class="op">(</span><span class="va">start</span>,<span class="va">end</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">minutes</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                 start                 end duration
-1  2025-04-30 09:34:00 2025-04-30 15:18:00      344
-2  2025-05-01 08:30:00 2025-05-01 12:26:00      236
-3  2025-05-01 12:44:00 2025-05-01 16:02:00      198
-4  2025-05-02 09:24:00 2025-05-02 11:08:00      104
-5  2025-05-02 11:24:00 2025-05-02 13:30:00      126
-6  2025-05-02 14:34:00 2025-05-02 16:14:00      100
-7  2025-05-06 08:20:00 2025-05-06 10:58:00      158
-8  2025-05-07 08:14:00 2025-05-07 11:06:00      172
-9  2025-05-07 12:34:00 2025-05-07 14:16:00      102
-10 2025-05-09 08:28:00 2025-05-09 14:26:00      358
-11 2025-05-09 14:34:00 2025-05-09 16:20:00      106
-12 2025-05-10 08:10:00 2025-05-10 14:28:00      378
-13 2025-05-13 08:02:00 2025-05-13 16:28:00      506
-14 2025-05-14 08:02:00 2025-05-14 16:06:00      484
-15 2025-05-15 07:48:00 2025-05-15 16:28:00      520
-16 2025-05-16 07:56:00 2025-05-16 16:32:00      516
-17 2025-05-17 07:56:00 2025-05-17 14:28:00      392
-18 2025-05-17 14:32:00 2025-05-17 16:32:00      120
-19 2025-05-18 08:32:00 2025-05-18 12:28:00      236
-20 2025-05-20 07:54:00 2025-05-20 11:40:00      226
-21 2025-05-21 08:12:00 2025-05-21 13:24:00      312
-22 2025-05-22 13:40:00 2025-05-22 15:20:00      100
-23 2025-05-23 07:46:00 2025-05-23 09:26:00      100
-24 2025-05-28 12:10:00 2025-05-28 15:16:00      186
-25 2025-06-10 13:20:00 2025-06-10 16:32:00      192
-26 2025-06-11 08:06:00 2025-06-11 10:14:00      128
-27 2025-06-11 13:58:00 2025-06-11 16:36:00      158
-28 2025-06-13 12:54:00 2025-06-13 15:20:00      146
-29 2025-06-16 08:00:00 2025-06-16 13:12:00      312
-30 2025-06-19 07:54:00 2025-06-19 16:48:00      534
-31 2025-06-20 14:10:00 2025-06-20 16:32:00      142
-32 2025-06-27 07:56:00 2025-06-27 09:38:00      102
-33 2025-07-04 15:36:00 2025-07-04 18:42:00      186
-34 2025-07-07 10:20:00 2025-07-07 12:52:00      152
-35 2025-07-08 08:24:00 2025-07-08 10:46:00      142
-36 2025-07-08 11:52:00 2025-07-08 14:26:00      154
-37 2025-07-08 14:32:00 2025-07-08 16:50:00      138
-38 2025-07-11 08:04:00 2025-07-11 16:48:00      524
-39 2025-07-12 08:02:00 2025-07-12 16:44:00      522
-40 2025-07-13 08:14:00 2025-07-13 10:56:00      162
-41 2025-07-13 11:02:00 2025-07-13 12:50:00      108
-42 2025-07-18 11:20:00 2025-08-03 12:34:00    23114
-43 2025-08-03 14:40:00 2025-08-03 16:38:00      118
-44 2025-08-03 20:32:00 2025-08-03 22:30:00      118
-45 2025-08-03 22:42:00 2025-08-04 01:46:00      184
-46 2025-08-04 04:06:00 2025-08-05 11:22:00     1876
-47 2025-08-05 14:24:00 2025-08-05 18:18:00      234
-48 2025-08-08 04:22:00 2025-08-08 07:42:00      200
-49 2025-08-08 11:54:00 2025-08-08 14:00:00      126
-50 2025-08-08 14:06:00 2025-08-08 22:08:00      482
-51 2025-08-09 00:16:00 2025-08-09 03:56:00      220
-52 2025-08-09 13:18:00 2025-08-09 15:24:00      126
-53 2025-08-10 20:42:00 2025-08-10 23:34:00      172
-54 2025-08-10 23:40:00 2025-08-11 02:16:00      156
-55 2025-08-12 15:52:00 2025-08-12 18:26:00      154
-56 2025-08-13 08:54:00 2025-08-13 13:42:00      288
-57 2025-08-14 12:44:00 2025-08-14 15:46:00      182
-58 2025-08-14 21:26:00          2025-08-15      154
-59 2025-08-15 03:00:00 2025-08-15 04:50:00      110
-60 2025-08-15 08:44:00 2025-08-15 10:46:00      122
-61 2025-08-15 21:08:00 2025-08-16 02:10:00      302
-62 2025-08-16 08:02:00 2025-08-16 11:28:00      206
-63 2025-08-16 12:42:00 2025-08-16 18:26:00      344
-64 2025-08-17 06:08:00 2025-08-17 16:14:00      606
-65 2025-08-17 17:48:00 2025-08-17 19:54:00      126
-66 2025-08-18 05:52:00 2025-08-18 16:16:00      624
-67 2025-08-18 21:02:00 2025-08-19 00:06:00      184
-68 2025-08-19 01:32:00 2025-08-19 10:38:00      546
-69 2025-08-19 12:52:00 2025-08-19 17:00:00      248
-70 2025-08-19 19:46:00 2025-08-19 23:50:00      244
-71 2025-08-19 23:56:00 2025-08-20 10:14:00      618
-72 2025-08-20 10:20:00 2025-08-20 14:26:00      246
-73 2025-08-20 16:04:00 2025-08-22 18:00:00     2996
-74 2025-08-22 19:32:00 2025-08-22 21:20:00      108
-75 2025-08-22 21:30:00 2025-10-22 13:18:00    87348</code></pre>
+<pre><code>                  start                 end duration
+1   2025-04-30 09:34:00 2025-04-30 15:18:00      344
+2   2025-05-01 08:30:00 2025-05-01 12:26:00      236
+3   2025-05-01 12:44:00 2025-05-01 16:02:00      198
+4   2025-05-02 09:24:00 2025-05-02 11:08:00      104
+5   2025-05-02 11:24:00 2025-05-02 13:30:00      126
+6   2025-05-02 14:34:00 2025-05-02 16:14:00      100
+7   2025-05-06 08:20:00 2025-05-06 10:58:00      158
+8   2025-05-07 08:14:00 2025-05-07 11:06:00      172
+9   2025-05-07 12:34:00 2025-05-07 14:16:00      102
+10  2025-05-09 08:28:00 2025-05-09 14:26:00      358
+11  2025-05-09 14:34:00 2025-05-09 16:20:00      106
+12  2025-05-10 08:10:00 2025-05-10 14:28:00      378
+13  2025-05-13 08:02:00 2025-05-13 16:28:00      506
+14  2025-05-14 08:02:00 2025-05-14 16:06:00      484
+15  2025-05-15 07:48:00 2025-05-15 16:28:00      520
+16  2025-05-16 07:56:00 2025-05-16 16:32:00      516
+17  2025-05-17 07:56:00 2025-05-17 14:28:00      392
+18  2025-05-17 14:32:00 2025-05-17 16:32:00      120
+19  2025-05-18 08:32:00 2025-05-18 12:28:00      236
+20  2025-05-20 07:54:00 2025-05-20 11:40:00      226
+21  2025-05-21 08:12:00 2025-05-21 13:24:00      312
+22  2025-05-22 13:40:00 2025-05-22 15:20:00      100
+23  2025-05-23 07:46:00 2025-05-23 09:26:00      100
+24  2025-05-28 12:10:00 2025-05-28 15:16:00      186
+25  2025-06-10 13:20:00 2025-06-10 16:32:00      192
+26  2025-06-11 08:06:00 2025-06-11 10:14:00      128
+27  2025-06-11 13:58:00 2025-06-11 16:36:00      158
+28  2025-06-13 12:54:00 2025-06-13 15:20:00      146
+29  2025-06-16 08:00:00 2025-06-16 13:12:00      312
+30  2025-06-19 07:54:00 2025-06-19 16:48:00      534
+31  2025-06-20 14:10:00 2025-06-20 16:32:00      142
+32  2025-06-27 07:56:00 2025-06-27 09:38:00      102
+33  2025-07-04 15:36:00 2025-07-04 18:42:00      186
+34  2025-07-07 10:20:00 2025-07-07 12:52:00      152
+35  2025-07-08 08:24:00 2025-07-08 10:46:00      142
+36  2025-07-08 11:52:00 2025-07-08 14:26:00      154
+37  2025-07-08 14:32:00 2025-07-08 16:50:00      138
+38  2025-07-11 08:04:00 2025-07-11 16:48:00      524
+39  2025-07-12 08:02:00 2025-07-12 16:44:00      522
+40  2025-07-13 08:14:00 2025-07-13 10:56:00      162
+41  2025-07-13 11:02:00 2025-07-13 12:50:00      108
+42  2025-08-02 11:28:00 2025-08-02 13:16:00      108
+43  2025-08-03 07:12:00 2025-08-03 12:34:00      322
+44  2025-08-03 14:40:00 2025-08-03 16:38:00      118
+45  2025-08-03 20:32:00 2025-08-03 22:30:00      118
+46  2025-08-03 22:42:00 2025-08-04 01:46:00      184
+47  2025-08-04 04:06:00 2025-08-05 11:22:00     1876
+48  2025-08-05 14:24:00 2025-08-05 18:18:00      234
+49  2025-08-08 04:22:00 2025-08-08 07:42:00      200
+50  2025-08-08 11:54:00 2025-08-08 14:00:00      126
+51  2025-08-08 14:06:00 2025-08-08 22:08:00      482
+52  2025-08-09 00:16:00 2025-08-09 03:56:00      220
+53  2025-08-09 13:18:00 2025-08-09 15:24:00      126
+54  2025-08-10 20:42:00 2025-08-10 23:34:00      172
+55  2025-08-10 23:40:00 2025-08-11 02:16:00      156
+56  2025-08-12 15:52:00 2025-08-12 18:26:00      154
+57  2025-08-13 08:54:00 2025-08-13 13:42:00      288
+58  2025-08-14 12:44:00 2025-08-14 15:46:00      182
+59  2025-08-14 21:26:00          2025-08-15      154
+60  2025-08-15 03:00:00 2025-08-15 04:50:00      110
+61  2025-08-15 08:44:00 2025-08-15 10:46:00      122
+62  2025-08-15 21:08:00 2025-08-16 02:10:00      302
+63  2025-08-16 08:02:00 2025-08-16 11:28:00      206
+64  2025-08-16 12:42:00 2025-08-16 18:26:00      344
+65  2025-08-17 06:20:00 2025-08-17 16:14:00      594
+66  2025-08-17 17:48:00 2025-08-17 19:54:00      126
+67  2025-08-18 05:52:00 2025-08-18 16:16:00      624
+68  2025-08-18 21:02:00 2025-08-19 00:06:00      184
+69  2025-08-19 01:32:00 2025-08-19 07:40:00      368
+70  2025-08-19 07:44:00 2025-08-19 10:38:00      174
+71  2025-08-19 12:52:00 2025-08-19 17:00:00      248
+72  2025-08-19 19:46:00 2025-08-19 23:50:00      244
+73  2025-08-19 23:56:00 2025-08-20 10:14:00      618
+74  2025-08-20 10:20:00 2025-08-20 14:26:00      246
+75  2025-08-20 16:04:00 2025-08-21 18:08:00     1564
+76  2025-08-21 18:12:00 2025-08-21 20:58:00      166
+77  2025-08-21 21:02:00 2025-08-22 16:10:00     1148
+78  2025-08-22 16:14:00 2025-08-22 18:00:00      106
+79  2025-08-22 19:32:00 2025-08-22 21:20:00      108
+80  2025-08-22 21:30:00 2025-08-22 23:38:00      128
+81  2025-08-22 23:42:00 2025-08-23 04:16:00      274
+82  2025-08-23 04:20:00 2025-08-23 06:00:00      100
+83  2025-08-23 07:32:00 2025-08-23 09:42:00      130
+84  2025-08-23 10:56:00 2025-08-23 13:28:00      152
+85  2025-08-23 13:46:00 2025-08-23 19:42:00      356
+86  2025-08-23 19:46:00 2025-08-24 00:20:00      274
+87  2025-08-24 03:02:00 2025-08-24 05:02:00      120
+88  2025-08-24 05:26:00 2025-08-24 09:24:00      238
+89  2025-08-24 09:28:00 2025-08-24 11:38:00      130
+90  2025-08-24 11:52:00 2025-08-24 15:38:00      226
+91  2025-08-24 16:04:00 2025-08-24 19:18:00      194
+92  2025-08-24 19:22:00 2025-08-24 21:42:00      140
+93  2025-08-24 21:46:00 2025-08-25 01:28:00      222
+94  2025-08-25 02:22:00 2025-08-25 07:02:00      280
+95  2025-08-25 08:20:00 2025-08-25 14:52:00      392
+96  2025-08-25 14:56:00 2025-08-26 23:34:00     1958
+97  2025-08-26 23:38:00 2025-08-28 02:24:00     1606
+98  2025-08-28 03:42:00 2025-08-29 02:32:00     1370
+99  2025-08-29 02:36:00 2025-08-29 07:10:00      274
+100 2025-08-29 09:32:00 2025-08-29 19:32:00      600
+101 2025-08-29 21:04:00 2025-08-30 01:20:00      256
+102 2025-08-30 03:04:00 2025-08-30 06:56:00      232
+103 2025-08-30 07:00:00 2025-08-30 17:30:00      630
+104 2025-08-30 17:34:00 2025-08-30 20:18:00      164
+105 2025-08-30 20:46:00 2025-08-30 22:48:00      122
+106 2025-08-30 22:52:00 2025-08-31 01:54:00      182
+107 2025-08-31 01:58:00 2025-08-31 03:58:00      120
+108 2025-08-31 05:22:00 2025-08-31 12:18:00      416
+109 2025-08-31 13:16:00 2025-08-31 15:52:00      156
+110 2025-08-31 15:56:00 2025-08-31 18:00:00      124
+111 2025-08-31 18:04:00 2025-08-31 20:04:00      120
+112 2025-08-31 21:04:00 2025-09-01 06:24:00      560
+113 2025-09-01 07:36:00 2025-09-01 12:36:00      300
+114 2025-09-01 14:06:00 2025-09-01 18:04:00      238
+115 2025-09-01 19:08:00 2025-09-02 02:56:00      468
+116 2025-09-02 05:12:00 2025-09-02 06:50:00       98
+117 2025-09-02 07:38:00 2025-09-02 13:58:00      380
+118 2025-09-21 10:18:00 2025-09-21 12:50:00      152
+119 2025-09-22 11:06:00 2025-09-22 12:44:00       98</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">### metrics</span></span>
-<span><span class="va">metrics</span> <span class="op">&lt;-</span> <span class="va">combined_SUNA</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>baseline_and_rule1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">baseline</span>, <span class="va">rule1</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">.x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co">## median changed</span></span>
-<span> <span class="op">(</span><span class="va">metrics</span><span class="op">$</span><span class="va">SUNA_Nitrate_mgL</span> <span class="op">-</span> <span class="va">metrics</span><span class="op">$</span><span class="va">rule1</span><span class="op">)</span> <span class="op">/</span> <span class="va">metrics</span><span class="op">$</span><span class="va">SUNA_Nitrate_mgL</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.19375</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">combined_SUNA</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>baseline_and_rule1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">baseline</span>, <span class="va">rule1</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min <span class="op">=</span> <span class="va">min</span>, max <span class="op">=</span> <span class="va">max</span><span class="op">)</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 8
-  SUNA_Nitrate_mgL_min SUNA_Nitrate_mgL_max rule1_min rule1_max baseline_min
-                 &lt;dbl&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
-1               0.0641                0.494    0.0641     0.472       0.0907
-# ℹ 3 more variables: baseline_max &lt;dbl&gt;, baseline_and_rule1_min &lt;dbl&gt;,
-#   baseline_and_rule1_max &lt;dbl&gt;</code></pre>
-</div>
-</div>
-</section><section class="level3"><h3 id="example-2-data-driven-rules-state-tagging">Example 2: data-driven rules (state tagging)<a class="anchor" aria-label="anchor" href="#example-2-data-driven-rules-state-tagging"></a>
-</h3>
+</section><section class="section level4"><h4 id="example-2-data-driven-rules-state-tagging">Example 2: data-driven rules (state tagging)<a class="anchor" aria-label="anchor" href="#example-2-data-driven-rules-state-tagging"></a>
+</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load extra libraries</span></span>
 <span><span class="co"># library(devtools)</span></span>
 <span><span class="co"># load_all() # load adaptNP</span></span>
@@ -374,7 +490,7 @@
 </div>
 <p>In the <code>adaptNP</code> R package, <code>find_clusters</code> applies the state tagging method.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## train state tagging with old data</span></span>
 <span><span class="co"># Esthwaite_Buoy_OLD &lt;- read.csv('../temp/ESTH_2008_2009_2010_2011.csv') # data loaded in package</span></span>
 <span></span>
@@ -396,28 +512,44 @@
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu">modeltools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/modeltools/man/Generics.html" class="external-link">clusters</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">big_text</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>  axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span><span class="op">)</span>,</span>
+<span>  axis.text  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span><span class="op">)</span>,</span>
+<span>  plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">18</span><span class="op">)</span>,</span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_OLD_daily</span>  <span class="op">|&gt;</span> </span>
+<span><span class="va">p2010</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_OLD_daily</span>  <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">DATE</span>, <span class="va">state</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"FIELDNAME"</span>, values_to <span class="op">=</span> <span class="st">"VALUE"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">DATE</span>,y<span class="op">=</span><span class="va">VALUE</span>, color<span class="op">=</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">FIELDNAME</span><span class="op">)</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/pal_brewer.html" class="external-link">pal_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DATE</span>, y <span class="op">=</span> <span class="va">VALUE</span>, color <span class="op">=</span> <span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">FIELDNAME</span><span class="op">)</span>, scales <span class="op">=</span> <span class="st">"free"</span>, axes <span class="op">=</span> <span class="st">"all_y"</span>,</span>
+<span>        switch <span class="op">=</span> <span class="st">"y"</span>,                     <span class="co"># moves facet strip to the left</span></span>
+<span>        labeller <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>                Pyranometer <span class="op">=</span> <span class="st">"atop('Solar radiation', W~m^{-2})"</span>,</span>
+<span>                Wind_Speed <span class="op">=</span> <span class="st">"atop('Wind speed', m~s^{-1})"</span>,</span>
+<span>                Water_temperature_1m <span class="op">=</span> <span class="st">"atop('Water temperature', 'at ~1m depth (°C) ')"</span></span>
+<span>              <span class="op">)</span>,</span>
+<span>              <span class="va">label_parsed</span></span>
+<span>            <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">big_text</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>               <span class="co"># remove axis titles</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.placement <span class="op">=</span> <span class="st">"outside"</span><span class="op">)</span>       <span class="co"># ensures strip sits outside the panel, not over axis</span></span>
+<span></span>
+<span><span class="va">p2010</span></span></code></pre></div>
 <div class="cell-output-display">
 <div>
-<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="va">.Last.value</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### 3D plotting of clusters</span></span>
 <span><span class="co">#| fig-cap: "A visual summary of the three clusters (e.g. cluster 3 represents high wind conditions)"</span></span>
 <span><span class="co">#| fig-alt: "A visual summary of the three clusters"</span></span>
@@ -427,17 +559,82 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div>
-<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 3D</span></span></code></pre></div>
-</div>
-</section><section class="level3"><h3 id="make-cluster-predictions">make cluster predictions<a class="anchor" aria-label="anchor" href="#make-cluster-predictions"></a>
-</h3>
-<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 3D</span></span>
+<span><span class="co"># p3dclust &lt;-...</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">plot3D</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="va">make_cluster_plot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">centers</span> <span class="op">&lt;-</span> <span class="va">clusters</span><span class="op">@</span><span class="va">centers</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">centers</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Water_temperature_1m"</span><span class="op">]</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Pyranometer"</span><span class="op">]</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Wind_Speed"</span><span class="op">]</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">plot3D</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">centers</span> <span class="op">&lt;-</span> <span class="va">clusters</span><span class="op">@</span><span class="va">centers</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">centers</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Water_temperature_1m"</span><span class="op">]</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Pyranometer"</span><span class="op">]</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">centers</span><span class="op">[</span>,<span class="st">"Wind_Speed"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># back box only, normal color</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/plot3D/man/scatter.html" class="external-link">scatter3D</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span>, colvar <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"black"</span>, pch <span class="op">=</span> <span class="fl">19</span>, cex <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>          theta <span class="op">=</span> <span class="fl">40</span>, phi <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>          bty <span class="op">=</span> <span class="st">"b"</span>,                    <span class="co"># back panels/edges only</span></span>
+<span>          border <span class="op">=</span> <span class="st">"lightgray"</span>,</span>
+<span>          panel.color <span class="op">=</span> <span class="st">"transparent"</span>,          <span class="co"># remove panel fill (was white/grey)</span></span>
+<span>          ticktype <span class="op">=</span> <span class="st">"detailed"</span>,</span>
+<span>          scale <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>          xlab <span class="op">=</span> <span class="st">"Water temperature (1m)"</span>,</span>
+<span>          ylab <span class="op">=</span> <span class="st">"Solar radiation"</span>,</span>
+<span>          zlab <span class="op">=</span> <span class="st">"Wind speed"</span>,</span>
+<span>          cex.lab <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>          cex.axis <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add front edges manually in light grey to complete the full box</span></span>
+<span><span class="co"># pad &lt;- 0  # increase slightly if you want the box to extend beyond the data</span></span>
+<span><span class="co"># box3D(x0 = min(x) - pad, y0 = min(y) - pad, z0 = min(z) - pad,</span></span>
+<span><span class="co">#       x1 = max(x) + pad, y1 = max(y) + pad, z1 = max(z) + pad,</span></span>
+<span><span class="co">#       col = "lightgrey", lwd = 1, add = TRUE,</span></span>
+<span><span class="co">#       facets = FALSE)                  # edges only, no shaded faces</span></span>
+<span></span>
+<span><span class="co"># dashed lines between centres</span></span>
+<span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/combn.html" class="external-link">combn</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">pairs</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="va">pairs</span><span class="op">[</span><span class="fl">1</span>, <span class="va">i</span><span class="op">]</span>; <span class="va">b</span> <span class="op">&lt;-</span> <span class="va">pairs</span><span class="op">[</span><span class="fl">2</span>, <span class="va">i</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/plot3D/man/scatter.html" class="external-link">lines3D</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">]</span>, <span class="va">y</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>          col <span class="op">=</span> <span class="st">"blue"</span>, lty <span class="op">=</span> <span class="fl">2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># open red circles with numbers</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/plot3D/man/scatter.html" class="external-link">points3D</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, pch <span class="op">=</span> <span class="fl">21</span>, cex <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>         col <span class="op">=</span> <span class="st">"red"</span>, bg <span class="op">=</span> <span class="st">"white"</span>, lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>         alpha <span class="op">=</span> <span class="fl">1</span>, colkey <span class="op">=</span> <span class="cn">FALSE</span>, shade <span class="op">=</span> <span class="fl">0</span>, lighting <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/plot3D/man/scatter.html" class="external-link">text3D</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">z</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>       col <span class="op">=</span> <span class="st">"black"</span>, font <span class="op">=</span> <span class="fl">2</span>, cex <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># call it any time:</span></span>
+<span><span class="fu">make_cluster_plot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-8-2.png" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section class="section level4"><h4 id="make-cluster-predictions">make cluster predictions<a class="anchor" aria-label="anchor" href="#make-cluster-predictions"></a>
+</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># not used, apply to hourly data directly</span></span>
 <span></span>
 <span><span class="co">### predict hi-res data</span></span>
@@ -450,7 +647,7 @@
 <span><span class="va">newdata</span> <span class="op">=</span> <span class="fu"><a href="../reference/pred_clusters.html">pred_clusters</a></span><span class="op">(</span><span class="va">clusters</span>, <span class="va">newdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># plot hourly state and weather data</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">newdata</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>,<span class="va">Water_temperature_1m</span>,<span class="va">Pyranometer</span>,<span class="va">Wind_Speed</span>,<span class="va">state</span><span class="op">)</span>  <span class="op">|&gt;</span> </span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">newdata</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>,<span class="va">Water_temperature_1m</span>,<span class="va">Pyranometer</span>,<span class="va">Wind_Speed</span>,<span class="va">state</span><span class="op">)</span>  <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">state</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"FIELDNAME"</span>, values_to <span class="op">=</span> <span class="st">"VALUE"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span> </span>
@@ -465,7 +662,7 @@
 <figcaption>Applying the clusters on hourly data creates a very busy plot. We will apply clutering on daily data instead.</figcaption></figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">newdata</span>  <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/date.html" class="external-link">date</a></span><span class="op">(</span><span class="va">TIMESTAMP</span> <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -490,7 +687,7 @@
 #   Temp5m &lt;dbl&gt;, Temp6m &lt;dbl&gt;, Temp7m &lt;dbl&gt;, Temp8m &lt;dbl&gt;, Temp9m &lt;dbl&gt;,
 #   Temp10m &lt;dbl&gt;, Temp11m &lt;dbl&gt;, Temp12m &lt;dbl&gt;, state &lt;dbl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Mode</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="va">ux</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tabulate.html" class="external-link">tabulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">ux</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
@@ -528,7 +725,7 @@
 <li>High wind: every 6 hours (0300,0900,1500,2100)</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#| fig-cap: "Daily clustering results."</span></span>
 <span><span class="co">#| fig-alt: "Daily clustering results."</span></span>
 <span></span>
@@ -541,7 +738,7 @@
 <span></span>
 <span><span class="va">times</span> <span class="op">=</span> <span class="va">newdataDailyMode</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DATE</span>,<span class="va">state</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>TIMESTAMP <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">state</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span></span>
 <span>      from <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">DATE</span><span class="op">)</span>,</span>
 <span>      to   <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">DATE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">hours</a></span><span class="op">(</span><span class="fl">23</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">minutes</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>,</span>
@@ -559,7 +756,7 @@
 <span><span class="co"># plot sampling state</span></span>
 <span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">times</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">state</span>, state<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">times</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">state</span>, state<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">TIMESTAMP</span>,y<span class="op">=</span><span class="va">y</span>, color<span class="op">=</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/pal_brewer.html" class="external-link">pal_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -572,59 +769,284 @@
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># left join, plot sampled weather data and their state</span></span>
-<span><span class="va">times</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">state</span>, state<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p2025</span> <span class="op">&lt;-</span> <span class="va">times</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">state</span>, state<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">newdata</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">state</span><span class="op">)</span>, by<span class="op">=</span><span class="st">'TIMESTAMP'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>,<span class="va">Water_temperature_1m</span>,<span class="va">Pyranometer</span>,<span class="va">Wind_Speed</span>,<span class="va">state</span><span class="op">)</span>  <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, <span class="va">state</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"FIELDNAME"</span>, values_to <span class="op">=</span> <span class="st">"VALUE"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">TIMESTAMP</span>,y<span class="op">=</span><span class="va">VALUE</span>, color<span class="op">=</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">FIELDNAME</span><span class="op">)</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">FIELDNAME</span><span class="op">)</span>, scales <span class="op">=</span> <span class="st">"free"</span>, axes <span class="op">=</span> <span class="st">"all_y"</span>,</span>
+<span>        switch <span class="op">=</span> <span class="st">"y"</span>,                     <span class="co"># moves facet strip to the left</span></span>
+<span>        labeller <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>                Pyranometer <span class="op">=</span> <span class="st">"atop('Solar radiation', W~m^{-2})"</span>,</span>
+<span>                Wind_Speed <span class="op">=</span> <span class="st">"atop('Wind speed', m~s^{-1})"</span>,</span>
+<span>                Water_temperature_1m <span class="op">=</span> <span class="st">"atop('Water temperature', 'at ~1m depth (°C) ')"</span></span>
+<span>              <span class="op">)</span>,</span>
+<span>              <span class="va">label_parsed</span></span>
+<span>            <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="va">big_text</span><span class="op">+</span>               <span class="co"># remove axis titles</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>strip.placement <span class="op">=</span> <span class="st">"outside"</span><span class="op">)</span>  <span class="op">+</span>     <span class="co"># ensures strip sits outside the panel</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/pal_brewer.html" class="external-link">pal_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-7-1.png" alt="State tagging results" width="672"></p>
-<figcaption>State tagging results on the variables used for clustering.</figcaption></figure>
-</div>
-</div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'2025'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">''</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># left join, SUNA</span></span>
 <span></span>
 <span><span class="va">rule_statetag</span> <span class="op">&lt;-</span><span class="va">times</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">state</span>, state<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span> , by<span class="op">=</span><span class="st">'TIMESTAMP'</span><span class="op">)</span> </span>
 <span>  </span>
-<span><span class="va">rule_statetag</span>  <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span><span class="va">p_nitrate</span> <span class="op">&lt;-</span> <span class="va">rule_statetag</span>  <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">TIMESTAMP</span>,y<span class="op">=</span><span class="va">SUNA_Nitrate_mgL</span> , color<span class="op">=</span><span class="va">state</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_colour_discrete</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/pal_brewer.html" class="external-link">pal_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'2025'</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">'Nitrate (mg/L)'</span><span class="op">)</span> <span class="op">+</span> <span class="va">big_text</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">30</span>, r <span class="op">=</span> <span class="fl">5</span>, b <span class="op">=</span> <span class="fl">5</span>, l <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># extract timestamps, need to ensure timestamps are unique and sequential</span></span>
+<span><span class="va">mask_statetag</span> <span class="op">&lt;-</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">TIMESTAMP</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">rule_statetag</span><span class="op">$</span><span class="va">TIMESTAMP</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## note: 1: Package `gridGraphics` is required to handle base-R plots.</span></span>
+<span></span>
+<span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span></span>
+<span>  <span class="va">p2010</span>, <span class="fu"><a href="https://wilkelab.org/cowplot/reference/ggdraw.html" class="external-link">ggdraw</a></span><span class="op">(</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/as_grob.html" class="external-link">as_grob</a></span><span class="op">(</span><span class="va">make_cluster_plot</span><span class="op">)</span><span class="op">)</span>, <span class="va">p2025</span>, <span class="va">p_nitrate</span>,</span>
+<span>  labels <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span>,label_x <span class="op">=</span> <span class="fl">0.05</span>,ncol<span class="op">=</span><span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">FALSE</span>, label_size <span class="op">=</span> <span class="fl">18</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-8-1.png" alt="Nitrate adpative sampling results based on state tagging (i.e. clustering)" width="672"></p>
-<figcaption>Nitrate adpative sampling results based on state tagging (i.e. clustering)</figcaption></figure>
+<div>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/statetag-plots-1.png" width="672"></p>
+</figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># metrics</span></span>
-<span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span><span class="va">a</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9260465</code></pre>
 </div>
+</section><section class="section level2"><h2 id="metrics">metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
+</h2>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">-</span><span class="va">b</span><span class="op">)</span> <span class="op">/</span><span class="va">b</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### metrics</span></span>
+<span><span class="va">combined_SUNA</span> <span class="op">=</span> <span class="va">combined_SUNA</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>baseline_and_rule1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">baseline</span>, <span class="va">rule1</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rule_statetag</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">TIMESTAMP</span>, rule_statetag <span class="op">=</span> <span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span>,</span>
+<span>            by <span class="op">=</span> <span class="st">"TIMESTAMP"</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">raw_col</span> <span class="op">&lt;-</span> <span class="st">"SUNA_Nitrate_mgL"</span></span>
+<span></span>
+<span><span class="co"># reference stats</span></span>
+<span><span class="va">ref_median</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">combined_SUNA</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">ref_range</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">combined_SUNA</span><span class="op">[[</span><span class="va">raw_col</span><span class="op">]</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ref_nrows</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">combined_SUNA</span><span class="op">$</span><span class="va">SUNA_Nitrate_mgL</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics</span> <span class="op">&lt;-</span> <span class="va">combined_SUNA</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html" class="external-link">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">raw_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"series"</span>, values_to <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    non_na_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    median_val       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    range_val        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    pct_median_change <span class="op">=</span> <span class="op">(</span><span class="va">median_val</span> <span class="op">-</span> <span class="va">ref_median</span><span class="op">)</span> <span class="op">/</span> <span class="va">ref_median</span> <span class="op">*</span> <span class="fl">100</span>,</span>
+<span>    pct_range_change  <span class="op">=</span> <span class="va">range_val</span> <span class="op">/</span> <span class="va">ref_range</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">series</span>, <span class="va">median_val</span>, <span class="va">non_na_count</span>, <span class="va">pct_range_change</span>, <span class="va">pct_median_change</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">metrics</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">series</span><span class="op">)</span>  <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.006919643</code></pre>
+<pre><code># A tibble: 4 × 5
+  median_val non_na_count pct_range_change pct_median_change series
+       &lt;dbl&gt;        &lt;int&gt;            &lt;dbl&gt;             &lt;dbl&gt; &lt;chr&gt;
+1      0.224          703             89.9           -0.0893 baseline
+2      0.134         4268             89.9          -40.3    baseline_and_rule1
+3      0.13          3679             87.2          -42.0    rule1
+4      0.222         9248             92.6           -0.692  rule_statetag     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># metrics &lt;- combined_SUNA |&gt; </span></span>
+<span><span class="co">#     summarise(across(where(is.numeric), ~ median(.x, na.rm = TRUE)))</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># ## median changed</span></span>
+<span><span class="co">#  (metrics$rule1 - metrics$SUNA_Nitrate_mgL) / metrics$SUNA_Nitrate_mgL</span></span>
+<span></span>
+<span><span class="co"># c &lt;- combined_SUNA |&gt; mutate(baseline_and_rule1 = rowMeans(cbind(baseline, rule1), na.rm = TRUE)) |&gt; </span></span>
+<span><span class="co">#      summarise(across(where(is.numeric), list(min = min, max = max), na.rm=TRUE))</span></span>
+<span></span>
+<span><span class="co"># (c$baseline_max- c$baseline_min) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100</span></span>
+<span><span class="co"># (c$rule1_max- c$rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100</span></span>
+<span><span class="co"># (c$baseline_and_rule1_max - c$baseline_and_rule1_min ) / (c$SUNA_Nitrate_mgL_max- c$SUNA_Nitrate_mgL_min)  *100</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># a = diff(range(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE))</span></span>
+<span><span class="co"># diff(range(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE)) /a</span></span>
+<span></span>
+<span><span class="co"># b = median(Esthwaite_Buoy_SUNA_Data$`SUNA_Nitrate_mgL`, na.rm = TRUE)</span></span>
+<span><span class="co"># (median(rule_statetag$`SUNA_Nitrate_mgL`, na.rm = TRUE) -b) /b </span></span></code></pre></div>
+</div>
+<section class="level2"><h3 id="kolmogorov-smirnov-tests-and-ecdf">Kolmogorov-Smirnov Tests and <code>ecdf</code>
+<a class="anchor" aria-label="anchor" href="#kolmogorov-smirnov-tests-and-ecdf"></a>
+</h3>
+<p>A test to show how good a sub-sampled dataset preseves the characteristics of the orignial one is to overlay their empirical cumulative distribution functions (ecdf). In a perfect scenario, the ecdf of the two time series would completely overlap.</p>
+<p>Kolmogorov-Smirnov tests returns the KS statistic, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>, which is the maximum vertical distance between two cumulative distribution functions (CDFs).</p>
+<p>The accompanying p-values tests whether the two time series comes from the same statistical distribution. p-value &lt; 0.05 shows strong evidence that the distrutions differ.</p>
+<p><em>Caveat:</em> With very large datasets (common in environmental time series), the KS test becomes extremely sensitive. Even tiny, practically unimportant differences can become statistically significant. In those cases, D is often more informative than the p-value.</p>
+<p>Interpretation guide: D &lt; 0.05 Very similar 0.05-0.10 Small difference 0.10-0.20 Moderate difference &gt; 0.20 Large difference</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Asymptotic two-sample Kolmogorov-Smirnov test
+
+data:  Esthwaite_Buoy_SUNA_Data$SUNA_Nitrate_mgL and rule_statetag$SUNA_Nitrate_mgL
+D = 0.10697, p-value &lt; 2.2e-16
+alternative hypothesis: two-sided</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">baseline</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code><span>         <span class="va">D</span></span>
+<span><span class="fl">0.00950651</span> </span></code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code><span>       <span class="va">D</span></span>
+<span><span class="fl">0.106967</span> </span></code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ecdf.html" class="external-link">ecdf</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/ecdf.html" class="external-link">ecdf</a></span><span class="op">(</span><span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+</figure>
 </div>
 </div>
-</section><script id="quarto-html-after-body" type="application/javascript">
+<div class="sourceCode cell-code" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  `raw data` <span class="op">=</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>,</span>
+<span>  `baseline` <span class="op">=</span> <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`baseline`</span>,</span>
+<span>  `rule 1` <span class="op">=</span> <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`rule1`</span>,</span>
+<span>  `baseline and rule1` <span class="op">=</span> <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`baseline_and_rule1`</span>,</span>
+<span>  `state tagging` <span class="op">=</span> <span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/stack.html" class="external-link">stack</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">values</span>, colour <span class="op">=</span> <span class="va">ind</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Value"</span>, y <span class="op">=</span> <span class="st">"ECDF"</span>, colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">'SUNA nitrate (mg/L)'</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span></span>
+<span>    colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="../reference/theme_gov.html">theme_gov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>  legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>lineheight <span class="op">=</span> <span class="fl">0.9</span>, size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co"># add legend space</span></span>
+<span>  legend.position<span class="op">=</span><span class="st">'bottom'</span>,</span>
+<span>        panel.spacing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>        text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of all text</span></span>
+<span>        <span class="co"># axis.line = element_line(linewidth = 3, colour = "grey20"),</span></span>
+<span>        strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        strip.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        axis.text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis text</span></span>
+<span>        axis.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span>, <span class="co">#change font size of axis titles</span></span>
+<span>        plot.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>, <span class="co">#change font size of plot title</span></span>
+<span>        legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">20</span><span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">+</span> </span>
+<span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="st">"#0072B2"</span>,          <span class="co"># Okabe-Ito blue</span></span>
+<span>    <span class="st">"rule 1"</span> <span class="op">=</span> <span class="st">"#D55E00"</span>,</span>
+<span>    <span class="st">"baseline and rule1"</span> <span class="op">=</span> <span class="st">"#009E73"</span>,</span>
+<span>    <span class="st">"state tagging"</span> <span class="op">=</span> <span class="st">"#CC79A7"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"raw data"</span> <span class="op">=</span> <span class="st">"raw data"</span>,</span>
+<span>    <span class="st">"baseline"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"baseline"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`baseline`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span> ,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"rule 1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"rule 1"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`rule1`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"baseline and rule1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"baseline and rule1"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">combined_SUNA</span> <span class="op">$</span><span class="va">`baseline_and_rule1`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span> <span class="op">)</span>,<span class="st">")"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"state tagging"</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"state tagging"</span>,<span class="st">" (KS = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">'%.4f'</span>,<span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span>, <span class="va">rule_statetag</span><span class="op">$</span><span class="va">`SUNA_Nitrate_mgL`</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span>,<span class="st">")"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure><p><img src="adaptNP_ESTH_files/figure-html/unnamed-chunk-12-2.png" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#</span></span></code></pre></div>
+</div>
+</section><section class="level2"><h3 id="evaluating-extremes-performance">Evaluating extremes performance<a class="anchor" aria-label="anchor" href="#evaluating-extremes-performance"></a>
+</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">masks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  all_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">TRUE</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">mask_baseline</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  mask_baseline <span class="op">=</span> <span class="va">mask_baseline</span>,</span>
+<span>  mask_rule1 <span class="op">=</span> <span class="va">mask_rule1</span>,</span>
+<span>  mask_rule0and1 <span class="op">=</span> <span class="va">mask_rule0and1</span>,</span>
+<span>  mask_statetag <span class="op">=</span> <span class="va">mask_statetag</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># show sampling fraction</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">masks</span><span class="op">)</span>,</span>
+<span>  sampling_fraction <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">masks</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  method         sampling_fraction
+  &lt;chr&gt;                      &lt;dbl&gt;
+1 all_data                  1
+2 mask_baseline             0.0278
+3 mask_rule1                0.145
+4 mask_rule0and1            0.169
+5 mask_statetag             0.366 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html" class="external-link">imap_dfr</a></span><span class="op">(</span></span>
+<span>  <span class="va">masks</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="../reference/extreme_sampling_metrics.html">extreme_sampling_metrics</a></span><span class="op">(</span></span>
+<span>      full_values <span class="op">=</span> <span class="va">Esthwaite_Buoy_SUNA_Data</span><span class="op">$</span><span class="va">SUNA_Nitrate_mgL</span>,</span>
+<span>      sampled_mask <span class="op">=</span> <span class="va">.x</span>,</span>
+<span>      percentile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>      alpha <span class="op">=</span> <span class="fl">2</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">.y</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>P99_recall <span class="op">=</span> <span class="va">extreme_recall</span>,</span>
+<span>          P99_oversampling_factor <span class="op">=</span> <span class="va">oversampling_factor</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">results</span>   <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">method</span>, names_to <span class="op">=</span> <span class="st">"variable"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">method</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  variable        all_data mask_baseline mask_rule1 mask_rule0and1 mask_statetag
+  &lt;chr&gt;              &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;         &lt;dbl&gt;
+1 percentile          0.99        0.99       0.99            0.99          0.99
+2 alpha               2           2          2               2             2
+3 P99_recall          1           0.0325     0.110           0.134         0.122
+4 P99_oversampli…     1           1.17       0.753           0.794         0.333
+5 tail_weighted_…     1           0.0278     0.0935          0.118         0.338
+6 percentile_exp…     0.5         0.500      0.344           0.368         0.468</code></pre>
+</div>
+</div>
+</section></section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
